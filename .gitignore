@@ -2,6 +2,9 @@
 ###> symfony/framework-bundle ###
 .env
 /public/bundles/
+/public/dossier/
+/public/facture/
+/public/uploads/
 /var/
 /vendor/
 ###< symfony/framework-bundle ###
