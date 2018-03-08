@@ -1,0 +1,17 @@
+parameters:
+    mailer_transport: smtp
+    mailer_host: smtp.free.fr
+    mailer_port: 25
+    mailer_user: null
+    mailer_password: null
+    mailer_sender_address: contact@jovair.fr
+    mailer_sender_name: "Jovair Maintenance"
+
+swiftmailer:
+    #url: '%env(MAILER_URL)%'
+    transport: "%mailer_transport%"
+    host:      "%mailer_host%"
+    port:      "%mailer_port%"
+    username:  "%mailer_user%"
+    password:  "%mailer_password%"
+    spool:     { type: memory }

@@ -1,0 +1,155 @@
+{% set statut_travaux_label = [] %}
+{% for statut_name, statut_id in statut_travaux %}
+	{% set statut_travaux_label = statut_travaux_label|merge({(statut_id):statut_name}) %}
+{% endfor %}
+{% set statut_cnad_label = [] %}
+{% for statut_name, statut_id in statut_travaux %}
+	{% set statut_cnad_label = statut_cnad_label|merge({(statut_id):statut_name}) %}
+{% endfor %}
+
+<div class="row">
+	<div class="col-xs-12">
+		<h2 class="page-header alt">
+			<i class="fa fa-plane"></i> Compte Rendu d'intervention {{ entity.numBl }}
+			{% if not pdf %}<a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/dossier/{{ entity.numBl }}_CRI.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print" style="margin-left: 10px; margin-top:-15px;"><i class="fa fa-download"></i> PDF</a>{% endif %}
+			<small class="pull-right">Suivant le Bon de Commande n°: {{ entity.numBc }}</small>
+
+		</h2>
+	</div>
+</div>
+
+<h4 class="alt">Situation de l'appareil :</h4>
+<div class="row">
+	<div class="col-xs-12 col-sm-12">
+		<table class="table alt">
+			<tr>
+				<td><span class="big-text">Immatriculation: <b>{{ entity.appareil.immatriculation }}</b></span></td>
+				<td><span class="big-text">Heures APRS: <b>{{ entity.appareil.heureDerniereAprs }}</b></span></td>
+			</tr>
+		</table>
+		
+	</div>
+</div>
+<div class="row">
+	<div class="col-xs-12 col-sm-12">
+		{% include  'easy_admin/Includes/appareil_table.html.twig' with {'appareil': entity.appareil } %}
+		{% include  'easy_admin/Includes/pe_table.html.twig' with {'appareil': entity.appareil, 'first': true } %}
+	</div>
+</div>
+
+<h4 class="alt">Travaux demandés :</h4>
+<div class="row">
+	<div class="col-xs-12 col-sm-6">
+		{% if entity.travaux|length() > 0 %}
+		<h5 class="alt">Programmés</h5>
+		<table class="table table-striped">
+			{% for travaux in entity.travaux %}
+			<tr>
+				<td><b>{{ travaux.designation }}</b> {% if travaux.commentaire %}: {{ travaux.commentaire }}{% endif %}</td>
+				<td class="text-right">{% if travaux.isValid and travaux.statut > 0 %}<span class=" label label-{% if travaux.statut < 3 %}warning{% else %}success{% endif %}">{{ statut_travaux_label[travaux.statut] }}</span>{% endif %}</td>
+				<td class="text-right">{% if travaux.isValid %}{{ travaux.mecanicien }}{% endif %}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
+	<div class="col-xs-12 col-sm-6">
+		{% if entity.cnad|length() > 0 %}
+		<h5 class="alt">CN/AD</h5>
+		<table class="table table-striped">
+			{% for cnad in entity.cnad %}
+				<tr>
+					<td><b>{{ cnad.designation }}</b> {% if cnad.commentaire %}: {{ cnad.commentaire }}{% endif %}</td>
+					<td class="text-right">{% if cnad.isValid and cnad.statut > 0 %}<span class=" label label-{% if cnad.statut < 3 %}warning{% else %}success{% endif %}">{{ statut_cnad_label[cnad.statut] }}</span>{% endif %}</td>
+					<td class="text-right">{% if cnad.isValid %}{{ cnad.mecanicien }}{% endif %}</td>
+				</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
+</div>
+
+
+<div class="row">
+	<div class="col-xs-12 col-sm-6">
+		{% if entity.travauxSup|length() > 0 %}
+		<h4 class="alt">Travaux supplémentaire :</h4>
+		<table class="table table-striped">
+			<tr class="border_bottom">
+				<th>Anomalie découverte</th>
+				<th>Action corrective</th>
+				<th>Mécanicien</th>
+			</tr>
+			{% for dossier_travaux_sup in entity.travauxSup %}
+			<tr>
+				<td>{{ dossier_travaux_sup.designation }}</td>
+				<td>{{ dossier_travaux_sup.actionCorrective }}</td>
+				<td>{{ dossier_travaux_sup.mecanicien }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
+	<div class="col-xs-12 col-sm-6">
+		{% if entity.dossierArticle|length() > 0 %}
+		<h4 class="alt">Pièces utilisés :</h4>
+		<table class="table table-striped">
+			<tr class="border_bottom">
+				<th>Désignation</th>
+				<th>Sn</th>
+				<th>From Tracking</th>
+				<th>Qte</th>
+			</tr>
+			{% for dossier_article in entity.dossierArticle %}
+			<tr>
+				<td>{{ dossier_article.articleFormone.article.nom }}</td>
+				<td>{{ dossier_article.articleFormone.sn }}</td>
+				<td>{{ dossier_article.articleFormone.fromTracking }}</td>
+				<td>{{ dossier_article.quantite }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
+</div>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-6">
+		{% if entity.dossierOutils|length() > 0 %}
+		<h4 class="alt">Outillages soumis à étalonnage :</h4>
+		<table class="table table-striped">
+			<tr class="border_bottom">
+				<th>Désignation</th>
+				<th>Sn</th>
+				<th>Date</th>
+			</tr>
+			{% for dossier_outils in entity.dossierOutils %}
+			<tr>
+				<td>{{ dossier_outils.outillage.outillage.nom }}</td>
+				<td>Sn:{{ dossier_outils.outillage.outillage.sn }}</td>
+				<td>Date:{{ dossier_outils.outillage.dateValidite|date("d/m/Y") }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
+	<div class="col-xs-12 col-sm-6">
+		<h4 class="alt">Contrôle final :</h4>
+		<table class="table table-striped">
+			<tr class="border_bottom">
+				<th>Date</th>
+				<th>Heure</th>
+				<th>Lieu</th>
+				<th>Nom et prénom</th>
+				<th>Signature</th>
+			</tr>
+			<tr>						
+				<td>{% if entity.dateCf %}{{ entity.dateCf|date("d/m/Y") }}{% endif %}</td>
+				<td>{% if entity.timeCf %}{{ entity.timeCf|slice(0, 5) }}{% endif %}</td>
+				<td>{{ entity.lieuCf|default("") }}</td>
+				<td>{% if entity.mecanicien %}{{ entity.mecanicien|default("") }} ({{ entity.mecanicien.licence|default("") }}){% endif %}</td>
+				<td>{% if entity.mecanicien %}<img src="{{ app.request.scheme ~'://' ~ app.request.httpHost}}{{ vich_uploader_asset(entity.mecanicien, 'signatureFile', 'App\\Entity\\Mecanicien') }}" width="65" />{% endif %}</td>
+			</tr>
+		</table>
+	</div>
+</div>

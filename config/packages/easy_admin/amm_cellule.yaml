@@ -1,0 +1,15 @@
+easy_admin:
+    entities:
+        AmmCellule:
+            class: App\Entity\AmmCellule
+            controller: App\Controller\AmmCelluleController
+            form:
+                title: "Ajouter un AMM Cellule"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-warning' }
+                    - { property: 'type', label: 'Type', css_class: 'col-sm-6'}
+                    - { property: 'edition', label: 'Edition', css_class: 'col-sm-6'}
+                    - { property: 'revision', label: 'Révision / Acceptation', css_class: 'col-sm-6'}
+                    - { property: 'date', label: 'Date du PE', type_options: { widget: 'single_text' }, css_class: 'col-sm-6' }
+            edit:
+                title: "Modifier un AMM Cellule"

@@ -1,0 +1,40 @@
+parameters:
+   type_outillage: {'Outillage standard':'0', 'Compression':'1'}
+
+easy_admin:
+    entities:
+        Outillage:
+            class: App\Entity\Outillage
+            controller: App\Controller\OutillageController
+            disabled_actions: ['show']
+            list:
+                title: "Outillages"
+                actions:
+                    - { name: 'addCertificat', icon: 'plus-circle', label: "Certificat", css_class: 'btn btn-secondary ' }
+                    - { name: 'edit', icon: 'pencil', label: 'Modifier', css_class: 'btn btn-secondary ' }
+                    - { name: 'delete', icon: 'times', label: 'Supprimer', css_class: 'btn btn-secondary text-danger' }
+                fields: 
+                    - { property: 'nom', label: 'Nom'}
+                    - { property: 'sn', label: 'Sn'}
+                    - { property: 'pn', label: 'Pn'}
+                    - { property: 'last_date_certificat', label: 'Date de validité', template: 'last_certificat.html.twig'}
+
+            show:
+                actions:
+                    - { name: 'addCertificat', icon: 'plus-circle', label: "certificat", css_class: 'btn btn-secondary' }
+                fields: 
+                    - { property: 'nom', label: 'Nom', css_class: 'col-sm-6'}
+                    - { property: 'type', label: "Type d'outillage", css_class: 'col-sm-6', template: 'outillage_type.html.twig', type_outillage: '%type_outillage%'}
+                    - { property: 'sn', label: "Sn", css_class: 'col-sm-6'}
+                    - { property: 'pn', label: "Pn", css_class: 'col-sm-6'}
+                    - { property: 'outillage_certificats', label: 'Date de validité', css_class: 'col-sm-6', template: 'list_certificat.html.twig'}
+            form:
+                title: "Ajouter un outillage"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-primary' }
+                    - { property: 'nom', label: 'Nom', css_class: 'col-sm-6'}
+                    - { property: 'type', label: "Type d'outillage", type: 'choice', type_options: {choices: '%type_outillage%', expanded: false, multiple: false }, css_class: 'col-sm-6'}
+                    - { property: 'sn', label: 'Sn', css_class: 'col-sm-6'}
+                    - { property: 'pn', label: 'Pn', css_class: 'col-sm-6'}
+            edit:
+                title: "Modifier un outillage"

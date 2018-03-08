@@ -1,0 +1,9 @@
+twig:
+    paths: ['%kernel.project_dir%/templates']
+    debug: '%kernel.debug%'
+    strict_variables: '%kernel.debug%'
+    globals:
+        statut_dossier: '%statut_dossier%'
+        statut_travaux: '%statut_travaux%'
+        statut_cnad: '%statut_cnad%'
+        type_outillage: '%type_outillage%'

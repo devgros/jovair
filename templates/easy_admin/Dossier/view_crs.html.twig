@@ -1,0 +1,26 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+
+{% block page_title %}CRS du dossier {{ entity.numBl }}{% endblock %}
+
+{% block main_menu_wrapper %}
+<ul class="sidebar-menu">
+	<li class="header">Document</li>
+	<li><a href="{{ path('dossier_cri', { entity: 'Dossier', id: entity.id }) }}" ><i class="fa fa-file-text"></i> <span>CRI</span></a></li>
+	<li class="active"><a href="{{ path('dossier_crs', { entity: 'Dossier', id: entity.id }) }}" ><i class="fa fa-clipboard"></i> <span>CRS</span></a></li>
+	<li><a href="{{ path('dossier_aprs', { entity: 'Dossier', id: entity.id }) }}" ><i class="fa fa-sticky-note"></i> <span>APRS</span></a></li>
+	{% if entity.carteTravail %}<li><a href="{{ vich_uploader_asset(entity, 'carteTravailFile', 'App\\Entity\\Dossier') }}"  target="_blank" target="_self" ><i class="fa fa-file-pdf-o"></i> <span>Carte de travail</span></a></li>{% endif %}
+	{% if is_granted('IS_AUTHENTICATED_REMEMBERED') %}
+	<li class="header">Action</li>
+	<li><a href="{{ path('easyadmin', { action: 'show', entity: 'Dossier', primary_key_name: 'id', id: entity.id }) }}" ><i class="fa fa-sign-out"></i> <span>Retour au dossier</span></a></li>
+	{% endif %}
+</ul>
+{% endblock %}
+
+ {% block content_header %}
+ 	<h1>CRS du dossier {{ entity.numBl }}</h1>
+ 	<a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/dossier/{{ entity.numBl }}_CRS.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print" style="margin-left: 10px; margin-top:-25px; margin-bottom:15px;"><i class="fa fa-download"></i> PDF</a>
+ {% endblock %}	
+
+{% block main %}
+	{% include  'easy_admin/Dossier/include_crs.html.twig' with {'entity': entity, pdf: false } %}
+{% endblock %}

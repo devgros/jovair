@@ -1,0 +1,73 @@
+imports:
+    - { resource: easy_admin/dossier.yaml }
+    - { resource: easy_admin/dossier_travaux.yaml }
+    - { resource: easy_admin/dossier_cnad.yaml }
+    - { resource: easy_admin/dossier_travaux_sup.yaml }
+    - { resource: easy_admin/dossier_main_oeuvre.yaml }
+    - { resource: easy_admin/dossier_article.yaml }
+    - { resource: easy_admin/dossier_outils.yaml }
+    - { resource: easy_admin/facture.yaml }
+    - { resource: easy_admin/client.yaml }
+    - { resource: easy_admin/appareil.yaml }
+    - { resource: easy_admin/programme_entretien.yaml }
+    - { resource: easy_admin/amm_cellule.yaml }
+    - { resource: easy_admin/amm_moteur.yaml }
+    - { resource: easy_admin/outillage.yaml }
+    - { resource: easy_admin/article.yaml }
+    - { resource: easy_admin/article_prix.yaml }
+    - { resource: easy_admin/article_formone.yaml }
+    - { resource: easy_admin/outillage_certificat.yaml }
+    - { resource: easy_admin/mecanicien.yaml }
+    - { resource: easy_admin/main_oeuvre.yaml }
+    - { resource: easy_admin/main_oeuvre_prix.yaml }
+
+easy_admin:
+    site_name: 'Jovair <em style="font-size: 80%;">Maintenance<em>'
+    
+    design:
+        brand_color: '#008d4c'
+        color_scheme: 'dark'
+        form_theme: 'easy_admin/custom_layout.html.twig'
+        assets:
+            css:
+                - '/public/css/global.css'
+            js:
+        menu:
+            - { label: 'Gestion' }
+            - { entity: 'Dossier', label: 'Dossiers', icon: 'folder-open' } 
+            - { label: 'Devis', icon: 'calculator', url: 'http://test.fr' }
+            - { entity: 'Facture', label: 'Factures', icon: 'euro' }
+            - { label: 'Inventaire' }
+            - { entity: 'Article', label: 'Articles', icon: 'tags' } 
+            - { entity: 'MainOeuvre', label: "Main d'oeuvre", icon: 'wrench' } 
+            - { label: 'Clients' }
+            - { entity: 'Client', label: 'Clients', icon: 'address-book' } 
+            - { entity: 'Appareil', label: 'Appareils', icon: 'plane' } 
+            - label: "Atelier"            
+            - { entity: 'Outillage', label: 'Outillages', icon: 'gears' } 
+            - { entity: 'Mecanicien', label: 'Mécaniciens', icon: 'users' } 
+            
+            
+            
+
+    list:
+        actions:
+            - { name: 'show', icon: 'search', label: false }
+            - { name: 'edit', icon: 'pencil', label: false }
+            - { name: 'delete', icon: 'times', label: false }
+
+endroid_qr_code:
+    writer: 'png'
+    size: 200
+    margin: 0
+    foreground_color: { r: 0, g: 0, b: 0 }
+    background_color: { r: 255, g: 255, b: 255 }
+    error_correction_level: low # low, medium, quartile or high
+    encoding: UTF-8
+    label: ""
+    label_font_size: 20
+    label_alignment: left # left, center or right
+    label_margin: { b: 20 }
+    #logo_path: '%kernel.root_dir%/../vendor/endroid/qr-code/assets/images/symfony.png'
+    logo_width: 100
+    validate_result: false # checks if the result is readable

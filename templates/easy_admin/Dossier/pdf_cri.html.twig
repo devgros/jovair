@@ -1,0 +1,9 @@
+{% extends 'easy_admin/layout_pdf.html.twig' %}
+
+{% block page_title %}Compte Rendu d'intervention {{ entity.numBl }}{% endblock %}
+
+{% block body %}
+
+	{% include  'easy_admin/Dossier/include_cri.html.twig' with {'entity': entity, pdf: true } %}
+	
+{% endblock %}

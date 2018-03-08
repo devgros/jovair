@@ -1,0 +1,11 @@
+{% if field_options.format %}
+    {% set type_id = field_options.format|format(value) %}
+{% else %}
+    {% set type_id = value|number_format %}
+{% endif %}
+
+{% for name, id in field_options.type_outillage %}
+	{% if id == type_id %}
+		{{ name }}
+	{% endif %}
+{% endfor %}

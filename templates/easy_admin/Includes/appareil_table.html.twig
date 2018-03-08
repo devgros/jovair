@@ -1,0 +1,64 @@
+<table class="table table-show table-striped table-bordered">
+	<thead class="thead-light">
+		<tr>
+			<th class="empty_th"></th>
+			<th>Marque</th>
+			<th>Model</th>
+			<th>N° série</th>
+			<th>Date RG/Fab</th>
+			<th class="text-right">HT</th>
+			<th class="text-right">HRG</th>
+		</tr>
+	</thead>
+	<tbody>
+		<tr>
+			<th>Cellule</th>
+			<td>{{ appareil.marqueCellule }}</td>
+			<td>{{ appareil.modelCellule }}</td>
+			<td>{{ appareil.numSerieCellule }}</td>
+			<td>{% if  appareil.dateRgCellule %}{{ appareil.dateRgCellule|date("d/m/Y") }}{% endif %}</td>
+			<td class="text-right">{{ appareil.htCellule }}</td>
+			<td class="text-right">{{ appareil.hrgCellule }}</td>
+		</tr>
+		<tr>
+			<th>Moteur 1</th>
+			<td>{{ appareil.marqueMoteur1 }}</td>
+			<td>{{ appareil.modelMoteur1 }}</td>
+			<td>{{ appareil.numSerieMoteur1 }}</td>
+			<td>{% if  appareil.dateRgMoteur1 %}{{ appareil.dateRgMoteur1|date("d/m/Y") }}{% endif %}</td>
+			<td class="text-right">{{ appareil.htMoteur1 }}</td>
+			<td class="text-right">{{ appareil.hrgMoteur1 }}</td>
+		</tr>
+		{% if appareil.marqueMoteur2 or appareil.modelMoteur2 or appareil.numSerieMoteur2 %}
+		<tr>
+			<th>Moteur 2</th>
+			<td>{{ appareil.marqueMoteur2 }}</td>
+			<td>{{ appareil.modelMoteur2 }}</td>
+			<td>{{ appareil.numSerieMoteur2 }}</td>
+			<td>{% if  appareil.dateRgMoteur2 %}{{ appareil.dateRgMoteur2|date("d/m/Y") }}{% endif %}</td>
+			<td class="text-right">{{ appareil.htMoteur2 }}</td>
+			<td class="text-right">{{ appareil.hrgMoteur2 }}</td>
+		</tr>
+		{% endif %}
+		<tr>
+			<th>Hélice 1</th>
+			<td>{{ appareil.marqueHelice1 }}</td>
+			<td>{{ appareil.modelHelice1 }}</td>
+			<td>{{ appareil.numSerieHelice1 }}</td>
+			<td>{% if  appareil.dateRgHelice1 %}{{ appareil.dateRgHelice1|date("d/m/Y") }}{% endif %}</td>
+			<td class="text-right">{{ appareil.htHelice1 }}</td>
+			<td class="text-right">{{ appareil.hrgHelice1 }}</td>
+		</tr>
+		{% if appareil.marqueHelice2 or appareil.modelHelice2 or appareil.numSerieHelice2 %}
+		<tr>
+			<th>Hélice 2</th>
+			<td>{{ appareil.marqueHelice2 }}</td>
+			<td>{{ appareil.modelHelice2 }}</td>
+			<td>{{ appareil.numSerieHelice2 }}</td>
+			<td>{% if  appareil.dateRgHelice2 %}{{ appareil.dateRgHelice2|date("d/m/Y") }}{% endif %}</td>
+			<td class="text-right">{{ appareil.htHelice2 }}</td>
+			<td class="text-right">{{ appareil.hrgHelice2 }}</td>
+		</tr>
+		{% endif %}
+	</tbody>
+</table>

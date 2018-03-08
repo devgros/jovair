@@ -1,0 +1,19 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+
+{% block head_javascript %}
+    {% block adminlte_options %}
+        <script type="text/javascript">
+            var AdminLTEOptions = {
+                animationSpeed: 'normal',
+                sidebarExpandOnHover: false,
+                enableBoxRefresh: true,
+                enableBSToppltip: true,
+                enableFastclick: true,
+                enableControlSidebar: true,
+                enableBoxWidget: true
+            };
+        </script>
+    {% endblock %}
+
+    <script src="{{ asset('bundles/easyadmin/javascript/easyadmin-all.min.js') }}"></script>
+{% endblock head_javascript %}

@@ -1,0 +1,49 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\AmmCelluleRepository")
+ */
+class AmmCellule
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $type;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $edition;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $revision;
+
+    /**
+     * @ORM\Column(type="date")
+     */
+    private $date;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Appareil", inversedBy="appareil_amm_cellule")
+     */
+    private $appareil;
+
+    public function __toString()
+    {
+        return $this->type;
+    }
+}

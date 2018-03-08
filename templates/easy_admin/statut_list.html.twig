@@ -1,0 +1,7 @@
+{% if field_options.format %}
+    {% set type_id = field_options.format|format(value) %}
+{% else %}
+    {% set type_id = value|number_format %}
+{% endif %}
+
+<span class="label {% if type_id == 1 %}label-success{% else %}label-warning{% endif %}">{{ statut_dossier[type_id] }}</span>

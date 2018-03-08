@@ -1,0 +1,339 @@
+{% extends 'easy_admin/show.html.twig' %}
+
+{% set statut_travaux_label = [] %}
+{% for statut_name, statut_id in statut_travaux %}
+	{% set statut_travaux_label = statut_travaux_label|merge({(statut_id):statut_name}) %}
+{% endfor %}
+{% set statut_cnad_label = [] %}
+{% for statut_name, statut_id in statut_travaux %}
+	{% set statut_cnad_label = statut_cnad_label|merge({(statut_id):statut_name}) %}
+{% endfor %}
+
+{% block content_title %}
+	Dossier n°: {{ entity.numBl }} <span class="right label {% if entity.statut == 1 %}label-success{% else %}label-warning{% endif %}">{{ statut_dossier[entity.statut] }}</span><br/>
+	<span class="h4">Suivant le Bon de Commande n°: {{ entity.numBc }}</span>
+{% endblock %}
+
+{% block main %}
+<div class="form-horizontal">
+	<div class="box box-success">
+		<div class="box-header with-border">
+			<h3 class="box-title">Situation de l'appareil : </h3>
+			<div class="box-tools pull-right">
+            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+		</div>
+		<div class="box-body">
+			<div class="form-group field-string col-sm-6">
+				<label class="col-sm-2 control-label">Immatriculation</label>
+				<div  class="col-sm-10">
+					<div class="form-control"><a title="" href="{{ path('easyadmin', { action: "show", entity: "Appareil", id: entity.appareil.id }) }}" >{{ entity.appareil.immatriculation }}</a></div>	
+				</div>
+			</div>
+			<div class="form-group field-string col-sm-6">
+				<label class="col-sm-2 control-label">Heures APRS</label>
+				<div  class="col-sm-10">
+					<div class="form-control">{{ entity.appareil.heureDerniereAprs }}</div>	
+				</div>
+			</div>
+			<div class="form-group col-sm-12">
+				{% include  'easy_admin/Includes/appareil_table.html.twig' with {'appareil': entity.appareil } %}
+				{% include  'easy_admin/Includes/pe_table.html.twig' with {'appareil': entity.appareil, 'first': true } %}
+			</div>
+		</div>
+	</div>	
+
+	<div class="col-sm-6 no_pad_left">
+		<div class="box box-warning">
+			<div class="box-header with-border">
+			   <h3 class="box-title">Travaux demandés :</h3>
+				<div class="box-tools pull-right">
+	            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	            </div>
+			</div>
+			<div class="box-body">
+				{% if entity.travaux|length() > 0 %}
+				<table class="table table-striped">
+					{% for travaux in entity.travaux %}
+						<tr>
+							<td>
+								{% if travaux.isValid %}<span class=" label label-success"><i class="fa fa-check"></i></span>{% else %}<span class="label label-danger"><i class="fa fa-times"></i></span>{% endif %}
+								{{ travaux.designation }}
+							</td>
+							<td class="text-right">{% if travaux.isValid and travaux.statut > 0 %}<span class=" label label-{% if travaux.statut < 3 %}warning{% else %}success{% endif %}">{{ statut_travaux_label[travaux.statut] }}</span>{% endif %}</td>
+							<td class="text-right">{% if travaux.isValid %}{{ travaux.mecanicien }}{% endif %}</td>
+							<td class="text-right action_table">
+								{% if travaux.isValid %}<button type="button" class="btn btn-xs btn-secondary" data-toggle="modal" data-target="#tavraux{{ travaux.id }}"><i class="fa fa-search"></i></button>{% endif %}
+								{% if entity.statut == 0 %}<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierTravaux', primary_key_name: 'id', id: travaux.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6 no_pad_right">
+		<div class="box box-warning">
+			<div class="box-header with-border">
+			   <h3 class="box-title">CN / AD :</h3>
+				<div class="box-tools pull-right">
+	            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	            </div>
+			</div>
+			<div class="box-body">
+				{% if entity.cnad|length() > 0 %}
+				<table class="table table-striped">
+					{% for cnad in entity.cnad %}
+						<tr>
+							<td>
+								{% if cnad.isValid %}<span class=" label label-success"><i class="fa fa-check"></i></span>{% else %}<span class="label label-danger"><i class="fa fa-times"></i></span>{% endif %}
+								{{ cnad.designation }}
+							</td>
+							<td class="text-right">{% if cnad.isValid and cnad.statut > 0 %}<span class=" label label-{% if cnad.statut < 3 %}warning{% else %}success{% endif %}">{{ statut_cnad_label[cnad.statut] }}</span>{% endif %}</td>
+							<td class="text-right">{% if cnad.isValid %}{{ cnad.mecanicien }}{% endif %}</td>
+							<td class="text-right action_table">
+								{% if cnad.isValid %}<button type="button" class="btn btn-xs btn-secondary" data-toggle="modal" data-target="#cnad{{ cnad.id }}"><i class="fa fa-search"></i></button>{% endif %}
+								{% if entity.statut == 0 %}<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierCnad', primary_key_name: 'id', id: cnad.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>{% endif %}
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+				{% endif %}
+			</div>
+		</div>
+	</div>
+
+	<div class="box box-primary new-row">
+		<div class="box-header with-border">
+		   	<h3 class="box-title">Travaux découvert en visite :</h3>
+			<div class="box-tools pull-right">
+            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+		</div>
+		<div class="box-body">
+			{% if entity.travauxSup|length() > 0 %}
+			<table class="table table-striped">
+					<tr class="border_bottom">
+						<th>Anomalie découverte</th>
+						<th>Action corrective</th>
+						<th>Mécanicien</th>
+						{% if entity.statut == 0 %}<th class="text-right">Action</th>{% endif %}
+					</tr>
+				{% for dossier_travaux_sup in entity.travauxSup %}
+					<tr>
+						<td>{{ dossier_travaux_sup.designation }}</td>
+						<td>{{ dossier_travaux_sup.actionCorrective }}</td>
+						<td>{{ dossier_travaux_sup.mecanicien }}</td>
+						{% if entity.statut == 0 %}<td class="text-right">
+							<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierTravauxSup', primary_key_name: 'id', id: dossier_travaux_sup.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
+						</td>{% endif %}
+					</tr>
+				{% endfor %}
+			</table>
+			{% endif %}
+			{% if entity.statut == 0 %}<a href="{{ path('easyadmin', { action: 'new', entity: 'DossierTravauxSup', primary_key_name: 'id', dossier_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>{% endif %}
+		</div>
+	</div>
+
+	<div class="col-sm-6 no_pad_left new-row">
+		<div class="box box-danger ">
+			<div class="box-header with-border">
+			   	<h3 class="box-title">Pièces utilisés :</h3>
+				<div class="box-tools pull-right">
+	            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	            </div>
+			</div>
+			<div class="box-body">
+				{% if entity.dossierArticle|length() > 0 %}
+				<table class="table table-striped">
+					{% for dossier_article in entity.dossierArticle %}
+						<tr>
+							<td>{{ dossier_article.articleFormone.article.nom }} - sn:{{ dossier_article.articleFormone.sn }} - from tracking:{{ dossier_article.articleFormone.fromTracking }}</td>
+							<td>Qte: {{ dossier_article.quantite }}</td>
+							{% if entity.statut == 0 %}<td class="text-right">
+								<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierArticle', primary_key_name: 'id', id: dossier_article.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
+							</td>{% endif %}
+						</tr>
+					{% endfor %}
+				</table>
+				{% endif %}
+				{% if entity.statut == 0 %}<a href="{{ path('easyadmin', { action: 'new', entity: 'DossierArticle', primary_key_name: 'id', dossier_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>{% endif %}
+			</div>
+		</div>
+	</div>
+	<div class="col-sm-6 no_pad_right">
+		<div class="box box-danger ">
+			<div class="box-header with-border">
+			   	<h3 class="box-title">Pointage :</h3>
+				<div class="box-tools pull-right">
+	            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	            </div>
+			</div>
+			<div class="box-body">
+				{% if entity.dossierMainOeuvre|length() > 0 %}
+				<table class="table table-striped">
+					{% for dossier_main_oeuvre in entity.dossierMainOeuvre %}
+						<tr>
+							<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
+							<td>{{ dossier_main_oeuvre.dateRealisation|date('d/m/Y') }}</td>
+							<td>Qte: {{ dossier_main_oeuvre.quantite }}</td>
+							{% if entity.statut == 0 %}<td class="text-right">
+								<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierMainOeuvre', primary_key_name: 'id', id: dossier_main_oeuvre.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
+							</td>{% endif %}
+						</tr>
+					{% endfor %}
+				</table>
+				{% endif %}
+				{% if entity.statut == 0 %}<a href="{{ path('easyadmin', { action: 'new', entity: 'DossierMainOeuvre', primary_key_name: 'id', dossier_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>{% endif %}
+			</div>
+		</div>
+	</div>
+
+	
+
+	<div class="col-sm-6 no_pad_left new-row">
+		<div class="box box-success">
+			<div class="box-header with-border">
+			   	<h3 class="box-title">Outillages soumis à étalonnage :</h3>
+				<div class="box-tools pull-right">
+	            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	            </div>
+			</div>
+			<div class="box-body">
+				{% if entity.dossierOutils|length() > 0 %}
+				<table class="table table-striped">
+					{% for dossier_outils in entity.dossierOutils %}
+						<tr>
+							<td>{{ dossier_outils.outillage.outillage.nom }}</td>
+							<td>Sn:{{ dossier_outils.outillage.outillage.sn }}</td>
+							<td>Date:{{ dossier_outils.outillage.dateValidite|date("d/m/Y") }}</td>
+							{% if entity.statut == 0 %}<td class="text-right">
+								<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierOutils', primary_key_name: 'id', id: dossier_outils.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
+							</td>{% endif %}
+						</tr>
+					{% endfor %}
+				</table>
+				{% endif %}
+				{% if entity.statut == 0 %}<a href="{{ path('easyadmin', { action: 'new', entity: 'DossierOutils', primary_key_name: 'id', dossier_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>{% endif %}
+			</div>
+		</div>
+	</div>
+	{% if entity.statut > 0 %}
+	<div class="col-sm-6 no_pad_right">
+		<div class="box box-success ">
+			<div class="box-header with-border">
+			   	<h3 class="box-title">Contrôle final :</h3>
+				<div class="box-tools pull-right">
+	            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	            </div>
+			</div>
+			<div class="box-body">
+				<table class="table table-striped">
+					<tr class="border_bottom">
+						<th>Date</th>
+						<th>Heure</th>
+						<th>Lieu</th>
+						<th>Mécanicien</th>
+						<th>Signature</th>
+					</tr>
+					<tr>						
+						<td>{% if entity.dateCf %}{{ entity.dateCf|date("d/m/Y") }}{% endif %}</td>
+						<td>{% if entity.timeCf %}{{ entity.timeCf|slice(0, 5) }}{% endif %}</td>
+						<td>{{ entity.lieuCf }}</td>
+						<td>{{ entity.mecanicien }} ({{ entity.mecanicien.licence }})</td>
+						<td><img src="{{ vich_uploader_asset(entity.mecanicien, 'signatureFile', 'App\\Entity\\Mecanicien') }}" width="65" /></td>
+					</tr>
+				</table>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+
+	<div class="form-group form-actions">
+		<div class="col-sm-10 col-sm-offset-2">
+		{% block item_actions %}
+			{% set _show_actions_tmp = easyadmin_get_actions_for_show_item(_entity_config.name) %}
+			{% if entity.statut > 0 %}
+				{% set _show_actions = {'dossier_cri': _show_actions_tmp.dossier_cri, 'dossier_crs': _show_actions_tmp.dossier_crs, 'dossier_aprs': _show_actions_tmp.dossier_aprs, 'list': _show_actions_tmp.list } %}
+			{% else %}
+				{% set _show_actions = _show_actions_tmp %}
+			{% endif %}
+			
+			{% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
+
+			{{ include('@EasyAdmin/default/includes/_actions.html.twig', {
+				actions: _show_actions,
+				request_parameters: _request_parameters,
+				translation_domain: _entity_config.translation_domain,
+				trans_parameters: _trans_parameters,
+				item_id: _entity_id
+			}, with_context = false) }}
+		{% endblock item_actions %}
+		</div>
+	</div>
+
+</div>
+	
+	{% block delete_form %}
+		{{ include('@EasyAdmin/default/includes/_delete_form.html.twig', {
+			view: 'show',
+			referer: app.request.query.get('referer', ''),
+			delete_form: delete_form,
+			_translation_domain: _entity_config.translation_domain,
+			_trans_parameters: _trans_parameters,
+			_entity_config: _entity_config,
+		}, with_context = false) }}
+	{% endblock delete_form %}
+
+
+
+{% for travaux in entity.travaux %}
+	{% if travaux.isValid %}
+	<div class="modal fade" id="tavraux{{ travaux.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">{{ travaux.designation }} {% if travaux.statut > 0 %}<span class=" right label label-{% if travaux.statut < 3 %}warning{% else %}success{% endif %}">{{ statut_travaux_label[travaux.statut] }}</span>{% endif %}</h4>
+				</div>
+				<div class="modal-body">
+					<b>Effectué par :</b> {{ travaux.mecanicien }}<br/><br/>
+					<b>Commentaire: </b> {{ travaux.commentaire }}
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+{% endfor %}
+{% for cnad in entity.cnad %}
+	{% if cnad.isValid %}
+	<div class="modal fade" id="cnad{{ cnad.id }}" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+		<div class="modal-dialog" role="document">
+			<div class="modal-content">
+				<div class="modal-header">
+					<button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+					<h4 class="modal-title" id="myModalLabel">{{ cnad.designation }}{% if cnad.statut > 0 %}<span class=" right label label-{% if cnad.statut < 3 %}warning{% else %}success{% endif %}">{{ statut_cnad_label[cnad.statut] }}</span>{% endif %}</h4>
+				</div>
+				<div class="modal-body">
+					<div class="modal-body">
+					<b>Effectué par :</b> {{ cnad.mecanicien }}<br/><br/>
+					<b>Commentaire: </b> {{ cnad.commentaire }}
+				</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	{% endif %}
+{% endfor %}
+{% endblock %}
+
+{% block body_javascript %}
+	{{ parent() }}
+
+	<script type="text/javascript">
+		$(function() {
+			
+		});
+	</script>
+{% endblock %}

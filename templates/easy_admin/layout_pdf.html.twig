@@ -1,0 +1,54 @@
+<html lang="{{ app.request.locale|split('_')|first|default('en') }}">
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="robots" content="noindex, nofollow, noarchive, nosnippet, noodp, noimageindex, notranslate, nocache" />
+        <meta content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" name="viewport">
+        <meta name="generator" content="EasyAdmin" />
+
+        <title>{% block page_title %}{% endblock %}</title>
+
+        {% block head_stylesheets %}
+            <link rel="stylesheet" href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/easyadmin/stylesheet/easyadmin-all.min.css') }}">
+            <style>
+                {{ easyadmin_config('_internal.custom_css')|raw }}
+            </style>
+        {% endblock %}
+
+        {% for css_asset in easyadmin_config('design.assets.css') %}
+            <link rel="stylesheet" href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset(css_asset) }}">
+        {% endfor %}
+
+        {% block head_favicon %}
+            {% set favicon = easyadmin_config('design.assets.favicon') %}
+            <link rel="icon" type="{{ favicon.mime_type }}" href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset(favicon.path) }}" />
+        {% endblock %}
+
+        {% block head_javascript %}
+            {% block adminlte_options %}
+                <script type="text/javascript">
+                    var AdminLTEOptions = {
+                        animationSpeed: 'normal',
+                        sidebarExpandOnHover: false,
+                        enableBoxRefresh: false,
+                        enableBSToppltip: false,
+                        enableFastclick: false,
+                        enableControlSidebar: false,
+                        enableBoxWidget: false
+                    };
+                </script>
+            {% endblock %}
+
+            <script src="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/easyadmin/javascript/easyadmin-all.min.js') }}"></script>
+        {% endblock head_javascript %}
+
+        {% if easyadmin_config('design.rtl') %}
+            <link rel="stylesheet" href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/easyadmin/stylesheet/bootstrap-rtl.min.css') }}">
+            <link rel="stylesheet" href="{{ app.request.scheme ~'://' ~ app.request.httpHost ~ asset('bundles/easyadmin/stylesheet/adminlte-rtl.min.css') }}">
+        {% endif %}
+    </head>
+
+    <body id="pdf" class="easyadmin sidebar-mini {% block body_class %}{% endblock %}">
+        {% block body %}{% endblock body %}
+    </body>
+</html>

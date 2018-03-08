@@ -1,0 +1,50 @@
+{# a *-to-many collection of values #}
+
+{% if value is iterable %}
+    {% if 'show' == view %}
+        {% if value|length > 0 %}
+            <table class="table">
+                <tr>
+                    <th>Sn</th>
+                    <th>From Tracking</th>
+                    <th class="text-right">Quantité</th>
+                    <th class="text-right">Form one</th>
+                    <th class="text-right">Action</th>
+                </tr>
+                {% for item in value|slice(0, easyadmin_config('show.max_results')) %}
+                    <tr>
+                        {% if link_parameters is defined %}
+                            {# the empty string concatenation is needed when the primary key is an object (e.g. an Uuid object) #}
+                            {% set primary_key_value = '' ~ attribute(item, link_parameters.primary_key_name) %}
+                            <td>{{ item.sn }}</td>
+                            <td>{{ item.fromTracking }}</td>
+                            <td class="text-right">{{ item.quantite }}</td>
+                            <td class="text-right"><a title="voir le Form one" href="{{ vich_uploader_asset(item, 'formoneFile', 'App\\Entity\\ArticleFormone') }}" target="_blank" target="_self"><i class="fa fa-file-pdf-o"></i></a></td>
+                            <td class="text-right">
+                                <a href="{{ path('easyadmin', link_parameters|merge({ id: primary_key_value, menuIndex: '5', action: 'edit', referer: '' })) }}"><i class="fa fa-pencil"></i></a>
+                            </td>                   
+                        {% else %}
+                            <td>{{ item }}</td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+
+                {% set _remaining_items = value|length - easyadmin_config('show.max_results') %}
+                {% if _remaining_items > 0 %}
+                    <tr class="remaining-items"><td>({{ 'show.remaining_items'|transchoice(_remaining_items, {}, 'EasyAdminBundle') }})</td></tr>
+                {% endif %}
+            </table>
+        {% else %}
+            <div class="empty collection-empty">
+                {{ include(entity_config.templates.label_empty) }}
+            </div>
+        {% endif %}
+    {% elseif 'list' == view %}
+        <span class="badge">{{ value|length }}</span>
+    {% endif %}
+{# a simple *-to-one value associated with an entity managed by this backend #}
+{% elseif link_parameters is defined %}
+    <a href="{{ path('easyadmin', link_parameters|merge({ referer: '' })) }}">{{ value|easyadmin_truncate }}</a>
+{% else %}
+    {{ value|easyadmin_truncate }}
+{% endif %}

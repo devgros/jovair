@@ -1,0 +1,14 @@
+easy_admin:
+    entities:
+        OutillageCertificat:
+            class: App\Entity\OutillageCertificat
+            controller: App\Controller\OutillageCertificatController
+            image_base_path: '%app.path.certificat_files%'
+            disabled_actions: ['delete']
+
+            form:
+                title: "Ajouter un certificat de validité"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-primary' }
+                    - { property: 'date_validite', label: 'Date de validité', type_options: { widget: 'single_text' }, css_class: 'col-sm-6' }
+                    - { property: 'certificatFile', label: 'Certificat', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-6'}

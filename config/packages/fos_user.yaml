@@ -1,0 +1,10 @@
+fos_user:
+    registration:
+        confirmation:
+            enabled: true
+    db_driver: orm
+    user_class: App\Entity\User
+    firewall_name: main
+    from_email:
+        address: '%env(MAILER_USER_ADDRESS)%'
+        sender_name: '%env(MAILER_USER_NAME)%'

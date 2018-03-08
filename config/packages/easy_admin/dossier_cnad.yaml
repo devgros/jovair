@@ -1,0 +1,19 @@
+parameters:
+    statut_cnad: {'-':'0', 'Non concerné':'1', 'Non alloué':'2', 'Appliqué':'3', 'Effectué':'4'}
+
+easy_admin:
+    entities:
+        DossierCnad:
+            class: App\Entity\DossierCnad
+            controller: App\Controller\DossierCnadController
+            form:
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-warning' }
+                    - { property: 'designation', label: "Désignation", type_options: { disabled: "disabled"}, css_class: 'col-sm-6'}
+                    - { property: 'statut', label: "Statut", type: 'choice', type_options: {choices: '%statut_travaux%', expanded: false, multiple: false }, css_class: 'col-sm-6'}
+                    - { property: 'commentaire', label: "Commentaire", css_class: 'col-sm-12'}
+                    - { property: 'mecanicien', label: "Mecanicien", css_class: 'col-sm-6'}
+            edit:
+                title: "Modifier un CN/AD"
+
+                        

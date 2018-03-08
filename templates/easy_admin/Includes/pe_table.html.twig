@@ -1,0 +1,85 @@
+
+<table class="table table-show table-striped table-bordered">
+	<thead class="thead-light">
+		<tr>
+			<th class="empty_th"></th>
+			<th>Type</th>
+			<th>Edition</th>
+			<th>Révision/Acceptation</th>
+			<th>Date</th>
+			{% if not first %}<th class="text-right">Action</th>{% endif %}
+		</tr>
+	</thead>
+	{% if first %}
+	<tbody>
+		<tr>
+			<th>Programme d'entretien</th>
+			<td>{{ appareil.appareilPe|first.type }}</td>
+			<td>{{ appareil.appareilPe|first.edition }}</td>
+			<td>{{ appareil.appareilPe|first.revision }}</td>
+			<td>{{ appareil.appareilPe|first.date|date("d/m/Y") }}</td>
+		</tr>
+		<tr>
+			<th>AMM Cellule</th>
+			<td>{{ appareil.appareilAmmCellule|first.type }}</td>
+			<td>{{ appareil.appareilAmmCellule|first.edition }}</td>
+			<td>{{ appareil.appareilAmmCellule|first.revision }}</td>
+			<td>{{ appareil.appareilAmmCellule|first.date|date("d/m/Y") }}</td>
+		</tr>
+		<tr>
+			<th>AMM Moteur</th>
+			<td>{{ appareil.appareilAmmMoteur|first.type }}</td>
+			<td>{{ appareil.appareilAmmMoteur|first.edition }}</td>
+			<td>{{ appareil.appareilAmmMoteur|first.revision }}</td>
+			<td>{{ appareil.appareilAmmMoteur|first.date|date("d/m/Y") }}</td>
+		</tr>
+	</tbody>
+	{% else %}
+	<tbody>
+		{% if appareil.appareilPe|length() > 0 %}
+		{% for object in appareil.appareilPe %}
+		<tr>
+			{% if loop.first %}<th rowspan="{{ appareil.appareilPe|length }}">Programme d'entretien</th>{% endif %}
+			<td>{{ object.type }}</td>
+			<td>{{ object.edition }}</td>
+			<td>{{ object.revision }}</td>
+			<td>{{ object.date|date("d/m/Y") }}</td>
+			<td class="text-right">
+                <a href="{{ path('easyadmin', { action: 'edit', entity: 'ProgrammeEntretien', primary_key_name: 'id', id: object.id, referer: '' }) }}"><i class="fa fa-pencil"></i></a>
+            </td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+		{% if appareil.appareilAmmCellule|length() > 0 %}
+		<tr><td colspan="6"></td></tr>
+		{% for object in appareil.appareilAmmCellule %}
+		<tr>
+			{% if loop.first %}<th rowspan="{{ appareil.appareilAmmCellule|length }}">AMM Cellule</th>{% endif %}
+			<td>{{ object.type }}</td>
+			<td>{{ object.edition }}</td>
+			<td>{{ object.revision }}</td>
+			<td>{{ object.date|date("d/m/Y") }}</td>
+			<td class="text-right">
+                <a href="{{ path('easyadmin', { action: 'edit', entity: 'AmmCellule', primary_key_name: 'id', id: object.id, referer: '' }) }}"><i class="fa fa-pencil"></i></a>
+            </td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+		{% if appareil.appareilAmmCellule|length() > 0 %}
+		<tr><td colspan="6"></td></tr>
+		{% for object in appareil.appareilAmmMoteur %}
+		<tr>
+			{% if loop.first %}<th rowspan="{{ appareil.appareilAmmMoteur|length }}">AMM Moteur</th>{% endif %}
+			<td>{{ object.type }}</td>
+			<td>{{ object.edition }}</td>
+			<td>{{ object.revision }}</td>
+			<td>{{ object.date|date("d/m/Y") }}</td>
+			<td class="text-right">
+                <a href="{{ path('easyadmin', { action: 'edit', entity: 'AmmMoteur', primary_key_name: 'id', id: object.id, referer: '' }) }}"><i class="fa fa-pencil"></i></a>
+            </td>
+		</tr>
+		{% endfor %}
+		{% endif %}
+	</tbody>
+	{% endif %}
+</table>

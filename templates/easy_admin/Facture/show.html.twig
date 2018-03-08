@@ -1,0 +1,32 @@
+{% extends 'easy_admin/show.html.twig' %}
+
+{% block content %}
+    {% block flash_messages %}
+        {{ include(_entity_config is defined ? _entity_config.templates.flash_messages : '@EasyAdmin/default/flash_messages.html.twig') }}
+    {% endblock flash_messages %}
+
+    <section class="content-header">
+    {% block content_header %}
+
+        <h1 class="title">{% block content_title %}Facture n°: {{ entity.numFacture }}{% endblock %}
+            <a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/facture/facture_{{ entity.numFacture }}.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print"><i class="fa fa-download"></i> PDF</a>
+        </h1>
+
+    {% endblock content_header %}
+    {% block content_help %}
+        {% if _entity_config is defined and _entity_config[app.request.query.get('action')]['help']|default(false) %}
+            <div class="box box-widget help-entity">
+                <div class="box-body">
+                    {{ _entity_config[app.request.query.get('action')]['help']|trans|raw }}
+                </div>
+            </div>
+        {% endif %}
+    {% endblock content_help %}
+    </section>
+
+    <section id="main" class="invoice">
+        {% block main %}
+			{% include  'easy_admin/Facture/include_facture.html.twig' with {'entity': entity, pdf: false } %}
+		{% endblock %}
+    </section>
+{% endblock content %}

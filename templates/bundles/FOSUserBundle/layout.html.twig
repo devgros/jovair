@@ -1,0 +1,38 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+
+{% block page_title %}Connexion{% endblock %}
+
+{% block body %}
+<body class="hold-transition login-page">
+    <div class="login-box">
+        <div class="login-logo">
+            <a href="../../index2.html">{{ easyadmin_config('site_name')|raw }}</a>
+        </div>
+    <!-- /.login-logo -->
+        <div class="login-box-body">
+            <p class="login-box-msg">
+                {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                    {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+                    <a href="{{ path('fos_user_security_logout') }}">
+                        {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+                    </a>
+                {% endif %}
+            </p>
+
+            {% if app.request.hasPreviousSession %}
+                {% for type, messages in app.session.flashbag.all() %}
+                    {% for message in messages %}
+                        <div class="flash-{{ type }}">
+                            {{ message }}
+                        </div>
+                    {% endfor %}
+                {% endfor %}
+            {% endif %}
+
+            {% block fos_user_content %}
+            {% endblock fos_user_content %}
+        </div>
+    <!-- /.login-box-body -->
+    </div>
+</body>
+{% endblock body %}

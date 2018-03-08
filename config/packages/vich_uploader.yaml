@@ -1,0 +1,27 @@
+parameters:
+    app.path.signature_images: /public/uploads/signatures
+    app.path.certificat_files: /public/uploads/certificats
+    app.path.formone_files: /public/uploads/formones
+    app.path.carteTravailFile: /public/uploads/carte_travail
+
+vich_uploader:
+    db_driver: orm
+    twig: true
+    mappings:
+        signature_images:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.signature_images%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/signatures'
+        certificat_files:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.certificat_files%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/certificats'
+        formone_files:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.formone_files%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/formones'
+        carteTravailFile:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.carteTravailFile%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/carte_travail'
+            

@@ -1,0 +1,13 @@
+knp_snappy:
+    pdf:
+        enabled:    true
+        binary:     '%env(WKHTMLTOPDF_PATH)%'
+        options:    
+          margin-top: 4
+          margin-right: 4
+          margin-bottom: 4
+          margin-left: 4
+    image:
+        enabled:    true
+        binary:     '%env(WKHTMLTOIMAGE_PATH)%'
+        options:    []

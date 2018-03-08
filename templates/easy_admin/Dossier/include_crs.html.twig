@@ -1,0 +1,212 @@
+<div class="crs">
+	<table class="table table-crs table-bordered">
+		<tr>
+			<td colspan="3" style="width:192px;" >
+				<h3>1.Approving competent Authority/Country<br/><i>Autorité compétente/Pays</i></h3>
+				DIRECTION GENERALE DE L’AVIATION CIVILE - France
+			</td>
+			<td colspan="9" style="width:576px;"><br/>
+				<h2>AIRCRAFT CERTIFICATE OF RELEASE TO SERVICE <br/><i>Certificat d'approbation pour remise en service aéronef</i></h2>
+			</td>
+			<td colspan="4" style="width:256px;">
+				<h3>3 . Form Tracking Number<br/><i>N° du formulaire</i></h3>
+				<b class="focus">{{ entity.numBl }}</b>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="width:192px;" >
+				<h3>4 Approved Organisation Name and Adress<br/><i>Nom et adresse de l’Organisme</i></h3>
+				JOV'AIR MAINTENANCE 6 ue du docteur lucien Cartoto 13090 Aix en Provence / entretien en cadre non agréé
+			</td>
+			<td colspan="9" style="width:576px;"></td>
+			<td colspan="4" style="width:256px;">
+				<h3>5. Work Order / Contract / Invoice<br/><i>Bon de commande / Contrat / Facture</i></h3><br/>
+				<b class="focus">{{ entity.numBc }}</b>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="width:192px;">
+				<h3>6. Model<br/><i>type</i></h3>
+				{{ entity.appareil.modelCellule }}
+			</td>
+			<td colspan="3" style="width:192px;">
+				<h3>7. Registration<br/><i>Immatriculation</i></h3>
+				{{ entity.appareil.immatriculation }}
+			</td>
+			<td colspan="2" style="width:128px;">
+				<h3>8. A/C Serial Number<br/><i>N° de série</i></h3>
+				{{ entity.appareil.numSerieCellule }}
+			</td>
+			<td colspan="2" style="width:128px;">
+				<h3>9. Engine 1<br/><i>Model</i></h3>
+				<table class="table sub-table">
+					<tr>
+						<th>Type</th>
+						<th>SN</th>
+					</tr>
+					<tr>
+						<td>{{ entity.appareil.modelMoteur1 }}</td>
+						<td>{{ entity.appareil.numSerieMoteur1 }}</td>
+					</tr>
+				</table>
+				
+			</td>
+			<td colspan="2" style="width:128px;" >
+				<h3>9. Engine 2<br/><i>Model</i></h3>
+				<table class="table sub-table">
+					<tr>
+						<th>Type</th>
+						<th>SN</th>
+					</tr>
+					<tr>
+						<td>{{ entity.appareil.modelMoteur2 }}</td>
+						<td>{{ entity.appareil.numSerieMoteur2 }}</td>
+					</tr>
+				</table>
+			</td>
+			<td colspan="2" style="width:128px;">
+				<h3>11. Propeller Engine 1<br/><i>Type</i></h3>
+				<table class="table sub-table">
+					<tr>
+						<th>Type</th>
+						<th>SN</th>
+					</tr>
+					<tr>
+						<td>{{ entity.appareil.modelHelice1 }}</td>
+						<td>{{ entity.appareil.numSerieHelice1 }}</td>
+					</tr>
+				</table>
+			</td>
+			<td colspan="2" style="width:128px;">
+				<h3>11. Propeller Engine 2<br/><i>Type</i></h3>
+				<table class="table sub-table">
+					<tr>
+						<th>Type</th>
+						<th>SN</th>
+					</tr>
+					<tr>
+						<td>{{ entity.appareil.modelHelice2 }}</td>
+						<td>{{ entity.appareil.numSerieHelice2 }}</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="width:192px;">
+				<h3>14. Approved Maintenance  program<br/><i>Programme d’entretien approuvé</i></h3>
+				<table class="table sub-table">
+					<tr>
+						<td>{{ entity.appareil.appareilPe|first.type }}</td>
+						<td>{{ entity.appareil.appareilPe|first.revision }}</td>
+					</tr>
+				</table>
+			</td>
+			<td colspan="3" style="width:192px;">
+				<h3>15. Date of performance<br/><i>Date des travaux</i></h3>
+				{{ entity.dateCreation|date("d/m/Y") }} au {{ entity.dateCf|date("d/m/Y") }}
+			</td>
+			<td colspan="2" style="width:128px;">
+				<h3>16. Aircraft Flying Hours<br/><i>Heures de vol cellule</i></h3>
+				<b class="focus">{{ entity.appareil.htCellule }}</b>
+			</td>
+			<td colspan="2" style="width:128px;">
+				<h3>17. Engine 1 Flying Hours<br/><i>Heures Moteur  1</i></h3>
+				<b class="focus">{{ entity.appareil.hrgMoteur1 }}</b>				
+			</td>
+			<td colspan="2" style="width:128px;" >
+				<h3>17. Engine 2 Flying Hours<br/><i>Heures Moteur  2</i></h3>
+				<b class="focus">{{ entity.appareil.hrgMoteur2 }}</b>
+			</td>
+			<td colspan="2" style="width:128px;">
+				<h3>18. Propeller 1 Flying Hours<br/><i>Heures Hélice moteur 1</i></h3>
+				<b class="focus">{{ entity.appareil.hrgHelice1 }}</b>
+			</td>
+			<td colspan="2" style="width:128px;">
+				<h3>18. Propeller 2 Flying Hours<br/><i>Heures Hélice moteur 2</i></h3>
+				<b class="focus">{{ entity.appareil.hrgHelice2 }}</b>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="16" style="width:1024px;">
+				<h3>12. Status – Work performed /Etat – <i>travaux effectués</i></h3>
+				<table class="table sub-table left">
+					<tr>
+						{% if entity.travaux|length() > 0 %}
+						<td style="width:33%;">
+							<h4>Schedule works:</h4>
+							{% for travaux in entity.travaux %}
+								• {{ travaux.designation }}<br/>
+							{% endfor %}
+						</td>
+						{% endif %}
+						{% if entity.cnad|length() > 0 %}
+						<td style="width:33%;">
+							<h4>Airworthiness Directive / Bulletin Service Compliance :</h4>
+							{% for cnad in entity.cnad %}
+								• {{ cnad.designation }}<br/>
+							{% endfor %}
+						</td>
+						{% endif %}
+						{% if entity.travauxSup|length() > 0 %}
+						<td style="width:33%;">
+							<h4>Travaux suplémentaire découvert en visite :</h4>
+							{% for travauxSup in entity.travauxSup %}
+								• {{ travauxSup.designation }}<br/>
+							{% endfor %}
+						</td>
+						{% endif %}
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="16" style="width:1024px;">
+				<table class="table sub-table left">
+					<tr>
+						<td style="width:150px;"><h3>13. Remarks - <i>Remarques</i></h3></td>
+						<td>{{ entity.remarqueAprs }}</td>
+					</tr>
+				</table>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="16" style="width:1024px;">
+				<h3>19. Part M- Release to Service - <i>Approbation pour remise en service selon Part M</i></h3>
+				<p>
+					Certifies that unless otherwise specified in block 13, the work identified in block 12 and described in block 13, was accomplished in accordance with Part M and in respect to that work the aircraft are considered ready for release to service<br/>
+					<i>Certifie que, sauf indication contraire spécifiée en case 13, les travaux identifies en case 12 et décrits en case 13 ont été réalisés conformément à Part M et qu’au vu de ces travaux, l’aéronef est considéré prêt à la remise en service.</i><br/>
+					<i class="fa fa-{% if entity.isValidCtrlOk %}check-{% endif %}square-o"></i> Subject to the satisfactory performance of the test flight<br/>
+          			<i>&nbsp;&nbsp;&nbsp;&nbsp;Sous réserve de l’exécution satisfaisante du vol de contrôle</i><br/>
+          			<i class="fa fa-{% if entity.isValidCtrlOk %}check-{% endif %}square-o"></i> For ferry flight and under the conditions in conformity with document of approval associated with this ferry flight ref. :<br/>
+          			<i>&nbsp;&nbsp;&nbsp;&nbsp;Pour vol de convoyage technique t dans les conditions conformes au document d’approbation associé à ce vol de convoyage réf. : </i><br/>
+				</p>
+			</td>
+		</tr>
+		<tr>
+			<td colspan="3" style="width:192px;">
+				<h3>20. Authorised Signature<br/><i>Signature</i></h3>
+				{% if entity.mecanicien %}<img src="{{ app.request.scheme ~'://' ~ app.request.httpHost}}{{ vich_uploader_asset(entity.mecanicien, 'signatureFile', 'App\\Entity\\Mecanicien') }}" class="crs_sign" width="65" />{% endif %}
+			</td>
+			<td colspan="5" style="width:320px;">
+				<h3>21. Certificate/Approval Ref.<br/><i>N° de certificat d’agrément</i></h3>
+				{% if entity.mecanicien %}{{ entity.mecanicien.licence }}{% endif %}
+			</td>
+			<td colspan="3" style="width:192px;">
+				<h3>22. Surname - Name<br/><i>Nom - Prénom</i></h3>
+				{% if entity.mecanicien %}{{ entity.mecanicien }}{% endif %}
+			</td>	
+			<td colspan="2" style="width:128px;">
+				<h3>23. Date (dd/mm/yy)/time<br/><i>Date (jj/mm/an)/heure</i></h3>
+				<table class="table sub-table">
+					<tr>
+						<td>{% if entity.dateCf %}{{ entity.dateCf|date("d/m/Y") }}{% endif %}</td>
+						<td>{% if entity.timeCf %}{{ entity.timeCf|slice(0, 5) }}{% endif %}</td>
+					</tr>
+				</table>
+			</td>
+			<td colspan="3" style="width:192px;">
+				<h3>24. Location<br/><i>Lieu</i></h3>
+				{{ entity.lieuCf }}
+			</td>	
+	</table>
+</div>

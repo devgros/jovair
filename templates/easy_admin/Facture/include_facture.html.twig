@@ -1,0 +1,165 @@
+<div class="row">
+	<div class="col-xs-12">
+		<h2 class="page-header">
+			<img src="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/img/logo_min.png" width="70"  />
+			Jov'air Maintenance 
+			<small class="pull-right"><br/>Date: {{ entity.dateCreation|date('d/m/Y') }}</small>
+		</h2>
+	</div>
+</div>
+<div class="row invoice-info">
+	<div class="col-xs-12 table-responsive">
+		<table class="table invoice-info">
+			<tr>
+				<td>
+					<br/>
+					<address>
+					<strong>Jover Sébastien</strong><br/>
+					6 rue du docteur lucien cartotto, le magellan bat.A<br/>
+					13090 Aix-en-provence<br/>
+					Email: jovairmaintenance@gmail.com<br/>
+					Tel: 0665601740
+					</address>
+				</td>
+				<td>
+					A l'attention de :
+					<address>
+					<strong>{{ entity.client }}</strong><br>
+					{{ entity.client.adresse }}<br>
+					{{ entity.client.cp }} {{ entity.client.ville }}<br>
+					Email: {{ entity.client.email }}<br>
+					</address>
+				</td>
+				<td>
+					Facture N° <b>{{ entity.numFacture }}</b><br/>
+					<br>
+					{% if entity.dossier %}
+					Bon de commande: <b>{{ entity.dossier.numBc }}</b><br/>
+					N° de dossier: <b>{{ entity.dossier.numBl }}</b><br/>
+					Immatriculation: <b>{{ entity.dossier.appareil.immatriculation }}</b><br/>
+					Travaux: <b>{{ entity.dossier.getFirstTravaux }}</b><br/>
+					{% endif %}
+				</td>
+			</tr>
+		</table>
+	</div>
+</div>
+<div class="row invoice-info">
+	<div class="col-xs-12 invoice-col">
+		{% if entity.commentaire %}
+		<b>Observation: </b> {{ entity.commentaire }}
+		{% endif %}
+	</div>
+</div>
+
+{% set facture_total_ht = 0 %}
+{% set facture_total_tva = 0 %}
+{% set facture_total_ttc = 0 %}
+<div class="row">
+	<div class="col-xs-12 table-responsive">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Réf</th>
+					<th>Désignation</th>
+					<th class="text-right">Qté</th>
+					<th class="text-right">Prix unitaire HT</th>
+					<th class="text-right">Remise (%)</th>
+					<th class="text-right">Prix unitaire Remisé HT</th>
+					<th class="text-right">Total HT</th>
+					<th class="text-right">Taux TVA (%)</th>
+					<th class="text-right">TVA</th>
+					<th class="text-right">Total TTC</th>
+				</tr>
+			</thead>
+			<tbody>
+			{% if entity.dossier %}
+				{% if entity.dossier.dossierArticle|length() > 0 %}
+				<tr><th colspan="10" class="title">Pièces :</th></tr>
+				{% for dossier_article in entity.dossier.dossierArticle %}
+					{% set prix_ht = dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation) %}
+					{% set remise_ht = ((prix_ht * dossier_article.remise)/100) %}
+					{% set prix_ht_remise = (prix_ht-remise_ht) %}
+					{% set total_ht = (prix_ht_remise*dossier_article.quantite) %}
+					{% set tva = ((total_ht * 20)/100) %}
+					{% set total_ttc = (total_ht+tva) %}
+
+					{% set facture_total_ht = facture_total_ht + total_ht %}
+					{% set facture_total_tva = facture_total_tva + tva %}
+					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+				<tr>
+					<td>{{ dossier_article.articleFormone.sn }}</td>
+					<td>{{ dossier_article.articleFormone.article.nom }}</td>
+					<td class="text-right">{{ dossier_article.quantite }}</td>
+					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ dossier_article.remise }}%</td>
+					<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">20.0%</td>
+					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+				</tr>
+				{% endfor %}
+				{% endif %}
+				{% if entity.dossier.dossierMainOeuvre|length() > 0 %}
+				<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>
+				{% for dossier_main_oeuvre in entity.dossier.dossierMainOeuvre %}
+					{% set prix_ht = dossier_main_oeuvre.mainOeuvre.getPeriodePrix(entity.dateCreation) %}
+					{% set total_ht = (prix_ht*dossier_main_oeuvre.quantite) %}
+					{% set tva = ((total_ht * 20)/100) %}
+					{% set total_ttc = (total_ht+tva) %}
+
+					{% set facture_total_ht = facture_total_ht + total_ht %}
+					{% set facture_total_tva = facture_total_tva + tva %}
+					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+				<tr>
+					<td></td>
+					<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
+					<td class="text-right">{{ dossier_main_oeuvre.quantite }}</td>
+					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">0.00%</td>
+					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">20.0%</td>
+					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+				</tr>
+				{% endfor %}
+				{% endif %}
+			{% else %}
+
+			{% endif %}
+			</tbody>
+		</table>
+	</div>
+</div>
+
+<div class="row">
+	<!-- accepted payments column -->
+	<div class="col-xs-8"></div>
+	<!-- /.col -->
+	<div class="col-xs-4">
+		<div class="table-responsive">
+			<table class="table">
+				<tr>
+					<th style="width:50%">Total HT :</th>
+					<td class="text-right">{{ facture_total_ht|number_format(2, '.', ',') }} €</td>
+				</tr>
+				<tr>
+					<th>TVA (20.0%) :</th>
+					<td class="text-right">{{ facture_total_tva|number_format(2, '.', ',') }} €</td>
+				</tr>
+				<tr>
+					<th>Total TTC :</th>
+					<td class="text-right">{{ facture_total_ttc|number_format(2, '.', ',') }} €</td>
+				</tr>
+			</table>
+		</div>
+	</div>
+</div>
+
+<div class="row invoice-info">
+	<div class="col-xs-12 invoice-col">
+		<p class="facture_bottom">SASU au capital social de 5000€ / 821 289 246 RCS / SIREN 821 286 246 00018 / N° TVA intracommunautaire FR 44 821289246</p>
+	</div>
+</div>

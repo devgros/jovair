@@ -1,0 +1,74 @@
+{% extends '@EasyAdmin/default/list.html.twig' %}
+
+
+{% block main %}
+	{% set _list_item_actions = easyadmin_get_actions_for_list_item(_entity_config.name) %}
+
+	<div class="row">
+	{% for item in paginator.currentPageResults %}
+		{% set _item_id = '' ~ attribute(item, _entity_config.primary_key_field_name) %}
+		<div class="col-sm-6 {% if loop.index is even %}no_pad_left{% endif %}">
+			<div class="box box-widget widget-user-2 collapsed-box">
+				<div class="widget-user-header bg-purple box-icon">
+                    <div class="box-tools pull-right alt">
+		            	<button type="button" class="btn btn-box-tool text-white" data-widget="collapse"><i class="fa fa-plus"></i></button>
+		            </div>
+					<div class="widget-user-image">
+						<i class="fa fa-user"></i>
+					</div>
+					<h3 class="widget-user-username"> {{ item.nom}} {{item.prenom }}</h3>
+					<h5 class="widget-user-desc">{{ item.entreprise}}</h5>
+				</div>
+				<div class="box-body no-padding">
+					<div class="action-box">
+						{% if _list_item_actions|length > 0 %}
+                        {% set _column_label =  'list.row_actions'|trans(_trans_parameters, 'EasyAdminBundle') %}
+                        
+                        {% block item_actions %}
+                            {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
+                                actions: _list_item_actions,
+                                request_parameters: _request_parameters,
+                                translation_domain: _entity_config.translation_domain,
+                                trans_parameters: _trans_parameters,
+                                item_id: _item_id
+                            }, with_context = false) }}
+                        {% endblock item_actions %}
+                    	{% endif %}
+					</div>
+					<ul class="nav nav-stacked nav-box">
+						<li>Email <span class="pull-right"><a href="mailto:{{ item.email }}">{{ item.email }}</a></span></a></li>
+						<li>Téléphone <span class="pull-right">{{ item.tel }}</span></a></li>
+						<li>Adresse <span class="pull-right">{{ item.getAdresseComplete }}</span></a></li>
+						{% if item.appareils|length() > 0 %}
+						{% for appareil in item.appareils %}
+						<li>{% if loop.first %}Appareils{% else %}&nbsp;{% endif %} <span class="pull-right"><a href="{{ path('easyadmin', { action: "show", entity: "Appareil", id: appareil.id }) }}"><i class="fa fa-plane"></i> {{ appareil }}</a></span>
+						</li>
+						{% endfor %}
+						{% endif %}
+					</ul>
+				</div>
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+
+	{% block paginator %}
+        {{ include(_entity_config.templates.paginator) }}
+    {% endblock paginator %}
+
+    {% block delete_form %}
+        {% set referer = paginator.currentPage == paginator.nbPages and 1 != paginator.currentPage and 1 == paginator.currentPageResults|length
+            ? path('easyadmin', app.request.query|merge({ page: app.request.query.get('page') - 1 }))
+            : app.request.requestUri
+        %}
+
+        {{ include('@EasyAdmin/default/includes/_delete_form.html.twig', {
+            view: 'list',
+            referer: referer|url_encode,
+            delete_form: delete_form_template,
+            _translation_domain: _entity_config.translation_domain,
+            _trans_parameters: _trans_parameters,
+            _entity_config: _entity_config,
+        }, with_context = false) }}
+    {% endblock delete_form %}
+{% endblock main %}

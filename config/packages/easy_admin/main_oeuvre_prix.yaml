@@ -1,0 +1,10 @@
+easy_admin:
+    entities:
+        MainOeuvrePrix:
+            class: App\Entity\MainOeuvrePrix
+            disabled_actions: ['delete']
+
+            form:
+                fields:
+                    - { property: 'prix_ht', label: 'Prix HT', css_class: 'col-sm-6'}
+                    - { property: 'main_oeuvre', label: "Main d'oeuvre", css_class: 'col-sm-6'}

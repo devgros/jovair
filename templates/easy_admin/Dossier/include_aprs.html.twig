@@ -1,0 +1,30 @@
+<div class="aprs">
+	<table class="table table-aprs table-bordered">
+		<tr>
+			<td class="text-center v-align-middle" >{{ entity.appareil.immatriculation }}</td>
+			<td class="text-center"><b>HT:</b><br/>{{ entity.appareil.htCellule }}</td>
+			<td class="text-center"><b>Horamètre:</b><br/>{{ entity.horametreAprs }}</td>
+		</tr>
+		<tr>
+			<td class="text-right"><b>BC:</b><br/><b>BL:</b></td>
+			<td colspan="2" class="text-center">{{ entity.numBc }}<br/>{{ entity.numBl }}</td>
+		</tr>
+		<tr>
+			<td colspan="3" class="text-center">
+				{% set data_uri = absolute_url(path('dossier_cri', {'entity': "Dossier", 'id': entity.id})) %}
+				<img src="{{ qr_code_data_uri(data_uri) }}" />
+				
+
+				<div class="notice">Certifie que les travaux spécifiés ont été réalisés conformement à la PART M et que au vue de ces travaux, l'aéronef est consideré prés à la remise en service. Sauf indication contraire.</div>
+				<b>JOV'AIR MAINTENANCE</b><br/>
+				<div class="notice">
+					{% if entity.mecanicien %}{{ entity.mecanicien }}<br/>
+					{{ entity.mecanicien.licence }}{% endif %}
+				</div>
+		</tr>
+		<tr>
+			<td colspan="2"><b>Lieu:</b><br/><b>Date:</b><br/><b>Heure:</b></td>
+			<td>{{ entity.lieuCf }}<br/>{% if entity.dateCf %}{{ entity.dateCf|date("d/m/Y") }}{% endif %}<br/>{% if entity.timeCf %}{{ entity.timeCf|slice(0, 5) }}{% endif %}</td>
+		</tr>
+	</table>
+</div>

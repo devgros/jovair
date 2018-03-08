@@ -1,0 +1,14 @@
+easy_admin:
+    entities:
+        DossierOutils:
+            class: App\Entity\DossierOutils
+            controller: App\Controller\DossierOutilsController
+            form:
+                title: "Ajouter un outil"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-success' }
+                    - { property: 'outillage', label: "Outil", type_options: { query_builder: 'App\Repository\DossierOutilsRepository::getListOrderByDateGroupByOutillage'}, css_class: 'col-sm-12'}
+            edit:
+                title: "Modifier un outil"
+                fields:
+                    - { property: 'outillage', label: "Outil", type_options: { disabled: "disabled"}, css_class: 'col-sm-6'}

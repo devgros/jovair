@@ -1,0 +1,84 @@
+easy_admin:
+    entities:
+        Appareil:
+            class: App\Entity\Appareil
+            controller: App\Controller\AppareilController
+            list:
+                title: "Appareils"
+                fields: 
+                    - { property: 'immatriculation', label: 'Immatriculation'}
+                    - { property: 'client', label: 'Client'}
+                    - { property: 'heure_derniere_aprs', label: 'Heures APRS', css_class: 'text-right'}
+                    - { property: 'ht_cellule', label: 'HT Cellule', css_class: 'text-right'}
+                    
+                    - { property: 'marque_cellule', label: 'Cellule'}
+                    
+                actions:
+                    - { name: 'addPe', icon: 'plus-circle', label: "PE" }
+                    - { name: 'addAmmCellule', icon: 'plus-circle', label: "AMM cellule" }
+                    - { name: 'addAmmMoteur', icon: 'plus-circle', label: "AMM moteur" }
+                    - { name: 'addPe', icon: 'plus-circle', label: "PE" }
+                    - { name: 'show', icon: 'search', label: false }
+                    - { name: 'edit', icon: 'pencil', label: false }
+                    - { name: 'delete', icon: 'times', label: false }
+            show:
+                title: "Appareil"
+                fields: 
+                    - { property: 'client', label: 'Client', css_class: 'col-sm-6'}
+                    - { property: 'responsable_vol', label: 'Responssable de vol', css_class: 'col-sm-6'}
+                    - { property: 'immatriculation', label: 'Immatriculation', css_class: 'col-sm-6'}
+                    - { property: 'heure_derniere_aprs', label: 'Heures APRS', css_class: 'col-sm-6'}   
+                    
+                actions:
+                    - { name: 'addPe', icon: 'plus-circle', label: "PE", css_class: 'btn btn-secondary' }
+                    - { name: 'addAmmCellule', icon: 'plus-circle', label: "AMM cellule", css_class: 'btn btn-secondary' }
+                    - { name: 'addAmmMoteur', icon: 'plus-circle', label: "AMM moteur", css_class: 'btn btn-secondary' }
+            form:
+                title: "Ajouter un appareil"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-6', label: 'Informations générales' }
+                    - { property: 'client', label: 'Client'}
+                    - { property: 'immatriculation', label: 'Immatriculation', css_class: 'col-sm-8'}
+                    - { property: 'heure_derniere_aprs', label: 'Heures APRS', css_class: 'col-sm-4', type_options: { attr: {min: '0' }}}
+                    - { type: 'group', css_class: 'col-sm-6', label: 'Responsable de vol', background: 'box-primary' }
+                    - { property: 'nom_responsable_vol', label: 'Nom', css_class: 'col-sm-6'}
+                    - { property: 'prenom_responsable_vol', label: 'Prénom', css_class: 'col-sm-6'}
+                    - { property: 'email_responsable_vol', label: 'Email'}
+                    - { type: 'group', css_class: 'new-row col-sm-12', label: 'Information Techniques', background: 'box-danger'}
+                    - { type: 'section', label: 'Cellule' }
+                    - { property: 'marque_cellule', label: 'Marque', css_class: 'col-sm-3'}
+                    - { property: 'model_cellule', label: 'Model', css_class: 'col-sm-3'}
+                    - { property: 'num_serie_cellule', label: 'N° série', css_class: 'col-sm-2'}
+                    - { property: 'date_rg_cellule', label: 'Date RG/Fab', type_options: { widget: 'single_text' }, css_class: 'col-sm-2' }
+                    - { property: 'ht_cellule', label: 'HT', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { property: 'hrg_cellule', label: 'HRG', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { type: 'section', label: 'Moteur 1' }
+                    - { property: 'marque_moteur1', label: 'Marque', css_class: 'col-sm-3'}
+                    - { property: 'model_moteur1', label: 'Model', css_class: 'col-sm-3'}
+                    - { property: 'num_serie_moteur1', label: 'N° série', css_class: 'col-sm-2'}
+                    - { property: 'date_rg_moteur1', label: 'Date RG/Fab', type_options: { widget: 'single_text' }, css_class: 'col-sm-2' }
+                    - { property: 'ht_moteur1', label: 'HT', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { property: 'hrg_moteur1', label: 'HRG', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { type: 'section', label: 'Moteur 2' }
+                    - { property: 'marque_moteur2', label: 'Marque', css_class: 'col-sm-3'}
+                    - { property: 'model_moteur2', label: 'Model', css_class: 'col-sm-3'}
+                    - { property: 'num_serie_moteur2', label: 'N° série', css_class: 'col-sm-2'}
+                    - { property: 'date_rg_moteur2', label: 'Date RG/Fab', type_options: { widget: 'single_text' }, css_class: 'col-sm-2' }
+                    - { property: 'ht_moteur2', label: 'HT', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { property: 'hrg_moteur2', label: 'HRG', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { type: 'section', label: 'Hélice 1' }
+                    - { property: 'marque_helice1', label: 'Marque', css_class: 'col-sm-3'}
+                    - { property: 'model_helice1', label: 'Model', css_class: 'col-sm-3'}
+                    - { property: 'num_serie_helice1', label: 'N° série', css_class: 'col-sm-2'}
+                    - { property: 'date_rg_helice1', label: 'Date RG/Fab', type_options: { widget: 'single_text' }, css_class: 'col-sm-2' }
+                    - { property: 'ht_helice1', label: 'HT', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { property: 'hrg_helice1', label: 'HRG', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { type: 'section', label: 'Hélice 2' }
+                    - { property: 'marque_helice2', label: 'Marque', css_class: 'col-sm-3'}
+                    - { property: 'model_helice2', label: 'Model', css_class: 'col-sm-3'}
+                    - { property: 'num_serie_helice2', label: 'N° série', css_class: 'col-sm-2'}
+                    - { property: 'date_rg_helice2', label: 'Date RG/Fab', type_options: { widget: 'single_text' }, css_class: 'col-sm-2' }
+                    - { property: 'ht_helice2', label: 'HT', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+                    - { property: 'hrg_helice2', label: 'HRG', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
+            edit:
+                title: "Modifier un appareil"

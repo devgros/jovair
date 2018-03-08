@@ -1,0 +1,27 @@
+easy_admin:
+    entities:
+        MainOeuvre:
+            class: App\Entity\MainOeuvre
+            controller: App\Controller\MainOeuvreController
+            disabled_actions: ['show']
+            list:
+                title: "Main d'oeuvre"
+                actions:
+                    - { name: 'edit', icon: 'pencil', label: 'Modifier', css_class: 'btn btn-secondary ' }
+                    - { name: 'delete', icon: 'times', label: 'Supprimer', css_class: 'btn btn-secondary text-danger' }
+                fields: 
+                    - { property: 'nom', label: 'Désignation'}
+                    - { property: 'last_prix', label: 'Prix Ht (€)', css_class: 'text-right'}
+            show:
+                fields: 
+                    - { property: 'nom', label: "Désignation", css_class: 'col-sm-6'}
+                    - { property: 'last_prix', label: "Prix Ht (€)", css_class: 'col-sm-6'}
+                    - { property: 'main_oeuvre_prix', label: 'Historique des prix', css_class: 'col-sm-6', template: 'list_article_prix.html.twig'}
+            form:
+                title: "Ajouter une main d'oeuvre"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-warning' }
+                    - { property: 'nom', label: 'Désignation', css_class: 'col-sm-6'}
+                    - { property: 'prix_ht', label: 'Prix HT', type: 'text', type_options: { required: true }, css_class: 'col-sm-6'}
+            edit:
+                title: "Modifier une main d'oeuvre"

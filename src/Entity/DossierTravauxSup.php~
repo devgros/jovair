@@ -1,0 +1,43 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\DossierTravauxSupRepository")
+ */
+class DossierTravauxSup
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     */
+    private $designation;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank()
+     */
+    private $action_corrective;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Dossier", inversedBy="travaux_sup")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $dossier;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Mecanicien", inversedBy="travaux_sup")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $mecanicien;
+}

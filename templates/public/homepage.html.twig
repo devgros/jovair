@@ -1,0 +1,15 @@
+{% extends '@EasyAdmin/default/layout.html.twig' %}
+
+{% block page_title %}Jovair Maintenance{% endblock %}
+
+{% block body %}
+<body class="hold-transition login-page">
+	<div class="login-box" style="margin-bottom:0; margin-top:50px;">
+        <div class="login-logo">
+            {{ easyadmin_config('site_name')|raw }}
+
+        </div>
+    </div>
+    <div class="text-center"><img src="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/img/logo_max.png"  /></div>
+</body>
+{% endblock body %}
