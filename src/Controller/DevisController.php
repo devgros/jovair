@@ -84,7 +84,7 @@ class DevisController extends BaseAdminController
 				$new_num = 'F'.str_pad(($last_num+1), 3, "0", STR_PAD_LEFT)."-".$current_year."-JOV'AIR";
 			}
 		}else{
-			$new_num = "F247-".$current_year."-JOV'AIR";
+			$new_num = "F247-".date("y")."-JOV'AIR";
 		}
 		$facture->setNumFacture($new_num);
 		$facture->setDevis($entity);
