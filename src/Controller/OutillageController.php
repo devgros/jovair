@@ -8,6 +8,19 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 
 class OutillageController extends MyAdminController
 {
+    protected function createEditForm($entity, array $entityProperties)
+    {
+        if(! $entity->getLastPrix()){
+            $entity->setPrixHt(0);
+
+        }else{
+            $entity->setPrixHt($entity->getLastPrix()->getPrixHt());
+
+        }
+        
+        return parent::createEditForm($entity, $entityProperties);
+    }
+    
 	protected function addCertificatAction()
 	{
 		

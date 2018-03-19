@@ -22,9 +22,14 @@ class Dossier
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $num_bc;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $titre;
 
     /**
      * @ORM\Column(type="datetime")
@@ -73,6 +78,24 @@ class Dossier
      * @Assert\GreaterThanOrEqual(0)
      */
     private $horametre_aprs;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $scan_bc;
+
+    /**
+     * @Vich\UploadableField(mapping="scanBcFile", fileNameProperty="scan_bc")
+     * @var File
+     */
+    private $scanBcFile;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedBcAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -141,10 +164,9 @@ class Dossier
     private $dossier_outils;
 
     /**
-     * @ORM\OneToOne(targetEntity="Facture", inversedBy="dossier")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Devis", mappedBy="dossier")
      */
-    private $facture;
+    private $devis;
 
     public function __toString()
     {
@@ -162,6 +184,7 @@ class Dossier
         $this->dossier_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_outils = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devis = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -391,6 +414,72 @@ class Dossier
     }
 
     /**
+     * Set scanBc.
+     *
+     * @param string $scanBc
+     *
+     * @return Dossier
+     */
+    public function setScanBc($scanBc)
+    {
+        $this->scan_bc = $scanBc;
+
+        return $this;
+    }
+
+    /**
+     * Get scanBc.
+     *
+     * @return string
+     */
+    public function getscanBc()
+    {
+        return $this->scan_bc;
+    }
+
+    public function setScanBcFile(File $image = null)
+    {
+        $this->scanBcFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedBcAt' is not defined in your entity, use another property
+            $this->updatedBcAt = new \DateTime('now');
+        }
+    }
+
+    public function getScanBcFile()
+    {
+        return $this->scanBcFile;
+    }
+
+    /**
+     * Set updatedBcAt.
+     *
+     * @param \DateTime $updatedBcAt
+     *
+     * @return Dossier
+     */
+    public function setUpdatedBcAt($updatedBcAt)
+    {
+        $this->updatedBcAt = $updatedBcAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedBcAt.
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedBcAt()
+    {
+        return $this->updatedBcAt;
+    }
+
+    /**
      * Set carteTravail.
      *
      * @param string $carteTravail
@@ -566,7 +655,7 @@ class Dossier
      */
     public function addDossierMainOeuvre(\App\Entity\DossierMainOeuvre $dossierMainOeuvre)
     {
-        $dossier_main_oeuvre->setDossier($this);
+        $dossierMainOeuvre->setDossier($this);
         $this->dossier_main_oeuvre[] = $dossierMainOeuvre;
 
         return $this;
@@ -603,7 +692,7 @@ class Dossier
      */
     public function addDossierArticle(\App\Entity\DossierArticle $dossierArticle)
     {
-        $dossier_article->setDossier($this);
+        $dossierArticle->setDossier($this);
         $this->dossier_article[] = $dossierArticle;
 
         return $this;
@@ -640,7 +729,7 @@ class Dossier
      */
     public function addTravauxSup(\App\Entity\DossierTravauxSup $travauxSup)
     {
-        $travaux_sup->setDossier($this);
+        $travauxSup->setDossier($this);
         $this->travaux_sup[] = $travauxSup;
 
         return $this;
@@ -677,7 +766,7 @@ class Dossier
      */
     public function addDossierOutil(\App\Entity\DossierOutils $dossierOutil)
     {
-        $dossier_outils->setDossier($this);
+        $dossierOutil->setDossier($this);
         $this->dossier_outils[] = $dossierOutil;
 
         return $this;
@@ -754,26 +843,62 @@ class Dossier
     }
 
     /**
-     * Set facture.
+     * Set titre.
      *
-     * @param \App\Entity\Facture|null $facture
+     * @param string $titre
      *
      * @return Dossier
      */
-    public function setFacture(\App\Entity\Facture $facture = null)
+    public function setTitre($titre)
     {
-        $this->facture = $facture;
+        $this->titre = $titre;
 
         return $this;
     }
 
     /**
-     * Get facture.
+     * Get titre.
      *
-     * @return \App\Entity\Facture|null
+     * @return string
      */
-    public function getFacture()
+    public function getTitre()
     {
-        return $this->facture;
+        return $this->titre;
+    }
+
+    /**
+     * Add devi.
+     *
+     * @param \App\Entity\Devis $devi
+     *
+     * @return Dossier
+     */
+    public function addDevi(\App\Entity\Devis $devi)
+    {
+        $this->devis[] = $devi;
+
+        return $this;
+    }
+
+    /**
+     * Remove devi.
+     *
+     * @param \App\Entity\Devis $devi
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDevi(\App\Entity\Devis $devi)
+    {
+        return $this->devis->removeElement($devi);
+    }
+
+    /**
+     * Get devis.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDevis()
+    {
+        return $this->devis;
     }
 }

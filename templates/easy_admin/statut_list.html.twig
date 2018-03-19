@@ -4,4 +4,4 @@
     {% set type_id = value|number_format %}
 {% endif %}
 
-<span class="label {% if type_id == 1 %}label-success{% else %}label-warning{% endif %}">{{ statut_dossier[type_id] }}</span>
+<span class="label {% if type_id == 1 %}label-success{% else %}label-warning{% endif %}">{{ field_options.statut[type_id] }}</span>

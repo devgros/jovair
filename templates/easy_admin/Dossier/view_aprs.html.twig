@@ -18,7 +18,8 @@
 
  {% block content_header %}
  	<h1>APRS du dossier {{ entity.numBl }}</h1>
- 	<a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/dossier/{{ entity.numBl }}_APRS.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print" style="margin-left: 10px; margin-top:-25px; margin-bottom:15px;"><i class="fa fa-download"></i> PDF</a>
+ 	{% if entity.statut > 0 %}
+ 	<a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/dossier/{{ entity.numBl }}.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print" style="margin-left: 10px; margin-top:-25px; margin-bottom:15px;"><i class="fa fa-download"></i> PDF</a>{% endif %}
  {% endblock %}	
 
 {% block main %}

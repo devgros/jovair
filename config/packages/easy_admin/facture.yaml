@@ -10,3 +10,4 @@ easy_admin:
                     - { property: 'num_facture', label: 'N° facture'}
                     - { property: 'date_creation', label: 'Date de création', format: 'd/m/Y'}
                     - { property: 'client', label: 'Client'}
+                    - { property: 'getDossier', label: 'Dossier'}

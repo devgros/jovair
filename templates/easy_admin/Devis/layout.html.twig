@@ -1,0 +1,34 @@
+{% extends 'easy_admin/layout.html.twig' %}
+{% block body_javascript %}
+	{{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+			$('#devis_dossier').on('change', function (e) {
+				var value = $("#devis_dossier option:selected").val();
+				if(value != "" && $("#devis_client option:selected").val() != ""){
+					$("#devis_client").val("").trigger('change');
+				}
+			});
+			$('#devis_client').on('change', function (e) {
+				var value = $("#devis_client option:selected").val();
+				if(value != "" && $("#devis_dossier option:selected").val() != ""){
+					$("#devis_dossier").val("").trigger('change');
+				}
+			});
+
+			$(document).on('submit','[name="devis"]',function(){
+				if($("#devis_client option:selected").val() == "" && $("#devis_dossier option:selected").val() == ""){
+					$('#devis_client').closest('.form-group').addClass('has-error');
+					$('#devis_dossier').closest('.form-group').addClass('has-error');
+					$('#devis_client').closest('.form-group').append('<span class="help-block">Merci de choisir un client OU un dossier</span>')
+					return false;
+				}else{
+					$('.form-group.has-error').children('.help-block').remove();
+					$('#devis_client').closest('.form-group').removeClass('has-error');
+					$('#devis_dossier').closest('.form-group').removeClass('has-error');
+				}
+			});
+        });
+    </script>
+{% endblock body_javascript %}

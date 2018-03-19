@@ -29,7 +29,7 @@ class Appareil
     private $immatriculation;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="decimal", scale=2)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $heure_derniere_aprs;
@@ -55,13 +55,13 @@ class Appareil
     private $date_rg_cellule;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_cellule;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_cellule;
@@ -87,13 +87,13 @@ class Appareil
     private $date_rg_moteur1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_moteur1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_moteur1;
@@ -119,13 +119,13 @@ class Appareil
     private $date_rg_moteur2;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_moteur2;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_moteur2;
@@ -151,13 +151,13 @@ class Appareil
     private $date_rg_helice1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_helice1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_helice1;
@@ -183,13 +183,13 @@ class Appareil
     private $date_rg_helice2;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_helice2;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_helice2;
@@ -1281,5 +1281,41 @@ class Appareil
     public function getAppareilDossier()
     {
         return $this->appareil_dossier;
+    }
+
+    public function getDossierPe($date_dossier)
+    {
+        $pe = false;
+        foreach($this->appareil_pe as $appareil_pe){
+            if($appareil_pe->getDate() < $date_dossier){
+                $pe = $appareil_pe;
+                break;
+            }
+        }
+        return $pe;
+    }
+
+    public function getDossierAmmCellule($date_dossier)
+    {
+        $amm_cellule = false;
+        foreach($this->appareil_amm_cellule as $appareil_amm_cellule){
+            if($appareil_amm_cellule->getDate() < $date_dossier){
+                $amm_cellule = $appareil_amm_cellule;
+                break;
+            }
+        }
+        return $amm_cellule;
+    }
+
+    public function getDossierAmmMoteur($date_dossier)
+    {
+        $amm_moteur = false;
+        foreach($this->appareil_amm_moteur as $appareil_amm_moteur){
+            if($appareil_amm_moteur->getDate() < $date_dossier){
+                $amm_moteur = $appareil_amm_moteur;
+                break;
+            }
+        }
+        return $amm_moteur;
     }
 }

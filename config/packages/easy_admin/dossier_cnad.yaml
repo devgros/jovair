@@ -1,5 +1,5 @@
 parameters:
-    statut_cnad: {'-':'0', 'Non concerné':'1', 'Non alloué':'2', 'Appliqué':'3', 'Effectué':'4'}
+    statut_cnad: {'-':'0', 'Non concerné':'1', 'Non alloué':'2', 'Appliqué':'3', 'Effectué':'4', 'Reporté':'5'}
 
 easy_admin:
     entities:
@@ -12,7 +12,8 @@ easy_admin:
                     - { property: 'designation', label: "Désignation", type_options: { disabled: "disabled"}, css_class: 'col-sm-6'}
                     - { property: 'statut', label: "Statut", type: 'choice', type_options: {choices: '%statut_travaux%', expanded: false, multiple: false }, css_class: 'col-sm-6'}
                     - { property: 'commentaire', label: "Commentaire", css_class: 'col-sm-12'}
-                    - { property: 'mecanicien', label: "Mecanicien", css_class: 'col-sm-6'}
+                    - { property: 'mecanicien', label: "Effectué par", css_class: 'col-sm-6'}
+                    - { property: 'mecanicien_control', label: "Controlé par", css_class: 'col-sm-6'}
             edit:
                 title: "Modifier un CN/AD"
 

@@ -59,14 +59,29 @@ class Mecanicien
     private $travaux;
 
     /**
+     * @ORM\OneToMany(targetEntity="DossierTravaux", mappedBy="mecanicien_control", cascade={"ALL"})
+     */
+    private $travaux_control;
+
+    /**
      * @ORM\OneToMany(targetEntity="DossierCnad", mappedBy="mecanicien", cascade={"ALL"})
      */
     private $cnad;
 
     /**
+     * @ORM\OneToMany(targetEntity="DossierCnad", mappedBy="mecanicien_control", cascade={"ALL"})
+     */
+    private $cnad_control;
+
+    /**
      * @ORM\OneToMany(targetEntity="DossierTravauxSup", mappedBy="mecanicien", cascade={"ALL"})
      */
     private $travaux_sup;
+
+    /**
+     * @ORM\OneToMany(targetEntity="DossierTravauxSup", mappedBy="mecanicien_control", cascade={"ALL"})
+     */
+    private $travaux_sup_control;
 
     /**
      * @ORM\OneToMany(targetEntity="Dossier", mappedBy="mecanicien", cascade={"ALL"})
@@ -84,8 +99,11 @@ class Mecanicien
     public function __construct()
     {
         $this->travaux = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->travaux_control = new \Doctrine\Common\Collections\ArrayCollection();
         $this->cnad = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->cnad_control = new \Doctrine\Common\Collections\ArrayCollection();
         $this->travaux_sup = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->travaux_sup_control = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -382,5 +400,113 @@ class Mecanicien
     public function getDossier()
     {
         return $this->dossier;
+    }
+
+    /**
+     * Add travauxControl.
+     *
+     * @param \App\Entity\DossierTravaux $travauxControl
+     *
+     * @return Mecanicien
+     */
+    public function addTravauxControl(\App\Entity\DossierTravaux $travauxControl)
+    {
+        $this->travaux_control[] = $travauxControl;
+
+        return $this;
+    }
+
+    /**
+     * Remove travauxControl.
+     *
+     * @param \App\Entity\DossierTravaux $travauxControl
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTravauxControl(\App\Entity\DossierTravaux $travauxControl)
+    {
+        return $this->travaux_control->removeElement($travauxControl);
+    }
+
+    /**
+     * Get travauxControl.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTravauxControl()
+    {
+        return $this->travaux_control;
+    }
+
+    /**
+     * Add cnadControl.
+     *
+     * @param \App\Entity\DossierCnad $cnadControl
+     *
+     * @return Mecanicien
+     */
+    public function addCnadControl(\App\Entity\DossierCnad $cnadControl)
+    {
+        $this->cnad_control[] = $cnadControl;
+
+        return $this;
+    }
+
+    /**
+     * Remove cnadControl.
+     *
+     * @param \App\Entity\DossierCnad $cnadControl
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeCnadControl(\App\Entity\DossierCnad $cnadControl)
+    {
+        return $this->cnad_control->removeElement($cnadControl);
+    }
+
+    /**
+     * Get cnadControl.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCnadControl()
+    {
+        return $this->cnad_control;
+    }
+
+    /**
+     * Add travauxSupControl.
+     *
+     * @param \App\Entity\DossierTravauxSup $travauxSupControl
+     *
+     * @return Mecanicien
+     */
+    public function addTravauxSupControl(\App\Entity\DossierTravauxSup $travauxSupControl)
+    {
+        $this->travaux_sup_control[] = $travauxSupControl;
+
+        return $this;
+    }
+
+    /**
+     * Remove travauxSupControl.
+     *
+     * @param \App\Entity\DossierTravauxSup $travauxSupControl
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTravauxSupControl(\App\Entity\DossierTravauxSup $travauxSupControl)
+    {
+        return $this->travaux_sup_control->removeElement($travauxSupControl);
+    }
+
+    /**
+     * Get travauxSupControl.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTravauxSupControl()
+    {
+        return $this->travaux_sup_control;
     }
 }

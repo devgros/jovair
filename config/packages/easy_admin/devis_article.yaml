@@ -1,0 +1,18 @@
+easy_admin:
+    entities:
+        DevisArticle:
+            class: App\Entity\DevisArticle
+            controller: App\Controller\DevisArticleController
+            form:
+                title: "Ajouter un article"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-danger' }
+                    - { property: 'article_formone', label: "Article", css_class: 'col-sm-6'}
+                    - { property: 'quantite', label: "Quantité", css_class: 'col-sm-3'}
+                    - { property: 'remise', label: "Remise (%)", css_class: 'col-sm-3'}
+            edit:
+                title: "Modifier un article"
+                fields:
+                    - { property: 'article_formone', label: "Article", type_options: { disabled: true }, css_class: 'col-sm-6'}
+                    - { property: 'quantite', label: "Quantité", css_class: 'col-sm-3'}
+                    - { property: 'remise', label: "Remise (%)", css_class: 'col-sm-3'}

@@ -25,7 +25,7 @@ easy_admin:
                 title: "Appareil"
                 fields: 
                     - { property: 'client', label: 'Client', css_class: 'col-sm-6'}
-                    - { property: 'responsable_vol', label: 'Responssable de vol', css_class: 'col-sm-6'}
+                    - { property: 'responsable_vol', label: 'Responsable de navigation', css_class: 'col-sm-6'}
                     - { property: 'immatriculation', label: 'Immatriculation', css_class: 'col-sm-6'}
                     - { property: 'heure_derniere_aprs', label: 'Heures APRS', css_class: 'col-sm-6'}   
                     
@@ -40,7 +40,7 @@ easy_admin:
                     - { property: 'client', label: 'Client'}
                     - { property: 'immatriculation', label: 'Immatriculation', css_class: 'col-sm-8'}
                     - { property: 'heure_derniere_aprs', label: 'Heures APRS', css_class: 'col-sm-4', type_options: { attr: {min: '0' }}}
-                    - { type: 'group', css_class: 'col-sm-6', label: 'Responsable de vol', background: 'box-primary' }
+                    - { type: 'group', css_class: 'col-sm-6', label: 'Responsable de navigation', background: 'box-primary' }
                     - { property: 'nom_responsable_vol', label: 'Nom', css_class: 'col-sm-6'}
                     - { property: 'prenom_responsable_vol', label: 'Prénom', css_class: 'col-sm-6'}
                     - { property: 'email_responsable_vol', label: 'Email'}

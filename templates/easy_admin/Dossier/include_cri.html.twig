@@ -11,7 +11,7 @@
 	<div class="col-xs-12">
 		<h2 class="page-header alt">
 			<i class="fa fa-plane"></i> Compte Rendu d'intervention {{ entity.numBl }}
-			{% if not pdf %}<a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/dossier/{{ entity.numBl }}_CRI.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print" style="margin-left: 10px; margin-top:-15px;"><i class="fa fa-download"></i> PDF</a>{% endif %}
+			{% if not pdf %}{% if entity.statut > 0 %}<a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/dossier/{{ entity.numBl }}.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print" style="margin-left: 10px; margin-top:-15px;"><i class="fa fa-download"></i> PDF</a>{% endif %}{% endif %}
 			<small class="pull-right">Suivant le Bon de Commande n°: {{ entity.numBc }}</small>
 
 		</h2>
@@ -33,7 +33,7 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-12">
 		{% include  'easy_admin/Includes/appareil_table.html.twig' with {'appareil': entity.appareil } %}
-		{% include  'easy_admin/Includes/pe_table.html.twig' with {'appareil': entity.appareil, 'first': true } %}
+		{% include  'easy_admin/Includes/pe_table.html.twig' with {'appareil': entity.appareil, 'with_dosser': true, 'date_dossier': entity.dateCreation } %}
 	</div>
 </div>
 
@@ -71,7 +71,7 @@
 
 
 <div class="row">
-	<div class="col-xs-12 col-sm-6">
+	<div class="col-xs-12 col-sm-12">
 		{% if entity.travauxSup|length() > 0 %}
 		<h4 class="alt">Travaux supplémentaire :</h4>
 		<table class="table table-striped">
@@ -90,6 +90,9 @@
 		</table>
 		{% endif %}
 	</div>
+</div>
+
+<div class="row">
 	<div class="col-xs-12 col-sm-6">
 		{% if entity.dossierArticle|length() > 0 %}
 		<h4 class="alt">Pièces utilisés :</h4>
@@ -106,6 +109,25 @@
 				<td>{{ dossier_article.articleFormone.sn }}</td>
 				<td>{{ dossier_article.articleFormone.fromTracking }}</td>
 				<td>{{ dossier_article.quantite }}</td>
+			</tr>
+			{% endfor %}
+		</table>
+		{% endif %}
+	</div>
+	<div class="col-xs-12 col-sm-6">
+		{% if entity.dossierMainOeuvre|length() > 0 %}
+		<h4 class="alt">Main d'oeuvre :</h4>
+		<table class="table table-striped">
+			<tr class="border_bottom">
+				<th>Désignation</th>
+				<th>Date</th>
+				<th>Qte</th>
+			</tr>
+			{% for dossier_main_oeuvre in entity.dossierMainOeuvre %}
+			<tr>
+				<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
+				<td>{{ dossier_main_oeuvre.dateRealisation|date('d/m/Y') }}</td>
+				<td>{{ dossier_main_oeuvre.quantite }}</td>
 			</tr>
 			{% endfor %}
 		</table>

@@ -30,27 +30,16 @@ class Facture
     private $date_creation;
 
     /**
-     * @ORM\Column(type="integer")
-     * @Assert\GreaterThanOrEqual(0)
-     */
-    private $statut = 0;
-
-    /**
-     * @ORM\Column(type="string", length=255, nullable=true)
-     */
-    private $commentaire;
-
-    /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="facture")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=true)
      */
     private $client;
 
     /**
-     * @ORM\OneToOne(targetEntity="Dossier", inversedBy="facture")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\ManyToOne(targetEntity="Devis", inversedBy="factures")
      */
-    private $dossier;
+    private $devis;
+
 
     public function __toString()
     {
@@ -115,86 +104,39 @@ class Facture
         return $this->date_creation;
     }
 
+
     /**
-     * Set statut.
+     * Set devis.
      *
-     * @param int $statut
+     * @param \App\Entity\Devis|null $devis
      *
      * @return Facture
      */
-    public function setStatut($statut)
+    public function setDevis(\App\Entity\Devis $devis = null)
     {
-        $this->statut = $statut;
+        $this->devis = $devis;
 
         return $this;
     }
 
     /**
-     * Get statut.
+     * Get devis.
      *
-     * @return int
+     * @return \App\Entity\Devis|null
      */
-    public function getStatut()
+    public function getDevis()
     {
-        return $this->statut;
-    }
-
-    /**
-     * Set commentaire.
-     *
-     * @param string|null $commentaire
-     *
-     * @return Facture
-     */
-    public function setCommentaire($commentaire = null)
-    {
-        $this->commentaire = $commentaire;
-
-        return $this;
-    }
-
-    /**
-     * Get commentaire.
-     *
-     * @return string|null
-     */
-    public function getCommentaire()
-    {
-        return $this->commentaire;
-    }
-
-    /**
-     * Set dossier.
-     *
-     * @param \App\Entity\Dossier|null $dossier
-     *
-     * @return Facture
-     */
-    public function setDossier(\App\Entity\Dossier $dossier = null)
-    {
-        $this->dossier = $dossier;
-
-        return $this;
-    }
-
-    /**
-     * Get dossier.
-     *
-     * @return \App\Entity\Dossier|null
-     */
-    public function getDossier()
-    {
-        return $this->dossier;
+        return $this->devis;
     }
 
     /**
      * Set client.
      *
-     * @param \App\Entity\Client $client
+     * @param \App\Entity\Client|null $client
      *
      * @return Facture
      */
-    public function setClient(\App\Entity\Client $client)
+    public function setClient(\App\Entity\Client $client = null)
     {
         $this->client = $client;
 
@@ -204,10 +146,15 @@ class Facture
     /**
      * Get client.
      *
-     * @return \App\Entity\Client
+     * @return \App\Entity\Client|null
      */
     public function getClient()
     {
         return $this->client;
+    }
+
+    public function getDossier()
+    {
+        return $this->devis->getDossier();
     }
 }

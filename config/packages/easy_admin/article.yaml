@@ -4,7 +4,7 @@ easy_admin:
             class: App\Entity\Article
             controller: App\Controller\ArticleController
             list:
-                title: "Articles"
+                title: "Stock"
                 fields: 
                     - { property: 'nom', label: 'Désignation'}
                     - { property: 'pn', label: 'Pn'}
@@ -18,7 +18,7 @@ easy_admin:
                     - { name: 'edit', icon: 'pencil', label: false }
                     - { name: 'delete', icon: 'times', label: false }
             show:
-                title: "Article"
+                title: "Stock"
                 fields: 
                     - { property: 'nom', label: "Désignation", css_class: 'col-sm-6'}
                     - { property: 'pn', label: 'Pn', css_class: 'col-sm-6'}
@@ -31,7 +31,7 @@ easy_admin:
                 actions:
                     - { name: 'addFormone', icon: 'plus-circle', label: "FormOne", css_class: 'btn btn-secondary' }   
             form:
-                title: "Ajouter un article"
+                title: "Ajouter un article au stock"
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-primary' }
                     - { property: 'pn', label: 'Pn', css_class: 'col-sm-6'}
@@ -40,4 +40,4 @@ easy_admin:
                     - { property: 'marge', label: 'Marge', css_class: 'col-sm-6'}
                     - { property: 'seuil_alert', label: "Seuil d'alerte", type_options: { attr: {min: '0' }}, css_class: 'col-sm-6'}
             edit:
-                title: "Modifier un article"
+                title: "Modifier un article du stock"

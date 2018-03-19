@@ -21,7 +21,7 @@ class ArticleFormone
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $sn;
 
@@ -66,11 +66,18 @@ class ArticleFormone
     private $dossier_article;
 
     /**
+     * @ORM\OneToMany(targetEntity="DevisArticle", mappedBy="article_formone", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $devis_article;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devis_article = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
@@ -259,7 +266,7 @@ class ArticleFormone
      */
     public function addDossierArticle(\App\Entity\DossierArticle $dossierArticle)
     {
-        $dossier_article->setArticleFormone($this);
+        $dossierArticle->setArticleFormone($this);
         $this->dossier_article[] = $dossierArticle;
 
         return $this;
@@ -285,5 +292,42 @@ class ArticleFormone
     public function getDossierArticle()
     {
         return $this->dossier_article;
+    }
+
+    /**
+     * Add devisArticle.
+     *
+     * @param \App\Entity\DevisArticle $devisArticle
+     *
+     * @return ArticleFormone
+     */
+    public function addDevisArticle(\App\Entity\DevisArticle $devisArticle)
+    {
+        $devisArticle->setArticleFormone($this);
+        $this->devis_article[] = $devisArticle;
+
+        return $this;
+    }
+
+    /**
+     * Remove devisArticle.
+     *
+     * @param \App\Entity\DevisArticle $devisArticle
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDevisArticle(\App\Entity\DevisArticle $devisArticle)
+    {
+        return $this->devis_article->removeElement($devisArticle);
+    }
+
+    /**
+     * Get devisArticle.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDevisArticle()
+    {
+        return $this->devis_article;
     }
 }

@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DossierCnadRepository")
@@ -50,6 +51,24 @@ class DossierCnad
      * @ORM\JoinColumn(nullable=true)
      */
     private $mecanicien;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="change", field={"mecanicien"})
+     */
+    private $date_signature;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Mecanicien", inversedBy="cnad_control")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $mecanicien_control;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @Gedmo\Timestampable(on="change", field={"mecanicien_control"})
+     */
+    private $date_signature_control;
 
     /**
      * Get id.
@@ -203,5 +222,77 @@ class DossierCnad
     public function getMecanicien()
     {
         return $this->mecanicien;
+    }
+
+    /**
+     * Set dateSignature.
+     *
+     * @param \DateTime|null $dateSignature
+     *
+     * @return DossierCnad
+     */
+    public function setDateSignature($dateSignature = null)
+    {
+        $this->date_signature = $dateSignature;
+
+        return $this;
+    }
+
+    /**
+     * Get dateSignature.
+     *
+     * @return \DateTime|null
+     */
+    public function getDateSignature()
+    {
+        return $this->date_signature;
+    }
+
+    /**
+     * Set dateSignatureControl.
+     *
+     * @param \DateTime|null $dateSignatureControl
+     *
+     * @return DossierCnad
+     */
+    public function setDateSignatureControl($dateSignatureControl = null)
+    {
+        $this->date_signature_control = $dateSignatureControl;
+
+        return $this;
+    }
+
+    /**
+     * Get dateSignatureControl.
+     *
+     * @return \DateTime|null
+     */
+    public function getDateSignatureControl()
+    {
+        return $this->date_signature_control;
+    }
+
+    /**
+     * Set mecanicienControl.
+     *
+     * @param \App\Entity\Mecanicien|null $mecanicienControl
+     *
+     * @return DossierCnad
+     */
+    public function setMecanicienControl(\App\Entity\Mecanicien $mecanicienControl = null)
+    {
+        $this->mecanicien_control = $mecanicienControl;
+
+        return $this;
+    }
+
+    /**
+     * Get mecanicienControl.
+     *
+     * @return \App\Entity\Mecanicien|null
+     */
+    public function getMecanicienControl()
+    {
+        return $this->mecanicien_control;
     }
 }

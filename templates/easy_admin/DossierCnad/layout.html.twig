@@ -1,0 +1,18 @@
+{% extends 'easy_admin/layout.html.twig' %}
+{% block body_javascript %}
+	{{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+			$('#dossiercnad_mecanicien').on('change', function (e) {
+				var mecano_id = $("#dossiercnad_mecanicien option:selected").val();
+				if(mecano_id == 1){
+					controle_id = 2;
+				}else{
+					controle_id = 1;
+				}
+				$("#dossiercnad_mecanicien_control").val(controle_id).trigger('change');
+			});
+        });
+    </script>
+{% endblock body_javascript %}

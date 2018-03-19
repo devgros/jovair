@@ -36,5 +36,6 @@ easy_admin:
                     - { property: 'type', label: "Type d'outillage", type: 'choice', type_options: {choices: '%type_outillage%', expanded: false, multiple: false }, css_class: 'col-sm-6'}
                     - { property: 'sn', label: 'Sn', css_class: 'col-sm-6'}
                     - { property: 'pn', label: 'Pn', css_class: 'col-sm-6'}
+                    - { property: 'prix_ht', label: 'Prix HT', type: 'text', type_options: { required: true }, css_class: 'col-sm-6'}
             edit:
                 title: "Modifier un outillage"

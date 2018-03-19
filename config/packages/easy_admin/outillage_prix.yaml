@@ -1,0 +1,10 @@
+easy_admin:
+    entities:
+        OutillagePrix:
+            class: App\Entity\OutillagePrix
+            disabled_actions: ['delete']
+
+            form:
+                fields:
+                    - { property: 'prix_ht', label: 'Prix HT', css_class: 'col-sm-6'}
+                    - { property: 'outillage', label: 'Outillage', css_class: 'col-sm-6'}

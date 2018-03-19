@@ -44,7 +44,13 @@
 						<li>Type <span class="pull-right">{{ type_outillage_label[item.type] }}</span></a></li>
 						<li>Sn <span class="pull-right">{{ item.sn }}</span></a></li>
 						<li>Pn <span class="pull-right">{{ item.pn }}</span></a></li>
-						{% if item.outillageCertificats|length() > 0 %}
+						{% if item.outillagePrix|length > 0 %}
+						{% for outillage_prix in item.outillagePrix %}
+						<li>{% if loop.first %}Historique des prix{% else %}&nbsp;{% endif %} <span class="pull-right">{{ outillage_prix }} € ( changé le {{ outillage_prix.dateChange|date("d/m/Y à H\\hi") }} )</span>
+						</li>
+						{% endfor %}
+						{% endif %}
+						{% if item.outillageCertificats|length > 0 %}
 						{% for certificat in item.outillageCertificats %}
 						<li>{% if loop.first %}Certificats de validité{% else %}&nbsp;{% endif %} <span class="pull-right"><a href="{{ vich_uploader_asset(certificat, 'certificatFile', 'App\\Entity\\OutillageCertificat') }}" target="_blank">{{ certificat.dateValidite|date('d/m/Y') }} <i class="fa fa-file-pdf-o"></i></a></span>
 						</li>
@@ -52,7 +58,6 @@
 						{% endif %}
 					</ul>
 				</div>
-				
 			</div>
 		</div>
 	{% endfor %}

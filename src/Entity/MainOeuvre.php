@@ -41,12 +41,19 @@ class MainOeuvre
     private $dossier_main_oeuvre;
 
     /**
+     * @ORM\OneToMany(targetEntity="DevisMainOeuvre", mappedBy="main_oeuvre", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $devis_main_oeuvre;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->main_oeuvre_prix = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devis_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
@@ -172,7 +179,7 @@ class MainOeuvre
      */
     public function addDossierMainOeuvre(\App\Entity\DossierMainOeuvre $dossierMainOeuvre)
     {
-        $dossier_main_oeuvre->setMainOeuvre($this);
+        $dossierMainOeuvre->setMainOeuvre($this);
         $this->dossier_main_oeuvre[] = $dossierMainOeuvre;
 
         return $this;
@@ -198,5 +205,42 @@ class MainOeuvre
     public function getDossierMainOeuvre()
     {
         return $this->dossier_main_oeuvre;
+    }
+
+    /**
+     * Add devisMainOeuvre.
+     *
+     * @param \App\Entity\DevisMainOeuvre $devisMainOeuvre
+     *
+     * @return MainOeuvre
+     */
+    public function addDevisMainOeuvre(\App\Entity\DevisMainOeuvre $devisMainOeuvre)
+    {
+        $devisMainOeuvre->setMainOeuvre($this);
+        $this->devis_main_oeuvre[] = $devisMainOeuvre;
+
+        return $this;
+    }
+
+    /**
+     * Remove devisMainOeuvre.
+     *
+     * @param \App\Entity\DevisMainOeuvre $devisMainOeuvre
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDevisMainOeuvre(\App\Entity\DevisMainOeuvre $devisMainOeuvre)
+    {
+        return $this->devis_main_oeuvre->removeElement($devisMainOeuvre);
+    }
+
+    /**
+     * Get devisMainOeuvre.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDevisMainOeuvre()
+    {
+        return $this->devis_main_oeuvre;
     }
 }

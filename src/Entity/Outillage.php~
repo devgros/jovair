@@ -39,15 +39,16 @@ class Outillage
     private $pn;
 
     /**
+     * @ORM\OneToMany(targetEntity="OutillagePrix", mappedBy="outillage", cascade={"ALL"}, indexBy="date_change")
+     * @ORM\OrderBy({"date_change" = "DESC"})
+     */
+    private $outillage_prix;
+
+    /**
      * @ORM\OneToMany(targetEntity="OutillageCertificat", mappedBy="outillage", cascade={"ALL"}, indexBy="date_validite")
      * @ORM\OrderBy({"date_validite" = "DESC"})
      */
     private $outillage_certificats;
-
-    /**
-     * @ORM\OneToMany(targetEntity="DossierOutils", mappedBy="outillage", cascade={"ALL"})
-     */
-    private $dossier_outils;
 
     public function __toString()
     {
@@ -60,7 +61,6 @@ class Outillage
     public function __construct()
     {
         $this->outillage_certificats = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->dossier_outils = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**

@@ -1,0 +1,48 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\DevisMainOeuvreRepository")
+ */
+class DevisMainOeuvre
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="integer")
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $quantite;
+
+    /**
+     * @ORM\Column(type="decimal", scale=2, options={"default" : 0})
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $remise;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Devis", inversedBy="devis_main_oeuvre")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $devis;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="MainOeuvre", inversedBy="devis_main_oeuvre")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private $main_oeuvre;
+
+    public function __toString()
+    {
+        return $this->devis->getNumDevis()." - ".$this->main_oeuvre->getNom()." | qte:".$this->quantite;
+    }
+}

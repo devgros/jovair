@@ -1,0 +1,42 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
+use Symfony\Component\Validator\Constraints as Assert;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\OutillagePrixRepository")
+ */
+class OutillagePrix
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    private $date_change;
+
+    /**
+     * @ORM\Column(type="decimal", scale=2)
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $prix_ht;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Outillage", inversedBy="outillage_prix")
+     */
+    private $outillage;
+
+    public function __toString()
+    {
+        return $this->prix_ht;
+    }
+}

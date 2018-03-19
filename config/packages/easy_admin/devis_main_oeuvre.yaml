@@ -1,0 +1,18 @@
+easy_admin:
+    entities:
+        DevisMainOeuvre:
+            class: App\Entity\DevisMainOeuvre
+            controller: App\Controller\DevisMainOeuvreController
+            form:
+                title: "Ajouter une main d'oeuvre"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-danger' }
+                    - { property: 'main_oeuvre', label: "Main d'oeuvre", css_class: 'col-sm-6'}
+                    - { property: 'quantite', label: "Quantité", css_class: 'col-sm-3'}
+                    - { property: 'remise', label: "Remise (%)", css_class: 'col-sm-3'}
+            edit:
+                title: "Modifier une main d'oeuvre"
+                fields:
+                    - { property: 'main_oeuvre', label: "Main d'oeuvre", type_options: { disabled: true }, css_class: 'col-sm-6'}
+                    - { property: 'quantite', label: "Quantité", css_class: 'col-sm-3'}
+                    - { property: 'remise', label: "Remise (%)", css_class: 'col-sm-3'}

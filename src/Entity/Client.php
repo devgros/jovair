@@ -65,14 +65,19 @@ class Client
     private $appareils;
 
     /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Devis", mappedBy="client")
+     */
+    private $devis;
+
+    /**
      * @ORM\OneToMany(targetEntity="App\Entity\Facture", mappedBy="client")
      */
-    private $factures;
+    private $facture;
 
     public function __construct()
     {
         $this->appareils = new ArrayCollection();
-        $this->factures = new ArrayCollection();
+        $this->devis = new ArrayCollection();
     }
 
     public function __toString()
@@ -324,6 +329,69 @@ class Client
     }
 
     /**
+     * Add devis.
+     *
+     * @param \App\Entity\Devis $devis
+     *
+     * @return Client
+     */
+    public function addDevis(\App\Entity\Devis $devis)
+    {
+        $this->devis[] = $devis;
+
+        return $this;
+    }
+
+    /**
+     * Remove devis.
+     *
+     * @param \App\Entity\Devis $devis
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDevis(\App\Entity\Devis $devis)
+    {
+        return $this->devis->removeElement($devis);
+    }
+
+    /**
+     * Get devis.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDevis()
+    {
+        return $this->devis;
+    }
+
+
+    /**
+     * Add devi.
+     *
+     * @param \App\Entity\Devis $devi
+     *
+     * @return Client
+     */
+    public function addDevi(\App\Entity\Devis $devi)
+    {
+        $this->devis[] = $devi;
+
+        return $this;
+    }
+
+    /**
+     * Remove devi.
+     *
+     * @param \App\Entity\Devis $devi
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDevi(\App\Entity\Devis $devi)
+    {
+        return $this->devis->removeElement($devi);
+    }
+
+    /**
      * Add facture.
      *
      * @param \App\Entity\Facture $facture
@@ -332,7 +400,7 @@ class Client
      */
     public function addFacture(\App\Entity\Facture $facture)
     {
-        $this->factures[] = $facture;
+        $this->facture[] = $facture;
 
         return $this;
     }
@@ -346,16 +414,16 @@ class Client
      */
     public function removeFacture(\App\Entity\Facture $facture)
     {
-        return $this->factures->removeElement($facture);
+        return $this->facture->removeElement($facture);
     }
 
     /**
-     * Get factures.
+     * Get facture.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getFactures()
+    public function getFacture()
     {
-        return $this->factures;
+        return $this->facture;
     }
 }

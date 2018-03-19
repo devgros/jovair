@@ -94,10 +94,11 @@
 		<tr>
 			<td colspan="3" style="width:192px;">
 				<h3>14. Approved Maintenance  program<br/><i>Programme d’entretien approuvé</i></h3>
+				{% set dossier_pe = entity.appareil.getDossierPe(entity.dateCreation) %}
 				<table class="table sub-table">
 					<tr>
-						<td>{{ entity.appareil.appareilPe|first.type }}</td>
-						<td>{{ entity.appareil.appareilPe|first.revision }}</td>
+						<td>{{ dossier_pe.type }}</td>
+						<td>{{ dossier_pe.revision }}</td>
 					</tr>
 				</table>
 			</td>
@@ -164,7 +165,32 @@
 				<table class="table sub-table left">
 					<tr>
 						<td style="width:150px;"><h3>13. Remarks - <i>Remarques</i></h3></td>
-						<td>{{ entity.remarqueAprs }}</td>
+						<td>
+							{{ entity.remarqueAprs }}
+							{% if entity.travaux|length() > 0 %}
+							{% set first_travaux = true %}
+							{% for travaux in entity.travaux %}
+								{% if travaux.statut == 5 %}
+									{% if first_travaux %}<br/><b>Travaux reporté : </b>{% endif %}
+									{% if not first_travaux %}, {% endif %}{{ travaux.designation }}
+								{% endif %}
+								{% set first_travaux = false %}
+							{% endfor %}
+							{% endif %}
+							{% if entity.cnad|length() > 0 %}
+							{% set first_cnad = true %}
+							{% for cnad in entity.cnad %}
+								{% if cnad.statut == 5 %}
+									{% if first_cnad %}
+										<br/><b>CN/AD reporté : </b>
+									{% endif %}
+									{% if not first_cnad %}, {% endif %}
+									{{ cnad.designation }}
+								{% endif %}
+								{% set first_cnad = false %}
+							{% endfor %}
+							{% endif %}
+						</td>
 					</tr>
 				</table>
 			</td>

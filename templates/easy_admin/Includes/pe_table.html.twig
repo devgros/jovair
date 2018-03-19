@@ -7,32 +7,42 @@
 			<th>Edition</th>
 			<th>Révision/Acceptation</th>
 			<th>Date</th>
-			{% if not first %}<th class="text-right">Action</th>{% endif %}
+			{% if not with_dosser %}<th class="text-right">Action</th>{% endif %}
 		</tr>
 	</thead>
-	{% if first %}
+	{% if with_dosser %}
+	{% set dossier_pe = appareil.getDossierPe(date_dossier) %}
+	{% set dossier_amm_cellule = appareil.getDossierAmmCellule(date_dossier) %}
+	{% set dossier_amm_moteur = appareil.getDossierAmmMoteur(date_dossier) %}
+
 	<tbody>
+		{% if dossier_pe %}
 		<tr>
 			<th>Programme d'entretien</th>
-			<td>{{ appareil.appareilPe|first.type }}</td>
-			<td>{{ appareil.appareilPe|first.edition }}</td>
-			<td>{{ appareil.appareilPe|first.revision }}</td>
-			<td>{{ appareil.appareilPe|first.date|date("d/m/Y") }}</td>
+			<td>{{ dossier_pe.type }}</td>
+			<td>{{ dossier_pe.edition }}</td>
+			<td>{{ dossier_pe.revision }}</td>
+			<td>{{ dossier_pe.date|date("m/Y") }}</td>
 		</tr>
+		{% endif %}
+		{% if dossier_amm_cellule %}
 		<tr>
 			<th>AMM Cellule</th>
-			<td>{{ appareil.appareilAmmCellule|first.type }}</td>
-			<td>{{ appareil.appareilAmmCellule|first.edition }}</td>
-			<td>{{ appareil.appareilAmmCellule|first.revision }}</td>
-			<td>{{ appareil.appareilAmmCellule|first.date|date("d/m/Y") }}</td>
+			<td>{{ dossier_amm_cellule.type }}</td>
+			<td>{{ dossier_amm_cellule.edition }}</td>
+			<td>{{ dossier_amm_cellule.revision }}</td>
+			<td>{{ dossier_amm_cellule.date|date("m/Y") }}</td>
 		</tr>
+		{% endif %}
+		{% if dossier_amm_moteur %}
 		<tr>
 			<th>AMM Moteur</th>
-			<td>{{ appareil.appareilAmmMoteur|first.type }}</td>
-			<td>{{ appareil.appareilAmmMoteur|first.edition }}</td>
-			<td>{{ appareil.appareilAmmMoteur|first.revision }}</td>
-			<td>{{ appareil.appareilAmmMoteur|first.date|date("d/m/Y") }}</td>
+			<td>{{ dossier_amm_moteur.type }}</td>
+			<td>{{ dossier_amm_moteur.edition }}</td>
+			<td>{{ dossier_amm_moteur.revision }}</td>
+			<td>{{ dossier_amm_moteur.date|date("m/Y") }}</td>
 		</tr>
+		{% endif %}
 	</tbody>
 	{% else %}
 	<tbody>
@@ -43,7 +53,7 @@
 			<td>{{ object.type }}</td>
 			<td>{{ object.edition }}</td>
 			<td>{{ object.revision }}</td>
-			<td>{{ object.date|date("d/m/Y") }}</td>
+			<td>{{ object.date|date("m/Y") }}</td>
 			<td class="text-right">
                 <a href="{{ path('easyadmin', { action: 'edit', entity: 'ProgrammeEntretien', primary_key_name: 'id', id: object.id, referer: '' }) }}"><i class="fa fa-pencil"></i></a>
             </td>
@@ -58,7 +68,7 @@
 			<td>{{ object.type }}</td>
 			<td>{{ object.edition }}</td>
 			<td>{{ object.revision }}</td>
-			<td>{{ object.date|date("d/m/Y") }}</td>
+			<td>{{ object.date|date("m/Y") }}</td>
 			<td class="text-right">
                 <a href="{{ path('easyadmin', { action: 'edit', entity: 'AmmCellule', primary_key_name: 'id', id: object.id, referer: '' }) }}"><i class="fa fa-pencil"></i></a>
             </td>
@@ -73,7 +83,7 @@
 			<td>{{ object.type }}</td>
 			<td>{{ object.edition }}</td>
 			<td>{{ object.revision }}</td>
-			<td>{{ object.date|date("d/m/Y") }}</td>
+			<td>{{ object.date|date("m/Y") }}</td>
 			<td class="text-right">
                 <a href="{{ path('easyadmin', { action: 'edit', entity: 'AmmMoteur', primary_key_name: 'id', id: object.id, referer: '' }) }}"><i class="fa fa-pencil"></i></a>
             </td>

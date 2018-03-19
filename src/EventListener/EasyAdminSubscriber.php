@@ -9,7 +9,10 @@ use app\entity\Article;
 use app\entity\ArticlePrix;
 use app\entity\MainOeuvre;
 use app\entity\MainOeuvrePrix;
+use app\entity\Outillage;
+use app\entity\OutillagePrix;
 use app\entity\DossierArticle;
+use app\entity\DevisArticle;
 use app\entity\ArticleFormone;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
@@ -18,10 +21,11 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'easy_admin.post_persist' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('newQteArticle')),
-            'easy_admin.post_update' => array(array('addArticlePrix'), array('addMainOeuvrePrix')),
+            'easy_admin.post_persist' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('addOutillagePrix'), array('newQteArticle')),
+            'easy_admin.post_update' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('addOutillagePrix')),
             'easy_admin.pre_edit' => array(array('storeQteArticle')),
             'easy_admin.pre_update' => array(array('updateQteArticle')),
+            'easy_admin.pre_remove' => array(array('restockQteArticle')),
         );
     }
 
@@ -69,10 +73,32 @@ class EasyAdminSubscriber implements EventSubscriberInterface
         }
     }
 
+    public function addOutillagePrix(GenericEvent $event)
+    {
+        $entity = $event->getSubject();
+        if ($entity instanceof Outillage) {
+            $create_outillageprix = false;
+            if($entity->getLastPrix())
+            {
+                if($entity->getPrixHt() != $entity->getLastPrix()->getPrixHt()) $create_outillageprix = true;
+            }else{
+                $create_outillageprix = true;
+            }
+            if($create_outillageprix)
+            {
+                $outillage_prix = new OutillagePrix();
+                $outillage_prix->setPrixHt($entity->getPrixHt());
+                $outillage_prix->setOutillage($entity);
+                $event['em']->persist($outillage_prix);
+                $event['em']->flush($outillage_prix);
+            }
+        }
+    }
+
     public function newQteArticle(GenericEvent $event)
     {
         $entity = $event->getSubject();
-        if ($entity instanceof DossierArticle) {
+        if ($entity instanceof DossierArticle or $entity instanceof DevisArticle) {
             $qte_stock = $entity->getArticleFormone()->getQuantite();
             $qte_utilise = $entity->getQuantite();
 
@@ -92,12 +118,18 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             $session = new Session();
             $session->set('old_qte_dossier_article', $old_qte_dossier_article->getQuantite());
         }
+        if($entity['name'] == "DevisArticle")
+        {
+            $old_qte_dossier_article = $event['em']->getRepository(DevisArticle::class, 'default')->findOldQte($event['request']->get('id'));
+            $session = new Session();
+            $session->set('old_qte_dossier_article', $old_qte_dossier_article->getQuantite());
+        }
     }
 
     public function updateQteArticle(GenericEvent $event)
     {
         $entity = $event->getSubject();
-        if ($entity instanceof DossierArticle) {
+        if ($entity instanceof DossierArticle or $entity instanceof DevisArticle) {
             $session = new Session();
             $old_qte_dossier_article = $session->get('old_qte_dossier_article');
 
@@ -116,6 +148,21 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             $event['em']->persist($entity->getArticleFormone());
             $event['em']->flush($entity->getArticleFormone());
             $session->remove('old_qte_dossier_article');
+        }
+    }
+
+    public function restockQteArticle(GenericEvent $event)
+    {
+        $entity = $event->getSubject();
+        if ($entity instanceof DossierArticle or $entity instanceof DevisArticle) {
+
+            $qte_to_restock = $entity->getQuantite();
+            $qte_stock = $entity->getArticleFormone()->getQuantite();
+            $new_qte_stock = $qte_stock + $qte_to_restock;
+            $entity->getArticleFormone()->setQuantite($new_qte_stock);
+            $event['em']->persist($entity->getArticleFormone());
+            $event['em']->flush($entity->getArticleFormone());
+
         }
     }
 }

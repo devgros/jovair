@@ -8,16 +8,16 @@ easy_admin:
             controller: App\Controller\DossierController
             show:
                 actions:
-                    - { name: 'dossier_cri', type: 'route', icon: 'eye', label: "CRI", target: "_blank", css_class: 'btn btn-info' }
-                    - { name: 'dossier_crs', type: 'route', icon: 'eye', label: "CRS", target: "_blank", css_class: 'btn btn-info' }
-                    - { name: 'dossier_aprs', type: 'route', icon: 'eye', label: "APRS", target: "_blank", css_class: 'btn btn-info' }
+                    - { name: 'dossier_cri', type: 'route', icon: 'eye', label: "CRI", css_class: 'btn btn-info' }
+                    - { name: 'dossier_crs', type: 'route', icon: 'eye', label: "CRS", css_class: 'btn btn-info' }
+                    - { name: 'dossier_aprs', type: 'route', icon: 'eye', label: "APRS", css_class: 'btn btn-info' }
                     - { name: 'validate', icon: 'check', label: "Cloturer le dossier", css_class: 'btn btn-danger' }
             list:
                 title: "Dossiers"
                 fields: 
                     - { property: 'num_bl', label: 'N° dossier'}
+                    - { property: 'titre', label: 'Titre'}
                     - { property: 'num_bc', label: 'N° de bon de commande'}
-                    
                     - { property: 'date_creation', label: 'Date de création', format: 'd/m/Y'}
                     - { property: 'appareil', label: 'Appareil'}
                     - { property: 'statut', label: "Statut", template: 'statut_list.html.twig', statut: '%statut_dossier%'}
@@ -27,7 +27,9 @@ easy_admin:
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: 'Informations générales', background: 'box-success' }
                     - { property: 'appareil', label: "Appareil", css_class: 'col-sm-6'}
+                    - { property: 'titre', label: "Titre du dossier", css_class: 'col-sm-6'}
                     - { property: 'num_bc', label: "N° de bon de Commande", css_class: 'col-sm-6'}
+                    - { property: 'scanBcFile', label: 'Scan du bon de commande', type: 'vich_image', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
                     - { type: 'group', css_class: 'col-sm-6', label: 'Travaux demandés :', background: 'box-warning' }
                     - { property: 'travaux', label: false, type: 'collection', type_options: { entry_type: 'App\Form\DossierTravauxType', mapped: true, allow_add: true, required: false, allow_delete: true, by_reference: false, entry_options: {label: false} }, css_class: 'col-sm-12'}
                     - { type: 'group', css_class: 'col-sm-6', label: 'CN / AD :', background: 'box-warning' }

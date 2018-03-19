@@ -41,12 +41,24 @@ class MainOeuvre
     private $dossier_main_oeuvre;
 
     /**
+     * @ORM\OneToMany(targetEntity="DevisMainOeuvre", mappedBy="main_oeuvre", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $devis_main_oeuvre;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->main_oeuvre_prix = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devis_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
+    }
+
+    public function __toString()
+    {
+        return $this->nom;
     }
 
     /**
@@ -145,5 +157,53 @@ class MainOeuvre
 
     public function getLastPrix(){
     	return $this->main_oeuvre_prix->first();
+    }
+
+    public function getPeriodePrix($date){
+        $prix_ht = 0;
+        foreach($this->main_oeuvre_prix as $main_oeuvre_prix){
+            if($main_oeuvre_prix->getDateChange() < $date){
+                $prix_ht = $main_oeuvre_prix->getPrixHT();
+                break;
+            }
+        }
+        return $prix_ht;
+    }
+
+    /**
+     * Add dossierMainOeuvre.
+     *
+     * @param \App\Entity\DossierMainOeuvre $dossierMainOeuvre
+     *
+     * @return MainOeuvre
+     */
+    public function addDossierMainOeuvre(\App\Entity\DossierMainOeuvre $dossierMainOeuvre)
+    {
+        $dossier_main_oeuvre->setMainOeuvre($this);
+        $this->dossier_main_oeuvre[] = $dossierMainOeuvre;
+
+        return $this;
+    }
+
+    /**
+     * Remove dossierMainOeuvre.
+     *
+     * @param \App\Entity\DossierMainOeuvre $dossierMainOeuvre
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDossierMainOeuvre(\App\Entity\DossierMainOeuvre $dossierMainOeuvre)
+    {
+        return $this->dossier_main_oeuvre->removeElement($dossierMainOeuvre);
+    }
+
+    /**
+     * Get dossierMainOeuvre.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDossierMainOeuvre()
+    {
+        return $this->dossier_main_oeuvre;
     }
 }

@@ -1,0 +1,9 @@
+{% extends 'easy_admin/layout_pdf.html.twig' %}
+
+{% block page_title %}Pro format n°: {{ entity.numDevis }}{% endblock %}
+
+{% block body %}
+
+	{% include  'easy_admin/Devis/include_devis.html.twig' with {'entity': entity, pdf: true } %}
+	
+{% endblock %}

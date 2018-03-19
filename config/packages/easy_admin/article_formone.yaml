@@ -8,9 +8,9 @@ easy_admin:
                 title: "Ajouter une Form One"
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-primary' }
-                    - { property: 'sn', label: 'Sn', css_class: 'col-sm-6'}
                     - { property: 'from_tracking', label: 'From tracking', css_class: 'col-sm-6'}
                     - { property: 'quantite', label: "Quantité", type_options: { attr: {min: '0' }}, css_class: 'col-sm-6'}
+                    - { property: 'sn', label: 'Sn', css_class: 'col-sm-6'}
                     - { property: 'formoneFile', label: 'Form one', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
             edit:
                 title: "Modifier une Form One"

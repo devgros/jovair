@@ -1,0 +1,34 @@
+parameters:
+   statut_devis: {'0':'En cours', '1':'Accepté'}
+
+easy_admin:
+    entities:
+        Devis:
+            class: App\Entity\Devis
+            controller: App\Controller\DevisController
+            show:
+                actions:
+                    - { name: 'generatePdf', icon: 'download', target: "_blank", label: "PDF", css_class: 'btn btn-secondary' }
+                    - { name: 'validate', icon: 'check', label: "Générer la facture", css_class: 'btn btn-danger' }
+            list:
+                title: "Pro format"
+                fields: 
+                    - { property: 'num_devis', label: 'N° de Pro format'}
+                    - { property: 'date_creation', label: 'Date de création', format: 'd/m/Y'}
+                    - { property: 'client', label: 'Client'}
+                    - { property: 'dossier', label: 'Dossier'}
+                    - { property: 'statut', label: "Statut", template: 'statut_list.html.twig', statut: '%statut_devis%'}
+                actions:
+                    - { name: 'new', label: 'Créer un Pro format' }
+                    - { name: 'show', icon: 'search', label: false }
+                    - { name: 'edit', icon: 'pencil', label: false }
+                    - { name: 'delete', icon: 'times', label: false }
+            form:
+                title: "Ajouter un Pro format"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: 'Informations générales', background: 'box-success' }
+                    - { property: 'client', label: "Client", css_class: 'col-sm-6'}
+                    - { property: 'dossier', label: "Dossier", css_class: 'col-sm-6'}
+                    - { property: 'commentaire', label: "Observation", css_class: 'col-sm-12'}
+            edit:
+                title: "Modifier un Pro format"

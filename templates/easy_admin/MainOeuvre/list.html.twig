@@ -41,7 +41,7 @@
                     	{% endif %}
 					</div>
 					<ul class="nav nav-stacked nav-box">
-						{% if item.mainOeuvrePrix|length() > 0 %}
+						{% if item.mainOeuvrePrix|length > 0 %}
 						{% for main_oeuvre_prix in item.mainOeuvrePrix %}
 						<li>{% if loop.first %}Historique des prix{% else %}&nbsp;{% endif %} <span class="pull-right">{{ main_oeuvre_prix }} € ( changé le {{ main_oeuvre_prix.dateChange|date("d/m/Y à H\\hi") }} )</span>
 						</li>

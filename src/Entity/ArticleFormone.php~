@@ -21,7 +21,7 @@ class ArticleFormone
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $sn;
 
@@ -66,16 +66,23 @@ class ArticleFormone
     private $dossier_article;
 
     /**
+     * @ORM\OneToMany(targetEntity="DevisArticle", mappedBy="article_formone", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $devis_article;
+
+    /**
      * Constructor
      */
     public function __construct()
     {
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devis_article = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     public function __toString()
     {
-        return $this->sn;
+        return $this->article->getNom()." - sn:".$this->sn." - from tracking:".$this->from_tracking." - qte:".$this->quantite;
     }
 
     /**
@@ -248,5 +255,42 @@ class ArticleFormone
     public function getArticle()
     {
         return $this->article;
+    }
+
+    /**
+     * Add dossierArticle.
+     *
+     * @param \App\Entity\DossierArticle $dossierArticle
+     *
+     * @return ArticleFormone
+     */
+    public function addDossierArticle(\App\Entity\DossierArticle $dossierArticle)
+    {
+        $dossier_article->setArticleFormone($this);
+        $this->dossier_article[] = $dossierArticle;
+
+        return $this;
+    }
+
+    /**
+     * Remove dossierArticle.
+     *
+     * @param \App\Entity\DossierArticle $dossierArticle
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDossierArticle(\App\Entity\DossierArticle $dossierArticle)
+    {
+        return $this->dossier_article->removeElement($dossierArticle);
+    }
+
+    /**
+     * Get dossierArticle.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDossierArticle()
+    {
+        return $this->dossier_article;
     }
 }

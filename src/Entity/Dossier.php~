@@ -22,9 +22,14 @@ class Dossier
     private $id;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      */
     private $num_bc;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $titre;
 
     /**
      * @ORM\Column(type="datetime")
@@ -73,6 +78,24 @@ class Dossier
      * @Assert\GreaterThanOrEqual(0)
      */
     private $horametre_aprs;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $scan_bc;
+
+    /**
+     * @Vich\UploadableField(mapping="scanBcFile", fileNameProperty="scan_bc")
+     * @var File
+     */
+    private $scanBcFile;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedBcAt;
 
     /**
      * @ORM\Column(type="string", length=255, nullable=true)
@@ -141,10 +164,9 @@ class Dossier
     private $dossier_outils;
 
     /**
-     * @ORM\OneToOne(targetEntity="Facture", inversedBy="dossier")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\OneToMany(targetEntity="App\Entity\Devis", mappedBy="dossier")
      */
-    private $facture;
+    private $devis;
 
     public function __toString()
     {
@@ -162,6 +184,7 @@ class Dossier
         $this->dossier_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_outils = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dossier = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -388,6 +411,72 @@ class Dossier
     public function getHorametreAprs()
     {
         return $this->horametre_aprs;
+    }
+
+    /**
+     * Set scanBc.
+     *
+     * @param string $scanBc
+     *
+     * @return Dossier
+     */
+    public function setScanBc($scanBc)
+    {
+        $this->scan_bc = $scanBc;
+
+        return $this;
+    }
+
+    /**
+     * Get scanBc.
+     *
+     * @return string
+     */
+    public function getscanBc()
+    {
+        return $this->scan_bc;
+    }
+
+    public function setScanBcFile(File $image = null)
+    {
+        $this->scanBcFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedBcAt' is not defined in your entity, use another property
+            $this->updatedBcAt = new \DateTime('now');
+        }
+    }
+
+    public function getScanBcFile()
+    {
+        return $this->scanBcFile;
+    }
+
+    /**
+     * Set updatedBcAt.
+     *
+     * @param \DateTime $updatedBcAt
+     *
+     * @return Dossier
+     */
+    public function setUpdatedBcAt($updatedBcAt)
+    {
+        $this->updatedBcAt = $updatedBcAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedBcAt.
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedBcAt()
+    {
+        return $this->updatedBcAt;
     }
 
     /**
@@ -751,5 +840,65 @@ class Dossier
     public function getTimeCf()
     {
         return $this->time_cf;
+    }
+
+    /**
+     * Set titre.
+     *
+     * @param string $titre
+     *
+     * @return Dossier
+     */
+    public function setTitre($titre)
+    {
+        $this->titre = $titre;
+
+        return $this;
+    }
+
+    /**
+     * Get titre.
+     *
+     * @return string
+     */
+    public function getTitre()
+    {
+        return $this->titre;
+    }
+
+    /**
+     * Add dossier.
+     *
+     * @param \App\Entity\Devis $dossier
+     *
+     * @return Dossier
+     */
+    public function addDossier(\App\Entity\Devis $dossier)
+    {
+        $this->dossier[] = $dossier;
+
+        return $this;
+    }
+
+    /**
+     * Remove dossier.
+     *
+     * @param \App\Entity\Devis $dossier
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDossier(\App\Entity\Devis $dossier)
+    {
+        return $this->dossier->removeElement($dossier);
+    }
+
+    /**
+     * Get dossier.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDossier()
+    {
+        return $this->dossier;
     }
 }
