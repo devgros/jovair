@@ -74,7 +74,7 @@ class Dossier
     private $is_valid_ctrl_ok = false;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $horametre_aprs;

@@ -23,7 +23,7 @@ class DossierMainOeuvre
     private $date_realisation;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="decimal", scale=2)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $quantite;
