@@ -12,6 +12,7 @@ use App\Entity\Mecanicien;
 
 use Vich\UploaderBundle\Form\Type\VichFileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\NumberType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\Extension\Core\Type\DateType;
 use Symfony\Component\Form\Extension\Core\Type\TimeType;
@@ -40,8 +41,65 @@ class DossierController extends MyAdminController
 			$new_num = "026-".$current_year."-JOV'AIR";
 		}
 		$entity->setNumBl($new_num);
+
+		$heure_aprs = $entity->getHeureDerniereAprs();
+        if($heure_aprs){
+        	$appareil = $entity->getAppareil();
+        	$appareil->setHeureDerniereAprs($heure_aprs);
+
+        	if($appareil->getHtCellule()) $appareil->setHtCellule($this->addAPRSTime($appareil->getHtCellule(), $heure_aprs));
+	        if($appareil->getHrgCellule()) $appareil->setHrgCellule($this->addAPRSTime($appareil->getHrgCellule(), $heure_aprs));
+	        if($appareil->getHtMoteur1()) $appareil->setHtMoteur1($this->addAPRSTime($appareil->getHtMoteur1(), $heure_aprs));
+	        if($appareil->getHrgMoteur1()) $appareil->SetHrgMoteur1($this->addAPRSTime($appareil->getHrgMoteur1(), $heure_aprs));
+	        if($appareil->getHtMoteur2()) $appareil->setHtMoteur2($this->addAPRSTime($appareil->getHtMoteur2(), $heure_aprs));
+	        if($appareil->getHrgMoteur2()) $appareil->SetHrgMoteur2($this->addAPRSTime($appareil->getHrgMoteur2(), $heure_aprs));
+	        if($appareil->getHtHelice1()) $appareil->setHtHelice1($this->addAPRSTime($appareil->getHtHelice1(), $heure_aprs));
+	        if($appareil->getHrgHelice1()) $appareil->setHrgHelice1($this->addAPRSTime($appareil->getHrgHelice1(), $heure_aprs));
+	        if($appareil->getHtHelice2()) $appareil->setHtHelice2($this->addAPRSTime($appareil->getHtHelice2(), $heure_aprs));
+	        if($appareil->getHrgHelice2()) $appareil->setHrgHelice2($this->addAPRSTime($appareil->getHrgHelice2(), $heure_aprs));
+	        $this->em->flush();
+        }
+		
 		parent::prePersistEntity($entity);
 	}
+
+	protected function preUpdateEntity($entity)
+    {
+        $heure_aprs = $entity->getHeureDerniereAprs();
+        if($heure_aprs){
+        	$appareil = $entity->getAppareil();
+        	$appareil->setHeureDerniereAprs($heure_aprs);
+
+        	if($appareil->getHtCellule()) $appareil->setHtCellule($this->addAPRSTime($appareil->getHtCellule(), $heure_aprs));
+	        if($appareil->getHrgCellule()) $appareil->setHrgCellule($this->addAPRSTime($appareil->getHrgCellule(), $heure_aprs));
+	        if($appareil->getHtMoteur1()) $appareil->setHtMoteur1($this->addAPRSTime($appareil->getHtMoteur1(), $heure_aprs));
+	        if($appareil->getHrgMoteur1()) $appareil->SetHrgMoteur1($this->addAPRSTime($appareil->getHrgMoteur1(), $heure_aprs));
+	        if($appareil->getHtMoteur2()) $appareil->setHtMoteur2($this->addAPRSTime($appareil->getHtMoteur2(), $heure_aprs));
+	        if($appareil->getHrgMoteur2()) $appareil->SetHrgMoteur2($this->addAPRSTime($appareil->getHrgMoteur2(), $heure_aprs));
+	        if($appareil->getHtHelice1()) $appareil->setHtHelice1($this->addAPRSTime($appareil->getHtHelice1(), $heure_aprs));
+	        if($appareil->getHrgHelice1()) $appareil->setHrgHelice1($this->addAPRSTime($appareil->getHrgHelice1(), $heure_aprs));
+	        if($appareil->getHtHelice2()) $appareil->setHtHelice2($this->addAPRSTime($appareil->getHtHelice2(), $heure_aprs));
+	        if($appareil->getHrgHelice2()) $appareil->setHrgHelice2($this->addAPRSTime($appareil->getHrgHelice2(), $heure_aprs));
+	        $this->em->flush();
+        }
+        
+        
+        parent::preUpdateEntity($entity);
+    }
+
+    protected function addAPRSTime($ht, $heure_aprs)
+    {
+    	list($htH,$htM) = explode('.',$ht);
+    	list($haprsH,$haprsM) = explode('.',$heure_aprs);
+    	$HT = $htH+$haprsH;
+    	$MT = $htM+$haprsM;
+    	while($MT > 60){
+    		$HT++;
+    		$MT = $MT-60;
+    	}
+    	$new_ht = $HT.".".str_pad(($MT), 2, "0", STR_PAD_LEFT);
+    	return $new_ht;
+    }
 
 	protected function validateAction(){
 		$this->request->query->set("menuIndex", "1");
@@ -50,7 +108,7 @@ class DossierController extends MyAdminController
 		$entity = $easyadmin['item'];
 		
 		$editForm = $this->createFormBuilder($entity)
-			->add('horametreAprs', IntegerType::class, array("label"=>"Horamètre APRS", 'required' => false, 'attr' => ['min' => '0']))
+			->add('horametreAprs', NumberType::class, array("label"=>"Horamètre APRS", 'required' => false, 'attr' => ['min' => '0']))
 			->add('remarqueAprs', TextType::class, array("label"=>"Remarques CRS", 'required' => false))
 			->add('isValidCtrlOk', CheckboxType::class, array('label'=> "Sous réserve de l’exécution satisfaisante du vol de contrôle", 'required' => false))
 			->add('dateCf', DateType::class, array("label"=>"Date du contrôle final", 'widget'=> 'single_text', 'attr' => ['value'=>date('Y-m-d')]))
@@ -111,10 +169,11 @@ class DossierController extends MyAdminController
 				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($entity, 'carteTravailFile'), 'all');
 			}
 			foreach($entity->getDossierArticle() as $article){
-				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($article->getArticleFormone(), 'formoneFile'), 'all');
+				if($article->getArticleFormone()->getFormone()){
+					$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($article->getArticleFormone(), 'formoneFile'), 'all');
+				}
 			}
-			
-			
+
 			$pdf->merge('file', $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'.pdf');
 
 			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');

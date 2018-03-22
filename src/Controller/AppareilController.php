@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 
 class AppareilController extends MyAdminController
 {
+
     public function addPeAction()
     {
     	$appareil_id = $this->request->query->get('id');

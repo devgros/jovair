@@ -115,28 +115,6 @@
 		{% endif %}
 	</div>
 	<div class="col-xs-12 col-sm-6">
-		{% if entity.dossierMainOeuvre|length() > 0 %}
-		<h4 class="alt">Main d'oeuvre :</h4>
-		<table class="table table-striped">
-			<tr class="border_bottom">
-				<th>Désignation</th>
-				<th>Date</th>
-				<th>Qte</th>
-			</tr>
-			{% for dossier_main_oeuvre in entity.dossierMainOeuvre %}
-			<tr>
-				<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
-				<td>{{ dossier_main_oeuvre.dateRealisation|date('d/m/Y') }}</td>
-				<td>{{ dossier_main_oeuvre.quantite }}</td>
-			</tr>
-			{% endfor %}
-		</table>
-		{% endif %}
-	</div>
-</div>
-
-<div class="row">
-	<div class="col-xs-12 col-sm-6">
 		{% if entity.dossierOutils|length() > 0 %}
 		<h4 class="alt">Outillages soumis à étalonnage :</h4>
 		<table class="table table-striped">
@@ -155,7 +133,10 @@
 		</table>
 		{% endif %}
 	</div>
-	<div class="col-xs-12 col-sm-6">
+</div>
+
+<div class="row">
+	<div class="col-xs-12 col-sm-12">
 		<h4 class="alt">Contrôle final :</h4>
 		<table class="table table-striped">
 			<tr class="border_bottom">

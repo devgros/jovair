@@ -40,7 +40,7 @@ class DevisController extends BaseAdminController
 			$client = $entity->getDossier()->getAppareil()->getClient();
 			$entity->setClient($client);
 		}
-		parent::prePersistEntity($entity);
+		parent::preUpdateEntity($entity);
 	}
 
 	protected function generatePdfAction(){

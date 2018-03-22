@@ -223,6 +223,11 @@ class Article
                 break;
             }
         }
+        if($prix_ht == 0){
+            $article_prix = $this->article_prix->last();
+            $prix_ht = $article_prix->getPrixHT();
+        }
+        
         return $prix_ht;
     }
 

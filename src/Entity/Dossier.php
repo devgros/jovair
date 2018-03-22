@@ -116,6 +116,11 @@ class Dossier
     private $updatedAt;
 
     /**
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $heure_derniere_aprs;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Appareil", inversedBy="appareil_dossier")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -900,5 +905,29 @@ class Dossier
     public function getDevis()
     {
         return $this->devis;
+    }
+
+    /**
+     * Set heureDerniereAprs.
+     *
+     * @param string $heureDerniereAprs
+     *
+     * @return Appareil
+     */
+    public function setHeureDerniereAprs($heureDerniereAprs)
+    {
+        $this->heure_derniere_aprs = $heureDerniereAprs;
+
+        return $this;
+    }
+
+    /**
+     * Get heureDerniereAprs.
+     *
+     * @return string
+     */
+    public function getHeureDerniereAprs()
+    {
+        return $this->heure_derniere_aprs;
     }
 }

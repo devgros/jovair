@@ -37,7 +37,7 @@ class ArticleFormone
     private $from_tracking;
 
     /**
-     * @ORM\Column(type="string", length=255)
+     * @ORM\Column(type="string", length=255, nullable=true)
      * @var string
      */
     private $formone;
@@ -49,7 +49,7 @@ class ArticleFormone
     private $formoneFile;
 
     /**
-     * @ORM\Column(type="datetime")
+     * @ORM\Column(type="datetime", nullable=true)
      * @var \DateTime
      */
     private $updatedAt;
