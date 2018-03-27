@@ -79,7 +79,8 @@
 				{% if entity.dossier.dossierArticle|length() > 0 %}
 				{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces du dossier :</th></tr>{% endif %}
 				{% for dossier_article in entity.dossier.dossierArticle %}
-					{% set prix_ht = dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation) %}
+					{% set marge_ht = ((dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation)*dossier_article.articleFormone.article.marge)/100) %}
+					{% set prix_ht = dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation) + marge_ht %}
 					{% set remise_ht = ((prix_ht * dossier_article.remise)/100) %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*dossier_article.quantite) %}
@@ -108,7 +109,8 @@
 			{% endif %}
 			{% if entity.devisArticle|length() > 0 %}
 				{% for devis_article in entity.devisArticle %}
-					{% set prix_ht = devis_article.articleFormone.article.getPeriodePrix(entity.dateCreation) %}
+					{% set marge_ht = ((devis_article.articleFormone.article.getPeriodePrix(entity.dateCreation)*devis_article.articleFormone.article.marge)/100) %}
+					{% set prix_ht = devis_article.articleFormone.article.getPeriodePrix(entity.dateCreation) + marge_ht %}
 					{% set remise_ht = ((prix_ht * devis_article.remise)/100) %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*devis_article.quantite) %}
