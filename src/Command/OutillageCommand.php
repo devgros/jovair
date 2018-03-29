@@ -24,14 +24,14 @@ class OutillageCommand extends ContainerAwareCommand
         foreach($outillages as $outillage){
         	$alerte_bdd = $em->getRepository('App:Alerte')->findBy(array('type' => '1', 'id_entity' => $outillage->getId()));
         	$last_date_certificat = $outillage->getLastDateCertificat()->getDateValidite();
-        	$last_date_certificat_at_one_month = $last_date_certificat->modify('-1 month');
-
+        	$last_date_certificat_at_one_month = clone $last_date_certificat;
+        	$last_date_certificat_at_one_month->modify('-1 month');
 	        if($last_date_certificat_at_one_month <= $current_date && $alerte_bdd == null){
 	            $alerte = new Alerte();
 	            $alerte->setType(1);
 	            $alerte->setIdEntity($outillage->getId());
 	            $alerte->setNameEntity("Outillage");
-	            $alerte->setDesignation($outillage->getNom()." - Certificat périmé le ".$last_date_certificat->format('d/m/Y'));
+	            $alerte->setDesignation($outillage->getNom()." - Certificat périmé le ".$outillage->getLastDateCertificat()->getDateValidite()->format('d/m/Y'));
 	            $em->persist($alerte);
 	            $em->flush($alerte);
 	        }
