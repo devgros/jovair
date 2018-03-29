@@ -18,7 +18,7 @@ class DevisArticle
     private $id;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="decimal", scale=2)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $quantite;

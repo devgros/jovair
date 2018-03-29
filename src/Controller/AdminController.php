@@ -6,5 +6,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminContr
 
 class AdminController extends BaseAdminController
 {
-
+	public function notificationsAction()
+	{
+		$alertes =  $this->getDoctrine()->getManager()->getRepository('App:Alerte')->findAll();
+		return $this->render("easy_admin/notifications.html.twig", array('alertes' => $alertes));
+	}
 }

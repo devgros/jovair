@@ -8,6 +8,7 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 
+use App\Entity\Devis;
 use App\Entity\Mecanicien;
 
 use Vich\UploaderBundle\Form\Type\VichFileType;
@@ -129,6 +130,39 @@ class DossierController extends MyAdminController
 		if ($editForm->isSubmitted() && $editForm->isValid()) {
 			$entity->setStatut(1);
 			$this->em->flush();
+
+			/*
+			 * CREATION DU PRO FORMAT SI NON EXISTANT
+			 */
+			$devis = $this->em->getRepository('App:Devis')->findBy(array('dossier'=>$entity->getId()));
+			if(!$devis){
+				$devis = new Devis();
+				$devis->setDossier($entity);
+
+				$last_devis =  $this->em->getRepository('App:Devis')->getLastDevis();
+				if(sizeof($last_devis)>0){
+					$last_num_devis = $last_devis[0]->getNumDevis();
+					$last_num = substr($last_num_devis, 1, 3);
+					$last_year = substr($last_num_devis, 5, 2);
+					$current_year = date("y");
+					if($current_year > $last_year){
+						$new_num = "D001-".$current_year."-JOV'AIR";
+					}else{
+						$new_num = 'D'.str_pad(($last_num+1), 3, "0", STR_PAD_LEFT)."-".$current_year."-JOV'AIR";
+					}
+				}else{
+					$new_num = "D001-".date("y")."-JOV'AIR";
+				}
+				$devis->setNumDevis($new_num);
+				$devis->setStatut(0);
+				if(!$devis->getClient()){
+					$client = $devis->getDossier()->getAppareil()->getClient();
+					$devis->setClient($client);
+				}
+
+				$this->em->persist($devis);
+				$this->em->flush();
+			}
 
 			/*
 			 * GENERATION PDF DOSSIER
