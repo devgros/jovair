@@ -5,6 +5,7 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\EventDispatcher\GenericEvent;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Session\Session;
+use app\entity\Alerte;
 use app\entity\Article;
 use app\entity\ArticlePrix;
 use app\entity\MainOeuvre;
@@ -14,6 +15,7 @@ use app\entity\OutillagePrix;
 use app\entity\DossierArticle;
 use app\entity\DevisArticle;
 use app\entity\ArticleFormone;
+use app\entity\OutillageCertificat;
 
 class EasyAdminSubscriber implements EventSubscriberInterface
 {
@@ -21,7 +23,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'easy_admin.post_persist' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('addOutillagePrix'), array('newQteArticle')),
+            'easy_admin.post_persist' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('addOutillagePrix'), array('newQteArticle'), array('newOutillageCertificat')),
             'easy_admin.post_update' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('addOutillagePrix')),
             'easy_admin.pre_edit' => array(array('storeQteArticle')),
             'easy_admin.pre_update' => array(array('updateQteArticle')),
@@ -106,6 +108,25 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             $entity->getArticleFormone()->setQuantite($new_qte_stock);
             $event['em']->persist($entity->getArticleFormone());
             $event['em']->flush($entity->getArticleFormone());
+
+            $this->seuilAlerte($event['em'], $new_qte_stock, $entity->getArticleFormone()->getArticle()->getSeuilAlert(), $entity->getArticleFormone()->getArticle()->getId(), $entity->getArticleFormone()->getArticle()->getNom());
+        }
+    }
+
+    public function newOutillageCertificat(GenericEvent $event)
+    {
+        $entity = $event->getSubject();
+        if ($entity instanceof OutillageCertificat ) {
+            $current_date = new \DateTime();
+            $alerte_bdd = $event['em']->getRepository('App:Alerte')->findBy(array('type' => '1', 'id_entity' => $entity->getOutillage()->getId()));
+            if($alerte_bdd != null){
+                $last_date_certificat = $entity->getOutillage()->getLastDateCertificat()->getDateValidite();
+                $last_date_certificat_at_one_month = $last_date_certificat->modify('-1 month');
+                if($last_date_certificat_at_one_month > $current_date) {
+                    $event['em']->remove($alerte_bdd[0]);
+                    $event['em']->flush();  
+                }
+            }
         }
     }
 
@@ -145,9 +166,16 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             }
 
             $entity->getArticleFormone()->setQuantite($new_qte_stock);
+
             $event['em']->persist($entity->getArticleFormone());
             $event['em']->flush($entity->getArticleFormone());
             $session->remove('old_qte_dossier_article');
+
+            $this->seuilAlerte($event['em'], $new_qte_stock, $entity->getArticleFormone()->getArticle()->getSeuilAlert(), $entity->getArticleFormone()->getArticle()->getId(), $entity->getArticleFormone()->getArticle()->getNom());
+        }
+        
+        if($entity instanceof ArticleFormone){
+            $this->seuilAlerte($event['em'], $entity->getQuantite(), $entity->getArticle()->getSeuilAlert(), $entity->getArticle()->getId(), $entity->getArticle()->getNom());
         }
     }
 
@@ -163,6 +191,28 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             $event['em']->persist($entity->getArticleFormone());
             $event['em']->flush($entity->getArticleFormone());
 
+            $this->seuilAlerte($event['em'], $new_qte_stock, $entity->getArticleFormone()->getArticle()->getSeuilAlert(), $entity->getArticleFormone()->getArticle()->getId(), $entity->getArticleFormone()->getArticle()->getNom());
         }
+    }
+
+    public function seuilAlerte($em, $qte, $seuil_alerte, $article_id, $article_name){
+        $alerte_bdd = $em->getRepository('App:Alerte')->findBy(array('name_entity' => 'Article', 'id_entity' => $article_id));
+        if($qte <= $seuil_alerte && $alerte_bdd == null){
+            $alerte = new Alerte();
+            $alerte->setType(0);
+            $alerte->setIdEntity($article_id);
+            $alerte->setNameEntity("Article");
+            $alerte->setDesignation($article_name." - il reste moins de ".$seuil_alerte." éléments au stock");
+            $em->persist($alerte);
+            $em->flush($alerte);
+        }
+
+        if($qte > $seuil_alerte && $alerte_bdd != null){
+            $em->remove($alerte_bdd[0]);
+            $em->flush();  
+        }
+
+
+        
     }
 }

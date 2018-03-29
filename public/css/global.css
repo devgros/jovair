@@ -42,7 +42,6 @@ h1 > .label {  font-size: 75%; }
 .box-tools.alt { position:relative; top:-10px; right:-10px; }
 .box-tools.alt > .btn-box-tool > i { font-size: 2em; }
 .aprs { width:6cm; }
-/*.crs { width:28cm; height:20px; }*/
 .table-crs { width:100%; }
 .table-aprs, .table-crs { background: #FFFFFF; border: 1px solid #000; }
 .table-aprs td, .table-crs td { border: 1px solid #000 !important; }
@@ -87,3 +86,8 @@ textarea, body.new textarea, body.edit textarea { min-height: 100px !important; 
 .little-button .btn-xs { padding:1px 0 !important; }
 .table-pdf { margin-bottom:0 !important; }
 .table-pdf > tbody > tr > td { border: none !important; padding:0 8px !important; }
+/*.crs-pdf { -webkit-transform: rotate(90deg); -moz-transform: rotate(90deg); -o-transform: rotate(90deg); -ms-transform: rotate(90deg); transform: rotate(90deg); }*/
+.notifications-menu > a { background: rgba(0,0,0,0) !important; }
+.notifications-menu > a:hover, .notifications-menu > a:focus, .notifications-menu > a:active { background: rgba(0,0,0,0.1) !important; }
+.notifications-menu li { line-height:20px; font-weight:normal; }
+.navbar-nav > .notifications-menu > .dropdown-menu { width:400px; }

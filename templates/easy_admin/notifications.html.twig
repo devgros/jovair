@@ -1,0 +1,30 @@
+<li class="dropdown notifications-menu">
+	<a href="#" class="dropdown-toggle" data-toggle="dropdown">
+		<i class="fa fa-bell-o text-white"></i>
+		{% if alertes|length > 0 %}<span class="label label-danger">{{ alertes|length }}</span>{% endif %}
+	</a>
+	<ul class="dropdown-menu">
+		{% if alertes|length > 0 %}
+		<li class="header">Vous avez {{ alertes|length }} notifications</li>
+		<li>
+			<ul class="menu">
+				{% for alerte in alertes %}
+				<li>
+					{% if alerte.type == 0 %}
+					<a href="{{ path('easyadmin', { action: 'show', entity: alerte.nameEntity, primary_key_name: 'id', id: alerte.idEntity, referer: '' }) }}">
+						<i class="fa fa-tags text-green"></i> {{ alerte.designation }}
+					</a>
+					{% elseif alerte.type == 1 %}
+					<a href="{{ path('easyadmin', { action: 'list', entity: alerte.nameEntity, primary_key_name: 'id', id: alerte.idEntity, referer: '' }) }}">
+						<i class="fa fa-gears text-blue"></i> {{ alerte.designation }}
+					</a>
+					{% endif %}
+				</li>
+				{% endfor %}
+			</ul>
+		</li>
+		{% else %}
+		<li class="header">Vous n'avez pas de notifications</li>
+		{% endif %}
+	</ul>
+</li>

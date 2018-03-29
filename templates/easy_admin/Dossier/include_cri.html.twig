@@ -10,7 +10,7 @@
 <div class="row">
 	<div class="col-xs-12">
 		<h2 class="page-header alt">
-			<i class="fa fa-plane"></i> Compte Rendu d'intervention {{ entity.numBl }}
+			<i class="fa fa-plane"></i> Bon de lancement et Compte Rendu d'intervention {{ entity.numBl }}
 			{% if not pdf %}{% if entity.statut > 0 %}<a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/dossier/{{ entity.numBl }}.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print" style="margin-left: 10px; margin-top:-15px;"><i class="fa fa-download"></i> PDF</a>{% endif %}{% endif %}
 			<small class="pull-right">Suivant le Bon de Commande n°: {{ entity.numBc }}</small>
 
