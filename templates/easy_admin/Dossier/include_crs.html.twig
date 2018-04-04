@@ -97,8 +97,8 @@
 				{% set dossier_pe = entity.appareil.getDossierPe(entity.dateCreation) %}
 				<table class="table sub-table">
 					<tr>
-						<td>{{ dossier_pe.type }}</td>
-						<td>{{ dossier_pe.revision }}</td>
+						<td>{% if dossier_pe %}{{ dossier_pe.type }}{% endif %}</td>
+						<td>{% if dossier_pe %}{{ dossier_pe.revision }}{% endif %}</td>
 					</tr>
 				</table>
 			</td>
