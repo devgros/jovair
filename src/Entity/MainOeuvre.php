@@ -167,6 +167,10 @@ class MainOeuvre
                 break;
             }
         }
+        if($prix_ht == 0){
+            $main_oeuvre_prix = $this->main_oeuvre_prix->last();
+            $prix_ht = $main_oeuvre_prix->getPrixHT();
+        }
         return $prix_ht;
     }
 
