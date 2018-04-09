@@ -117,7 +117,7 @@
 					{% set tva = ((total_ht * 20)/100) %}
 					{% set total_ttc = (total_ht+tva) %}
 
-					{% set facture_total_remise = facture_total_remise + remise_ht %}
+					{% set facture_total_remise = facture_total_remise + (remise_ht*devis_article.quantite) %}
 					{% set facture_total_ht = facture_total_ht + total_ht %}
 					{% set facture_total_tva = facture_total_tva + tva %}
 					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
@@ -187,7 +187,7 @@
 					{% set tva = ((total_ht * 20)/100) %}
 					{% set total_ttc = (total_ht+tva) %}
 
-					{% set facture_total_remise = facture_total_remise + remise_ht %}
+					{% set facture_total_remise = facture_total_remise + (remise_ht*devis_main_oeuvre.quantite) %}
 					{% set facture_total_ht = facture_total_ht + total_ht %}
 					{% set facture_total_tva = facture_total_tva + tva %}
 					{% set facture_total_ttc = facture_total_ttc + total_ttc %}

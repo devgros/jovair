@@ -30,13 +30,18 @@ class Facture
     private $date_creation;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $facture_paye;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="facture")
      * @ORM\JoinColumn(nullable=true)
      */
     private $client;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Devis", inversedBy="facture")
+     * @ORM\ManyToOne(targetEntity="Devis", inversedBy="factures")
      */
     private $devis;
 
@@ -127,5 +132,34 @@ class Facture
     public function getDevis()
     {
         return $this->devis;
+    }
+
+    /**
+     * Set client.
+     *
+     * @param \App\Entity\Client|null $client
+     *
+     * @return Facture
+     */
+    public function setClient(\App\Entity\Client $client = null)
+    {
+        $this->client = $client;
+
+        return $this;
+    }
+
+    /**
+     * Get client.
+     *
+     * @return \App\Entity\Client|null
+     */
+    public function getClient()
+    {
+        return $this->client;
+    }
+
+    public function getDossier()
+    {
+        return $this->devis->getDossier();
     }
 }
