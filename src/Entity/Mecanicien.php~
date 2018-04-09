@@ -37,6 +37,11 @@ class Mecanicien
 
     /**
      * @ORM\Column(type="string", length=255)
+     */
+    private $trigramme;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      * @var string
      */
     private $signature;
@@ -436,5 +441,77 @@ class Mecanicien
     public function getTravauxControl()
     {
         return $this->travaux_control;
+    }
+
+    /**
+     * Add cnadControl.
+     *
+     * @param \App\Entity\DossierCnad $cnadControl
+     *
+     * @return Mecanicien
+     */
+    public function addCnadControl(\App\Entity\DossierCnad $cnadControl)
+    {
+        $this->cnad_control[] = $cnadControl;
+
+        return $this;
+    }
+
+    /**
+     * Remove cnadControl.
+     *
+     * @param \App\Entity\DossierCnad $cnadControl
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeCnadControl(\App\Entity\DossierCnad $cnadControl)
+    {
+        return $this->cnad_control->removeElement($cnadControl);
+    }
+
+    /**
+     * Get cnadControl.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCnadControl()
+    {
+        return $this->cnad_control;
+    }
+
+    /**
+     * Add travauxSupControl.
+     *
+     * @param \App\Entity\DossierTravauxSup $travauxSupControl
+     *
+     * @return Mecanicien
+     */
+    public function addTravauxSupControl(\App\Entity\DossierTravauxSup $travauxSupControl)
+    {
+        $this->travaux_sup_control[] = $travauxSupControl;
+
+        return $this;
+    }
+
+    /**
+     * Remove travauxSupControl.
+     *
+     * @param \App\Entity\DossierTravauxSup $travauxSupControl
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTravauxSupControl(\App\Entity\DossierTravauxSup $travauxSupControl)
+    {
+        return $this->travaux_sup_control->removeElement($travauxSupControl);
+    }
+
+    /**
+     * Get travauxSupControl.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTravauxSupControl()
+    {
+        return $this->travaux_sup_control;
     }
 }

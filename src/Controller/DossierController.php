@@ -167,6 +167,19 @@ class DossierController extends MyAdminController
 			/*
 			 * GENERATION PDF DOSSIER
 			 */
+			if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf')) {
+				unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');
+			}
+
+			if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf')) {
+				unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf');
+			}
+
+			if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf')) {
+				unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf');
+			}
+
+
 			$this->container->get('knp_snappy.pdf')->generateFromHtml(
 				$this->renderView(
 					'easy_admin/Dossier/pdf_crs.html.twig',

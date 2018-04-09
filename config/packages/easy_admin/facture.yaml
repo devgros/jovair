@@ -3,7 +3,7 @@ easy_admin:
         Facture:
             class: App\Entity\Facture
             controller: App\Controller\FactureController
-            disabled_actions: ['new', 'edit', 'delete']
+            disabled_actions: ['new', 'delete']
             list:
                 title: "Factures"
                 fields: 
@@ -11,3 +11,8 @@ easy_admin:
                     - { property: 'date_creation', label: 'Date de création', format: 'd/m/Y'}
                     - { property: 'client', label: 'Client'}
                     - { property: 'getDossier', label: 'Dossier'}
+                    - { property: 'facture_paye', label: 'Payée ?', type: 'toggle' }
+            edit:
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: 'État de la facture', background: 'box-success' }
+                    - { property: 'facture_paye', label: 'La facture est-elle payée ?' }

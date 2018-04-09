@@ -42,13 +42,20 @@
 <div class="row">
 	<div class="col-xs-12 col-sm-6" {% if pdf %}{% endif %}>{% endif %}
 		{% if entity.travaux|length() > 0 %}
-		<h5 class="alt">Programmés</h5>
+		
 		<table class="table table-striped">
+			<tr class="row_title_cri">
+				<th colspan="2"><h5 class="alt">Programmés</h5></th>
+				<th class="text-right">EXE</th>
+				<th class="text-right">CTRL</th>
+			</tr>
+			<tr></tr>
 			{% for travaux in entity.travaux %}
 			<tr>
 				<td><b>{{ travaux.designation }}</b> {% if travaux.commentaire %}: {{ travaux.commentaire }}{% endif %}</td>
 				<td class="text-right">{% if travaux.isValid and travaux.statut > 0 %}<span class=" label label-{% if travaux.statut < 3 %}warning{% else %}success{% endif %}">{{ statut_travaux_label[travaux.statut] }}</span>{% endif %}</td>
-				<td class="text-right">{% if travaux.isValid %}{{ travaux.mecanicien }}{% endif %}</td>
+				<td class="text-right">{% if travaux.isValid %}{{ travaux.mecanicien.trigramme }}{% endif %}</td>
+				<td class="text-right">{% if travaux.isValid %}{{ travaux.mecanicienControl.trigramme }}{% endif %}</td>
 			</tr>
 			{% endfor %}
 		</table>
@@ -58,13 +65,19 @@
 	<div class="col-xs-12 col-sm-6">
 	{% endif %}
 		{% if entity.cnad|length() > 0 %}
-		<h5 class="alt">CN/AD</h5>
 		<table class="table table-striped">
+			<tr class="row_title_cri">
+				<th colspan="2"><h5 class="alt">CN/AD</h5></th>
+				<th class="text-right">EXE</th>
+				<th class="text-right">CTRL</th>
+			</tr>
+			<tr></tr>
 			{% for cnad in entity.cnad %}
 				<tr>
 					<td><b>{{ cnad.designation }}</b> {% if cnad.commentaire %}: {{ cnad.commentaire }}{% endif %}</td>
 					<td class="text-right">{% if cnad.isValid and cnad.statut > 0 %}<span class=" label label-{% if cnad.statut < 3 %}warning{% else %}success{% endif %}">{{ statut_cnad_label[cnad.statut] }}</span>{% endif %}</td>
-					<td class="text-right">{% if cnad.isValid %}{{ cnad.mecanicien }}{% endif %}</td>
+					<td class="text-right">{% if cnad.isValid %}{{ cnad.mecanicien.trigramme }}{% endif %}</td>
+					<td class="text-right">{% if cnad.isValid %}{{ cnad.mecanicienControl.trigramme }}{% endif %}</td>
 				</tr>
 			{% endfor %}
 		</table>
@@ -82,13 +95,15 @@
 			<tr class="border_bottom">
 				<th>Anomalie découverte</th>
 				<th>Action corrective</th>
-				<th>Mécanicien</th>
+				<th class="text-right">EXE</th>
+				<th class="text-right">CTRL</th>
 			</tr>
 			{% for dossier_travaux_sup in entity.travauxSup %}
 			<tr>
 				<td>{{ dossier_travaux_sup.designation }}</td>
 				<td>{{ dossier_travaux_sup.actionCorrective }}</td>
-				<td>{{ dossier_travaux_sup.mecanicien }}</td>
+				<td class="text-right">{{ dossier_travaux_sup.mecanicien.trigramme }}</td>
+				<td class="text-right">{{ dossier_travaux_sup.mecanicienControl.trigramme }}</td>
 			</tr>
 			{% endfor %}
 		</table>
@@ -103,17 +118,17 @@
 		<h4 class="alt">Pièces utilisés :</h4>
 		<table class="table table-striped">
 			<tr class="border_bottom">
+				<th>Pn</th>
 				<th>Désignation</th>
 				<th>Sn</th>
-				<th>From Tracking</th>
-				<th>Qte</th>
+				<th class="text-right">Qte</th>
 			</tr>
 			{% for dossier_article in entity.dossierArticle %}
 			<tr>
+				<td>{{ dossier_article.articleFormone.article.pn }}</td>
 				<td>{{ dossier_article.articleFormone.article.nom }}</td>
 				<td>{{ dossier_article.articleFormone.sn }}</td>
-				<td>{{ dossier_article.articleFormone.fromTracking }}</td>
-				<td>{{ dossier_article.quantite }}</td>
+				<td class="text-right">{{ dossier_article.quantite }}</td>
 			</tr>
 			{% endfor %}
 		</table>
@@ -128,13 +143,13 @@
 			<tr class="border_bottom">
 				<th>Désignation</th>
 				<th>Sn</th>
-				<th>Date</th>
+				<th class="text-right">Date de fin de validité</th>
 			</tr>
 			{% for dossier_outils in entity.dossierOutils %}
 			<tr>
 				<td>{{ dossier_outils.outillage.outillage.nom }}</td>
-				<td>Sn:{{ dossier_outils.outillage.outillage.sn }}</td>
-				<td>Date:{{ dossier_outils.outillage.dateValidite|date("d/m/Y") }}</td>
+				<td>{{ dossier_outils.outillage.outillage.sn }}</td>
+				<td class="text-right">{{ dossier_outils.outillage.dateValidite|date("d/m/Y") }}</td>
 			</tr>
 			{% endfor %}
 		</table>

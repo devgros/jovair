@@ -19,7 +19,7 @@ class Appareil
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Client", inversedBy="appareils")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $client;
 

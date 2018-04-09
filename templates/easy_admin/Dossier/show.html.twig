@@ -54,14 +54,23 @@
 			<div class="box-body">
 				{% if entity.travaux|length() > 0 %}
 				<table class="table table-striped">
+					<tr class="border_bottom">
+						<th width="5">N°</th>
+						<th colspan="2"></th>
+						<th class="text-right" width="10">EXE</th>
+						<th class="text-right" width="10">CTRL</th>
+						<th width="90"></th>
+					</tr>
 					{% for travaux in entity.travaux %}
 						<tr>
+							<td>{{ loop.index }}</td>
 							<td>
 								{% if travaux.isValid %}<span class=" label label-success"><i class="fa fa-check"></i></span>{% else %}<span class="label label-danger"><i class="fa fa-times"></i></span>{% endif %}
 								{{ travaux.designation }}
 							</td>
 							<td class="text-right">{% if travaux.isValid and travaux.statut > 0 %}<span class=" label label-{% if travaux.statut < 3 %}warning{% elseif travaux.statut >= 5 %}danger{% else %}success{% endif %}">{{ statut_travaux_label[travaux.statut] }}</span>{% endif %}</td>
-							<td class="text-right">{% if travaux.isValid %}{{ travaux.mecanicien }}{% endif %}</td>
+							<td class="text-right">{% if travaux.isValid %}{{ travaux.mecanicien.trigramme }}{% endif %}</td>
+							<td class="text-right">{% if travaux.isValid %}{{ travaux.mecanicienControl.trigramme }}{% endif %}</td>
 							<td class="text-right action_table">
 								{% if travaux.isValid %}<button type="button" class="btn btn-xs btn-secondary" data-toggle="modal" data-target="#tavraux{{ travaux.id }}"><i class="fa fa-search"></i></button>{% endif %}
 								<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierTravaux', primary_key_name: 'id', id: travaux.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
@@ -84,14 +93,23 @@
 			<div class="box-body">
 				{% if entity.cnad|length() > 0 %}
 				<table class="table table-striped">
+					<tr class="border_bottom">
+						<th width="5">N°</th>
+						<th colspan="2"></th>
+						<th class="text-right" width="10">EXE</th>
+						<th class="text-right" width="10">CTRL</th>
+						<th width="90"></th>
+					</tr>
 					{% for cnad in entity.cnad %}
 						<tr>
+							<td>{{ loop.index }}</td>
 							<td>
 								{% if cnad.isValid %}<span class=" label label-success"><i class="fa fa-check"></i></span>{% else %}<span class="label label-danger"><i class="fa fa-times"></i></span>{% endif %}
 								{{ cnad.designation }}
 							</td>
 							<td class="text-right">{% if cnad.isValid and cnad.statut > 0 %}<span class=" label label-{% if cnad.statut < 3 %}warning{% elseif cnad.statut >= 5 %}danger{% else %}success{% endif %}">{{ statut_cnad_label[cnad.statut] }}</span>{% endif %}</td>
-							<td class="text-right">{% if cnad.isValid %}{{ cnad.mecanicien }}{% endif %}</td>
+							<td class="text-right">{% if cnad.isValid %}{{ cnad.mecanicien.trigramme }}{% endif %}</td>
+							<td class="text-right">{% if cnad.isValid %}{{ cnad.mecanicienControl.trigramme }}{% endif %}</td>
 							<td class="text-right action_table">
 								{% if cnad.isValid %}<button type="button" class="btn btn-xs btn-secondary" data-toggle="modal" data-target="#cnad{{ cnad.id }}"><i class="fa fa-search"></i></button>{% endif %}
 								<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierCnad', primary_key_name: 'id', id: cnad.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
@@ -115,16 +133,20 @@
 			{% if entity.travauxSup|length() > 0 %}
 			<table class="table table-striped">
 					<tr class="border_bottom">
+						<th width="5">N°</th>
 						<th>Anomalie découverte</th>
 						<th>Action corrective</th>
-						<th>Mécanicien</th>
-						<th class="text-right">Action</th>
+						<th class="text-right" width="10">EXE</th>
+						<th class="text-right" width="10">CTRL</th>
+						<th class="text-right" width="10"></th>
 					</tr>
 				{% for dossier_travaux_sup in entity.travauxSup %}
 					<tr>
+						<td>{{ loop.index }}</td>
 						<td>{{ dossier_travaux_sup.designation }}</td>
 						<td>{{ dossier_travaux_sup.actionCorrective }}</td>
-						<td>{{ dossier_travaux_sup.mecanicien }}</td>
+						<td class="text-right">{{ dossier_travaux_sup.mecanicien.trigramme }}</td>
+						<td class="text-right">{{ dossier_travaux_sup.mecanicienControl.trigramme }}</td>
 						<td class="text-right">
 							<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierTravauxSup', primary_key_name: 'id', id: dossier_travaux_sup.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
 						</td>
@@ -147,10 +169,19 @@
 			<div class="box-body">
 				{% if entity.dossierArticle|length() > 0 %}
 				<table class="table table-striped">
+					<tr class="border_bottom">
+						<th>Pn</th>
+						<th>Désignation</th>
+						<th>Sn</th>
+						<th class="text-right" width="10">Qte</th>
+						<th class="text-right" width="10"></th>
+					</tr>
 					{% for dossier_article in entity.dossierArticle %}
 						<tr>
-							<td>{{ dossier_article.articleFormone.article.nom }} - sn:{{ dossier_article.articleFormone.sn }} - from tracking:{{ dossier_article.articleFormone.fromTracking }}</td>
-							<td>Qte: {{ dossier_article.quantite }}</td>
+							<td>{{ dossier_article.articleFormone.article.pn }}</td>
+							<td>{{ dossier_article.articleFormone.article.nom }}</td>
+							<td>{{ dossier_article.articleFormone.sn }}</td>
+							<td class="text-right">{{ dossier_article.quantite }}</td>
 							<td class="text-right">
 								<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierArticle', primary_key_name: 'id', id: dossier_article.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
 							</td>
@@ -173,11 +204,17 @@
 			<div class="box-body">
 				{% if entity.dossierMainOeuvre|length() > 0 %}
 				<table class="table table-striped">
+					<tr class="border_bottom">
+						<th>Désignation</th>
+						<th class="text-right">Date</th>
+						<th class="text-right" width="10">Qte</th>
+						<th class="text-right" width="10"></th>
+					</tr>
 					{% for dossier_main_oeuvre in entity.dossierMainOeuvre %}
 						<tr>
 							<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
-							<td>{{ dossier_main_oeuvre.dateRealisation|date('d/m/Y') }}</td>
-							<td>Qte: {{ dossier_main_oeuvre.quantite }}</td>
+							<td class="text-right">{{ dossier_main_oeuvre.dateRealisation|date('d/m/Y') }}</td>
+							<td class="text-right">{{ dossier_main_oeuvre.quantite }}</td>
 							<td class="text-right">
 								<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierMainOeuvre', primary_key_name: 'id', id: dossier_main_oeuvre.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
 							</td>
@@ -203,11 +240,17 @@
 			<div class="box-body">
 				{% if entity.dossierOutils|length() > 0 %}
 				<table class="table table-striped">
+					<tr class="border_bottom">
+						<th>Désignation</th>
+						<th>Sn</th>
+						<th class="text-right">Date de fin de validité</th>
+						<th class="text-right" width="10"></th>
+					</tr>
 					{% for dossier_outils in entity.dossierOutils %}
 						<tr>
 							<td>{{ dossier_outils.outillage.outillage.nom }}</td>
-							<td>Sn:{{ dossier_outils.outillage.outillage.sn }}</td>
-							<td>Date:{{ dossier_outils.outillage.dateValidite|date("d/m/Y") }}</td>
+							<td>{{ dossier_outils.outillage.outillage.sn }}</td>
+							<td class="text-right">{{ dossier_outils.outillage.dateValidite|date("d/m/Y") }}</td>
 							<td class="text-right">
 								<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierOutils', primary_key_name: 'id', id: dossier_outils.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
 							</td>

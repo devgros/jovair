@@ -41,7 +41,7 @@
 				<h3>9. Engine 1<br/><i>Model</i></h3>
 				<table class="table sub-table">
 					<tr>
-						<th>Type</th>
+						<th style="width:50%;">Type</th>
 						<th>SN</th>
 					</tr>
 					<tr>
@@ -55,7 +55,7 @@
 				<h3>9. Engine 2<br/><i>Model</i></h3>
 				<table class="table sub-table">
 					<tr>
-						<th>Type</th>
+						<th style="width:50%;">Type</th>
 						<th>SN</th>
 					</tr>
 					<tr>
@@ -68,7 +68,7 @@
 				<h3>11. Propeller Engine 1<br/><i>Type</i></h3>
 				<table class="table sub-table">
 					<tr>
-						<th>Type</th>
+						<th style="width:50%;">Type</th>
 						<th>SN</th>
 					</tr>
 					<tr>
@@ -81,7 +81,7 @@
 				<h3>11. Propeller Engine 2<br/><i>Type</i></h3>
 				<table class="table sub-table">
 					<tr>
-						<th>Type</th>
+						<th style="width:50%;">Type</th>
 						<th>SN</th>
 					</tr>
 					<tr>
@@ -108,23 +108,68 @@
 			</td>
 			<td colspan="2" style="width:128px;">
 				<h3>16. Aircraft Flying Hours<br/><i>Heures de vol cellule</i></h3>
-				<b class="focus">{{ entity.appareil.htCellule }}</b>
+				<table class="table sub-table">
+					<tr>
+						<th style="width:50%;">HT</th>
+						<th>HRG</th>
+					</tr>
+					<tr>
+						<td><b>{{ entity.appareil.htCellule }}</b></td>
+						<td><b>{{ entity.appareil.hrgCellule }}</b></td>
+					</tr>
+				</table>
 			</td>
 			<td colspan="2" style="width:128px;">
 				<h3>17. Engine 1 Flying Hours<br/><i>Heures Moteur  1</i></h3>
-				<b class="focus">{{ entity.appareil.hrgMoteur1 }}</b>				
+				<table class="table sub-table">
+					<tr>
+						<th style="width:50%;">HT</th>
+						<th>HRG</th>
+					</tr>
+					<tr>
+						<td><b>{{ entity.appareil.htMoteur1 }}</b></td>
+						<td><b>{{ entity.appareil.hrgMoteur1 }}</b></td>
+					</tr>
+				</table>	
 			</td>
 			<td colspan="2" style="width:128px;" >
 				<h3>17. Engine 2 Flying Hours<br/><i>Heures Moteur  2</i></h3>
-				<b class="focus">{{ entity.appareil.hrgMoteur2 }}</b>
+				<table class="table sub-table">
+					<tr>
+						<th style="width:50%;">HT</th>
+						<th>HRG</th>
+					</tr>
+					<tr>
+						<td><b>{{ entity.appareil.htMoteur2 }}</b></td>
+						<td><b>{{ entity.appareil.hrgMoteur2 }}</b></td>
+					</tr>
+				</table>
 			</td>
 			<td colspan="2" style="width:128px;">
 				<h3>18. Propeller 1 Flying Hours<br/><i>Heures Hélice moteur 1</i></h3>
-				<b class="focus">{{ entity.appareil.hrgHelice1 }}</b>
+				<table class="table sub-table">
+					<tr>
+						<th style="width:50%;">HT</th>
+						<th>HRG</th>
+					</tr>
+					<tr>
+						<td><b>{{ entity.appareil.htHelice1 }}</b></td>
+						<td><b>{{ entity.appareil.hrgHelice1 }}</b></td>
+					</tr>
+				</table>
 			</td>
 			<td colspan="2" style="width:128px;">
 				<h3>18. Propeller 2 Flying Hours<br/><i>Heures Hélice moteur 2</i></h3>
-				<b class="focus">{{ entity.appareil.hrgHelice2 }}</b>
+				<table class="table sub-table">
+					<tr>
+						<th style="width:50%;">HT</th>
+						<th>HRG</th>
+					</tr>
+					<tr>
+						<td><b>{{ entity.appareil.htHelice2 }}</b></td>
+						<td><b>{{ entity.appareil.hrgHelice2 }}</b></td>
+					</tr>
+				</table>
 			</td>
 		</tr>
 		<tr>
@@ -136,7 +181,7 @@
 						<td style="width:33%;">
 							<h4>Schedule works:</h4>
 							{% for travaux in entity.travaux %}
-								• {{ travaux.designation }}<br/>
+								{{ loop.index }} - {{ travaux.designation }}<br/>
 							{% endfor %}
 						</td>
 						{% endif %}
@@ -144,15 +189,15 @@
 						<td style="width:33%;">
 							<h4>Airworthiness Directive / Bulletin Service Compliance :</h4>
 							{% for cnad in entity.cnad %}
-								• {{ cnad.designation }}<br/>
+								{{ loop.index }} - {{ cnad.designation }}<br/>
 							{% endfor %}
 						</td>
 						{% endif %}
 						{% if entity.travauxSup|length() > 0 %}
 						<td style="width:33%;">
-							<h4>Travaux suplémentaire découvert en visite :</h4>
+							<h4>Travaux supplémentaire découvert en visite :</h4>
 							{% for travauxSup in entity.travauxSup %}
-								• {{ travauxSup.designation }}<br/>
+								{{ loop.index }} - {{ travauxSup.designation }}<br/>
 							{% endfor %}
 						</td>
 						{% endif %}
@@ -167,30 +212,43 @@
 						<td style="width:150px;"><h3>13. Remarks - <i>Remarques</i></h3></td>
 						<td>
 							{{ entity.remarqueAprs }}
-							{% if entity.travaux|length() > 0 %}
+						</td>
+						{% if entity.travaux|length() > 0 %}
+						<td>
 							{% set first_travaux = true %}
 							{% for travaux in entity.travaux %}
 								{% if travaux.statut == 5 %}
-									{% if first_travaux %}<br/><b>Travaux reporté : </b>{% endif %}
-									{% if not first_travaux %}, {% endif %}{{ travaux.designation }}
+									{% if first_travaux %}<b>Travaux reporté : </b><br/>{% endif %}
+									{% if not first_travaux %}<br/> {% endif %}{{ loop.index }} - {{ travaux.commentaire }}
 								{% endif %}
 								{% set first_travaux = false %}
 							{% endfor %}
-							{% endif %}
-							{% if entity.cnad|length() > 0 %}
+						</td>
+						{% endif %}
+						{% if entity.cnad|length() > 0 %}
+						<td>
 							{% set first_cnad = true %}
 							{% for cnad in entity.cnad %}
 								{% if cnad.statut == 5 %}
-									{% if first_cnad %}
-										<br/><b>CN/AD reporté : </b>
-									{% endif %}
-									{% if not first_cnad %}, {% endif %}
-									{{ cnad.designation }}
+									{% if first_cnad %}<b>CN/AD reporté : </b><br/>{% endif %}
+									{% if not first_cnad %}<br/> {% endif %}
+									{{ loop.index }} - {{ cnad.commentaire }}
 								{% endif %}
 								{% set first_cnad = false %}
 							{% endfor %}
-							{% endif %}
 						</td>
+						{% endif %}
+						{% if entity.travauxSup|length() > 0 %}
+						<td>
+							{% set first_travauxSup = true %}
+							{% for travauxSup in entity.travauxSup %}
+								{% if first_travauxSup %}<b>Travaux supplémentaire -> Action corrective : </b><br/>{% endif %}
+								{% if not first_travauxSup %}<br/> {% endif %}
+								{{ loop.index }} - {{ travauxSup.actionCorrective }}
+								{% set first_travauxSup = false %}
+							{% endfor %}
+						</td>
+						{% endif %}
 					</tr>
 				</table>
 			</td>

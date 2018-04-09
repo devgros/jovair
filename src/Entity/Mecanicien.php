@@ -37,6 +37,11 @@ class Mecanicien
 
     /**
      * @ORM\Column(type="string", length=255)
+     */
+    private $trigramme;
+
+    /**
+     * @ORM\Column(type="string", length=255)
      * @var string
      */
     private $signature;
@@ -508,5 +513,29 @@ class Mecanicien
     public function getTravauxSupControl()
     {
         return $this->travaux_sup_control;
+    }
+
+    /**
+     * Set trigramme.
+     *
+     * @param string $trigramme
+     *
+     * @return Mecanicien
+     */
+    public function setTrigramme($trigramme)
+    {
+        $this->trigramme = $trigramme;
+
+        return $this;
+    }
+
+    /**
+     * Get trigramme.
+     *
+     * @return string
+     */
+    public function getTrigramme()
+    {
+        return $this->trigramme;
     }
 }
