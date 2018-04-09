@@ -82,7 +82,7 @@ class ArticleFormone
 
     public function __toString()
     {
-        return $this->article->getNom()." - sn:".$this->sn." - from tracking:".$this->from_tracking." - qte:".$this->quantite;
+        return $this->article->getNom()." - pn:".$this->article->getPn()." - sn:".$this->sn." - qte:".$this->quantite;
     }
 
     /**

@@ -91,3 +91,4 @@ textarea, body.new textarea, body.edit textarea { min-height: 100px !important; 
 .notifications-menu > a:hover, .notifications-menu > a:focus, .notifications-menu > a:active { background: rgba(0,0,0,0.1) !important; }
 .notifications-menu li { line-height:20px; font-weight:normal; }
 .navbar-nav > .notifications-menu > .dropdown-menu { width:400px; }
+.row_title_cri th { border-top:none !important; background:#fff!important; padding:0 !important; }

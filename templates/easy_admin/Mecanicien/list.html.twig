@@ -28,7 +28,7 @@
 					<div class="widget-user-image">
 						<img src="{{ vich_uploader_asset(item, 'signatureFile', 'App\\Entity\\Mecanicien') }}" alt="User Avatar">
 					</div>
-					<h3 class="widget-user-username">{{ item }}</h3>
+					<h3 class="widget-user-username">{{ item }} ({{item.trigramme}})</h3>
 					<h5 class="widget-user-desc">N° Licence <b>{{ item.licence }}</b></h5>
 				</div>
 			</div>

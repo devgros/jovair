@@ -17,6 +17,7 @@ easy_admin:
                     - { property: 'nom', label: 'Nom', css_class: 'col-sm-6'}
                     - { property: 'prenom', label: 'Prénom', css_class: 'col-sm-6'}
                     - { property: 'licence', label: 'Licence', css_class: 'col-sm-6'}
+                    - { property: 'trigramme', label: 'Trigramme', css_class: 'col-sm-6'}
                     - { property: 'signatureFile', label: 'Signature', type: 'vich_image', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
             edit:
                 title: "Modifier un mécanicien"
