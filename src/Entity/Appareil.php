@@ -234,6 +234,11 @@ class Appareil
      */
     private $appareil_dossier;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Todo", mappedBy="appareil")
+     */
+    private $todos;
+
     public function __toString()
     {
         return $this->immatriculation;
@@ -248,6 +253,7 @@ class Appareil
         $this->appareil_amm_cellule = new \Doctrine\Common\Collections\ArrayCollection();
         $this->appareil_amm_moteur = new \Doctrine\Common\Collections\ArrayCollection();
         $this->appareil_dossier = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->todos = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1317,5 +1323,41 @@ class Appareil
             }
         }
         return $amm_moteur;
+    }
+
+    /**
+     * Add todo.
+     *
+     * @param \App\Entity\Todo $todo
+     *
+     * @return Appareil
+     */
+    public function addTodo(\App\Entity\Todo $todo)
+    {
+        $this->todos[] = $todo;
+
+        return $this;
+    }
+
+    /**
+     * Remove todo.
+     *
+     * @param \App\Entity\Todo $todo
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTodo(\App\Entity\Todo $todo)
+    {
+        return $this->todos->removeElement($todo);
+    }
+
+    /**
+     * Get todos.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTodos()
+    {
+        return $this->todos;
     }
 }

@@ -34,7 +34,7 @@ class Article
     private $marge;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $seuil_alert;
