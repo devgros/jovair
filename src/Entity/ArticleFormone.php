@@ -43,6 +43,10 @@ class ArticleFormone
     private $formone;
 
     /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
      * @Vich\UploadableField(mapping="formone_files", fileNameProperty="formone")
      * @var File
      */

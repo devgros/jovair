@@ -29,7 +29,7 @@ easy_admin:
                     - { property: 'appareil', label: "Appareil", css_class: 'col-sm-6'}
                     - { property: 'titre', label: "Titre du dossier", css_class: 'col-sm-6'}
                     - { property: 'num_bc', label: "N° de bon de Commande", css_class: 'col-sm-6'}
-                    - { property: 'scanBcFile', label: 'Scan du bon de commande', type: 'vich_image', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
+                    - { property: 'scanBcFile', label: 'Scan du bon de commande', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
                     - { property: 'heure_derniere_aprs', label: 'Heures depuis dernière APRS', type: 'text', css_class: 'col-sm-6 new-row'}
                     - { type: 'group', css_class: 'col-sm-6', label: 'Travaux demandés :', background: 'box-warning' }
                     - { property: 'travaux', label: false, type: 'collection', type_options: { entry_type: 'App\Form\DossierTravauxType', mapped: true, allow_add: true, required: false, allow_delete: true, by_reference: false, entry_options: {label: false} }, css_class: 'col-sm-12'}
