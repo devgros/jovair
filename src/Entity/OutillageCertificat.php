@@ -38,6 +38,10 @@ class OutillageCertificat
     private $certificat;
 
     /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
      * @Vich\UploadableField(mapping="certificat_files", fileNameProperty="certificat")
      * @var File
      */

@@ -86,6 +86,10 @@ class Dossier
     private $scan_bc;
 
     /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
      * @Vich\UploadableField(mapping="scanBcFile", fileNameProperty="scan_bc")
      * @var File
      */
@@ -104,6 +108,10 @@ class Dossier
     private $carte_travail;
 
     /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
      * @Vich\UploadableField(mapping="carteTravailFile", fileNameProperty="carte_travail")
      * @var File
      */
