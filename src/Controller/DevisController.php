@@ -88,6 +88,7 @@ class DevisController extends BaseAdminController
 		}
 		$facture->setNumFacture($new_num);
 		$facture->setDevis($entity);
+		$facture->setFacturePaye(false);
 		$facture->setClient($entity->getClient());
 		$this->em->persist($facture);
 
