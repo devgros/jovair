@@ -24,6 +24,7 @@ imports:
     - { resource: easy_admin/mecanicien.yaml }
     - { resource: easy_admin/main_oeuvre.yaml }
     - { resource: easy_admin/main_oeuvre_prix.yaml }
+    - { resource: easy_admin/todo.yaml }
 
 easy_admin:
     site_name: "JOV'AIR <em style='font-size: 80%;'>Maintenance<em>"
@@ -41,6 +42,7 @@ easy_admin:
             - { entity: 'Dossier', label: 'Dossiers', icon: 'folder-open' } 
             - { entity: 'Devis', label: 'Pro format', icon: 'calculator' }
             - { entity: 'Facture', label: 'Factures', icon: 'euro' }
+            - { entity: 'Todo', label: 'Notes', icon: 'sticky-note' }
             - { label: 'Inventaire' }
             - { entity: 'Article', label: 'Stock', icon: 'tags' } 
             - { entity: 'MainOeuvre', label: "Main d'oeuvre", icon: 'wrench' } 

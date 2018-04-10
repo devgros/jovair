@@ -19,7 +19,7 @@ class Appareil
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Client", inversedBy="appareils")
-     * @ORM\JoinColumn(nullable=true)
+     * @ORM\JoinColumn(nullable=false)
      */
     private $client;
 
@@ -29,7 +29,7 @@ class Appareil
     private $immatriculation;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="decimal", scale=2)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $heure_derniere_aprs;
@@ -55,13 +55,13 @@ class Appareil
     private $date_rg_cellule;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_cellule;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_cellule;
@@ -87,13 +87,13 @@ class Appareil
     private $date_rg_moteur1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_moteur1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_moteur1;
@@ -119,13 +119,13 @@ class Appareil
     private $date_rg_moteur2;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_moteur2;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_moteur2;
@@ -151,13 +151,13 @@ class Appareil
     private $date_rg_helice1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_helice1;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_helice1;
@@ -183,13 +183,13 @@ class Appareil
     private $date_rg_helice2;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $ht_helice2;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $hrg_helice2;
@@ -234,6 +234,11 @@ class Appareil
      */
     private $appareil_dossier;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Todo", mappedBy="appareil")
+     */
+    private $todos;
+
     public function __toString()
     {
         return $this->immatriculation;
@@ -248,6 +253,7 @@ class Appareil
         $this->appareil_amm_cellule = new \Doctrine\Common\Collections\ArrayCollection();
         $this->appareil_amm_moteur = new \Doctrine\Common\Collections\ArrayCollection();
         $this->appareil_dossier = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->todos = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -1245,5 +1251,77 @@ class Appareil
     public function getAppareilAmmMoteur()
     {
         return $this->appareil_amm_moteur;
+    }
+
+    /**
+     * Add appareilDossier.
+     *
+     * @param \App\Entity\Dossier $appareilDossier
+     *
+     * @return Appareil
+     */
+    public function addAppareilDossier(\App\Entity\Dossier $appareilDossier)
+    {
+        $this->appareil_dossier[] = $appareilDossier;
+
+        return $this;
+    }
+
+    /**
+     * Remove appareilDossier.
+     *
+     * @param \App\Entity\Dossier $appareilDossier
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeAppareilDossier(\App\Entity\Dossier $appareilDossier)
+    {
+        return $this->appareil_dossier->removeElement($appareilDossier);
+    }
+
+    /**
+     * Get appareilDossier.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getAppareilDossier()
+    {
+        return $this->appareil_dossier;
+    }
+
+    public function getDossierPe($date_dossier)
+    {
+        $pe = false;
+        foreach($this->appareil_pe as $appareil_pe){
+            if($appareil_pe->getDate() < $date_dossier){
+                $pe = $appareil_pe;
+                break;
+            }
+        }
+        return $pe;
+    }
+
+    public function getDossierAmmCellule($date_dossier)
+    {
+        $amm_cellule = false;
+        foreach($this->appareil_amm_cellule as $appareil_amm_cellule){
+            if($appareil_amm_cellule->getDate() < $date_dossier){
+                $amm_cellule = $appareil_amm_cellule;
+                break;
+            }
+        }
+        return $amm_cellule;
+    }
+
+    public function getDossierAmmMoteur($date_dossier)
+    {
+        $amm_moteur = false;
+        foreach($this->appareil_amm_moteur as $appareil_amm_moteur){
+            if($appareil_amm_moteur->getDate() < $date_dossier){
+                $amm_moteur = $appareil_amm_moteur;
+                break;
+            }
+        }
+        return $amm_moteur;
     }
 }

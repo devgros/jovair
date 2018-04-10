@@ -1,0 +1,59 @@
+<?php
+
+namespace App\Entity;
+
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Validator\Constraints as Assert;
+use Gedmo\Mapping\Annotation as Gedmo;
+
+/**
+ * @ORM\Entity(repositoryClass="App\Repository\TodoRepository")
+ */
+class Todo
+{
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private $id;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="create")
+     */
+    private $date_creation;
+
+    /**
+     * @ORM\Column(type="datetime")
+     * @Gedmo\Timestampable(on="update")
+     */
+    private $date_modif;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private $titre;
+
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $note;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="todos")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $client;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="Client", inversedBy="todos")
+     * @ORM\JoinColumn(nullable=true)
+     */
+    private $appareil;
+
+    public function __toString()
+    {
+        return $this->titre;
+    }
+}

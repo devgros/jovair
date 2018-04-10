@@ -74,10 +74,16 @@ class Client
      */
     private $facture;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Todo", mappedBy="client")
+     */
+    private $todos;
+
     public function __construct()
     {
         $this->appareils = new ArrayCollection();
         $this->devis = new ArrayCollection();
+        $this->todos = new ArrayCollection();
     }
 
     public function __toString()
@@ -389,5 +395,41 @@ class Client
     public function removeDevi(\App\Entity\Devis $devi)
     {
         return $this->devis->removeElement($devi);
+    }
+
+    /**
+     * Add facture.
+     *
+     * @param \App\Entity\Facture $facture
+     *
+     * @return Client
+     */
+    public function addFacture(\App\Entity\Facture $facture)
+    {
+        $this->facture[] = $facture;
+
+        return $this;
+    }
+
+    /**
+     * Remove facture.
+     *
+     * @param \App\Entity\Facture $facture
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeFacture(\App\Entity\Facture $facture)
+    {
+        return $this->facture->removeElement($facture);
+    }
+
+    /**
+     * Get facture.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getFacture()
+    {
+        return $this->facture;
     }
 }
