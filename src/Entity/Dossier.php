@@ -703,7 +703,6 @@ class Dossier
         foreach($this->dossier_main_oeuvre as $key=>$dossier_main_oeuvre){
             $groupDossierMainOeuvre[$dossier_main_oeuvre->getMainOeuvre()->getId()][] = $dossier_main_oeuvre;
         }
-        dump($groupDossierMainOeuvre);
 
         return $groupDossierMainOeuvre;
     }

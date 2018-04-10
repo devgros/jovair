@@ -171,7 +171,7 @@
 						<tr>
 							<td></td>
 							<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
-							<td class="text-right">{{ quantite }}</td>
+							<td class="text-right">{{ quantite|number_format(2, '.', ',') }}</td>
 							<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
 							<td class="text-right"></td>
 							<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
