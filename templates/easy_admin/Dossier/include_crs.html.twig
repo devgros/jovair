@@ -197,7 +197,7 @@
 						<td style="width:33%;">
 							<h4>Travaux supplémentaire découvert en visite :</h4>
 							{% for travauxSup in entity.travauxSup %}
-								{{ loop.index }} - {{ travauxSup.designation }}<br/>
+								{{ loop.index }} - {{ travauxSup.actionCorrective }}<br/>
 							{% endfor %}
 						</td>
 						{% endif %}
@@ -235,17 +235,6 @@
 									{{ loop.index }} - {{ cnad.commentaire }}
 								{% endif %}
 								{% set first_cnad = false %}
-							{% endfor %}
-						</td>
-						{% endif %}
-						{% if entity.travauxSup|length() > 0 %}
-						<td>
-							{% set first_travauxSup = true %}
-							{% for travauxSup in entity.travauxSup %}
-								{% if first_travauxSup %}<b>Travaux supplémentaire -> Action corrective : </b><br/>{% endif %}
-								{% if not first_travauxSup %}<br/> {% endif %}
-								{{ loop.index }} - {{ travauxSup.actionCorrective }}
-								{% set first_travauxSup = false %}
 							{% endfor %}
 						</td>
 						{% endif %}
