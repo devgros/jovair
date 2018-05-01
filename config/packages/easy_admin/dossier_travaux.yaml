@@ -11,8 +11,9 @@ easy_admin:
                     - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-warning' }
                     - { property: 'designation', label: "Désignation", type_options: { disabled: "disabled"}, css_class: 'col-sm-6'}
                     - { property: 'statut', label: "Statut", type: 'choice', type_options: {choices: '%statut_travaux%', expanded: false, multiple: false }, css_class: 'col-sm-6'}
-                    - { property: 'commentaire', label: "Commentaire", css_class: 'col-sm-12'}
-                    - { property: 'mecanicien', label: "Effectué par", css_class: 'col-sm-6'}
+                    - { property: 'commentaire', label: "Commentaire", css_class: 'col-sm-6'}
+                    - { property: 'carteTravailTravauxFile', label: 'Carte de travail', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
+                    - { property: 'mecanicien', label: "Effectué par", css_class: 'col-sm-6 new-row'}
                     - { property: 'mecanicien_control', label: "Controlé par", css_class: 'col-sm-6'}
             edit:
                 title: "Modifier un travaux demandé"

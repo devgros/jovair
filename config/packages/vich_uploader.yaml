@@ -2,7 +2,11 @@ parameters:
     app.path.signature_images: /public/uploads/signatures
     app.path.certificat_files: /public/uploads/certificats
     app.path.formone_files: /public/uploads/formones
+    app.path.formone_externe_files: /public/uploads/formones_externe
     app.path.carteTravailFile: /public/uploads/carte_travail
+    app.path.carteTravailTravauxFile: /public/uploads/carte_travail_travaux
+    app.path.carteTravailCnadFile: /public/uploads/carte_travail_cnad
+    app.path.carteTravailTravauxSupFile: /public/uploads/carte_travail_tarvaux_sup
     app.path.scanBcFile: /public/uploads/scan_bc
 
 vich_uploader:
@@ -21,10 +25,26 @@ vich_uploader:
             namer: vich_uploader.namer_uniqid
             uri_prefix:         '%app.path.formone_files%'
             upload_destination: '%kernel.root_dir%/../public/uploads/formones'
+        formone_externe_files:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.formone_externe_files%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/formones_externe'
         carteTravailFile:
             namer: vich_uploader.namer_uniqid
             uri_prefix:         '%app.path.carteTravailFile%'
             upload_destination: '%kernel.root_dir%/../public/uploads/carte_travail'
+        carteTravailTravauxFile:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.carteTravailTravauxFile%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/carte_travail_travaux'
+        carteTravailCnadFile:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.carteTravailCnadFile%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/carte_travail_cnad'
+        carteTravailTravauxSupFile:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.carteTravailTravauxSupFile%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/carte_travail_tarvaux_sup'
         scanBcFile:
             namer: vich_uploader.namer_uniqid
             uri_prefix:         '%app.path.scanBcFile%'

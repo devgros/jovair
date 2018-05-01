@@ -6,13 +6,13 @@ use App\Controller\AdminController as MyAdminController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 
-class DossierOutilsController extends MyAdminController
+class CompressiometreController extends MyAdminController
 {
     protected function prePersistEntity($entity)
     {
-        if (null !== $dossier_id = $this->request->query->get('dossier_id')) {
-            $dossier =  $this->em->getRepository('App:Dossier')->find($dossier_id);
-            $entity->setDossier($dossier);
+        if (null !== $dossier_outil_id = $this->request->query->get('dossier_outil_id')) {
+            $dossier_outil =  $this->em->getRepository('App:DossierOutils')->find($dossier_outil_id);
+            $entity->setDossierOutils($dossier_outil);
         }
         parent::prePersistEntity($entity);
     }
@@ -22,11 +22,7 @@ class DossierOutilsController extends MyAdminController
         $response = parent::newAction();
         $entity = $this->request->attributes->get('easyadmin')['item'];
         if ($response instanceof RedirectResponse) {
-            if($entity->getOutillage()->getOutillage()->getType() == "1"){
-                return $this->redirectToRoute('admin', ['entity' => 'Compressiometre', 'action' => 'new', 'dossier_outil_id' => $entity->getId()]);
-            }else{
-                return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossier()->getId()]);
-            }
+            return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossierOutils()->getDossier()->getId()]);
         }
 
         return $response;
@@ -37,7 +33,7 @@ class DossierOutilsController extends MyAdminController
         $response = parent::editAction();
         $entity = $this->request->attributes->get('easyadmin')['item'];
         if ($response instanceof RedirectResponse) {
-            return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossier()->getId()]);
+            return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossierOutils()->getDossier()->getId()]);
         }
 
         return $response;
@@ -45,13 +41,11 @@ class DossierOutilsController extends MyAdminController
 
     protected function deleteAction()
     {
-        $entity = $this->request->attributes->get('easyadmin')['item'];
-
         $response = parent::deleteAction();
 
-        
+        $entity = $this->request->attributes->get('easyadmin')['item'];
         if ($response instanceof RedirectResponse) {
-            return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossier()->getId()]);
+            return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossierOutils()->getDossier()->getId()]);
         }
 
         return $response;

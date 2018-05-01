@@ -27,7 +27,7 @@ class EasyAdminSubscriber implements EventSubscriberInterface
             'easy_admin.post_update' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('addOutillagePrix')),
             'easy_admin.pre_edit' => array(array('storeQteArticle')),
             'easy_admin.pre_update' => array(array('updateQteArticle')),
-            'easy_admin.pre_remove' => array(array('restockQteArticle')),
+            'easy_admin.pre_remove' => array(array('restockQteArticle'), array('removeCompressiometre')),
         );
     }
 
@@ -214,5 +214,23 @@ class EasyAdminSubscriber implements EventSubscriberInterface
 
 
         
+    }
+
+    public function removeCompressiometre(GenericEvent $event)
+    {
+        /*$entity = $event->getSubject();
+        dump($entity);
+        exit(0);*/
+        /*if ($entity instanceof DossierArticle or $entity instanceof DevisArticle) {
+
+            $qte_to_restock = $entity->getQuantite();
+            $qte_stock = $entity->getArticleFormone()->getQuantite();
+            $new_qte_stock = $qte_stock + $qte_to_restock;
+            $entity->getArticleFormone()->setQuantite($new_qte_stock);
+            $event['em']->persist($entity->getArticleFormone());
+            $event['em']->flush($entity->getArticleFormone());
+
+            $this->seuilAlerte($event['em'], $new_qte_stock, $entity->getArticleFormone()->getArticle()->getSeuilAlert(), $entity->getArticleFormone()->getArticle()->getId(), $entity->getArticleFormone()->getArticle()->getNom(), $entity->getArticleFormone()->getArticle()->getPn());
+        }*/
     }
 }

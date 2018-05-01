@@ -74,7 +74,7 @@ class Dossier
     private $is_valid_ctrl_ok = false;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
      * @Assert\GreaterThanOrEqual(0)
      */
     private $horametre_aprs;
@@ -86,6 +86,10 @@ class Dossier
     private $scan_bc;
 
     /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
      * @Vich\UploadableField(mapping="scanBcFile", fileNameProperty="scan_bc")
      * @var File
      */
@@ -104,6 +108,10 @@ class Dossier
     private $carte_travail;
 
     /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
      * @Vich\UploadableField(mapping="carteTravailFile", fileNameProperty="carte_travail")
      * @var File
      */
@@ -114,6 +122,11 @@ class Dossier
      * @var \DateTime
      */
     private $updatedAt;
+
+    /**
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $heure_derniere_aprs;
 
     /**
      * @ORM\ManyToOne(targetEntity="Appareil", inversedBy="appareil_dossier")
@@ -168,6 +181,11 @@ class Dossier
      */
     private $devis;
 
+    /*
+     * @ORM\OneToMany(targetEntity="Compressiometre", mappedBy="dossier", cascade={"persist", "remove"}, orphanRemoval=true)
+     */
+    //private $compressiometres;
+
     public function __toString()
     {
         return $this->num_bl;
@@ -184,7 +202,7 @@ class Dossier
         $this->dossier_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_outils = new \Doctrine\Common\Collections\ArrayCollection();
-        $this->dossier = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devis = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
     /**
@@ -655,7 +673,7 @@ class Dossier
      */
     public function addDossierMainOeuvre(\App\Entity\DossierMainOeuvre $dossierMainOeuvre)
     {
-        $dossier_main_oeuvre->setDossier($this);
+        $dossierMainOeuvre->setDossier($this);
         $this->dossier_main_oeuvre[] = $dossierMainOeuvre;
 
         return $this;
@@ -683,6 +701,22 @@ class Dossier
         return $this->dossier_main_oeuvre;
     }
 
+    public function getGroupDossierMainOeuvre()
+    {
+        $groupDossierMainOeuvre = array();
+        
+        foreach($this->dossier_main_oeuvre as $key=>$dossier_main_oeuvre){
+            $groupDossierMainOeuvre[$dossier_main_oeuvre->getMainOeuvre()->getId()][] = $dossier_main_oeuvre;
+        }
+
+        return $groupDossierMainOeuvre;
+    }
+
+    public function test()
+    {
+        return "okok";
+    }
+
     /**
      * Add dossierArticle.
      *
@@ -692,7 +726,7 @@ class Dossier
      */
     public function addDossierArticle(\App\Entity\DossierArticle $dossierArticle)
     {
-        $dossier_article->setDossier($this);
+        $dossierArticle->setDossier($this);
         $this->dossier_article[] = $dossierArticle;
 
         return $this;
@@ -729,7 +763,7 @@ class Dossier
      */
     public function addTravauxSup(\App\Entity\DossierTravauxSup $travauxSup)
     {
-        $travaux_sup->setDossier($this);
+        $travauxSup->setDossier($this);
         $this->travaux_sup[] = $travauxSup;
 
         return $this;
@@ -766,7 +800,7 @@ class Dossier
      */
     public function addDossierOutil(\App\Entity\DossierOutils $dossierOutil)
     {
-        $dossier_outils->setDossier($this);
+        $dossierOutil->setDossier($this);
         $this->dossier_outils[] = $dossierOutil;
 
         return $this;
@@ -867,38 +901,101 @@ class Dossier
     }
 
     /**
-     * Add dossier.
+     * Add devi.
      *
-     * @param \App\Entity\Devis $dossier
+     * @param \App\Entity\Devis $devi
      *
      * @return Dossier
      */
-    public function addDossier(\App\Entity\Devis $dossier)
+    public function addDevi(\App\Entity\Devis $devi)
     {
-        $this->dossier[] = $dossier;
+        $this->devis[] = $devi;
 
         return $this;
     }
 
     /**
-     * Remove dossier.
+     * Remove devi.
      *
-     * @param \App\Entity\Devis $dossier
+     * @param \App\Entity\Devis $devi
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeDossier(\App\Entity\Devis $dossier)
+    public function removeDevi(\App\Entity\Devis $devi)
     {
-        return $this->dossier->removeElement($dossier);
+        return $this->devis->removeElement($devi);
     }
 
     /**
-     * Get dossier.
+     * Get devis.
      *
      * @return \Doctrine\Common\Collections\Collection
      */
-    public function getDossier()
+    public function getDevis()
     {
-        return $this->dossier;
+        return $this->devis;
+    }
+
+    /**
+     * Set heureDerniereAprs.
+     *
+     * @param string $heureDerniereAprs
+     *
+     * @return Appareil
+     */
+    public function setHeureDerniereAprs($heureDerniereAprs)
+    {
+        $this->heure_derniere_aprs = $heureDerniereAprs;
+
+        return $this;
+    }
+
+    /**
+     * Get heureDerniereAprs.
+     *
+     * @return string
+     */
+    public function getHeureDerniereAprs()
+    {
+        return $this->heure_derniere_aprs;
+    }
+
+
+
+    /**
+     * Add compressiometre.
+     *
+     * @param \App\Entity\Compressiometre $compressiometre
+     *
+     * @return Dossier
+     */
+    public function addCompressiometre(\App\Entity\Compressiometre $compressiometre)
+    {
+        $compressiometre->setDossier($this);
+        $this->compressiometres[] = $compressiometre;
+
+        return $this;
+    }
+
+    /**
+     * Remove compressiometre.
+     *
+     * @param \App\Entity\Compressiometre $compressiometre
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeCompressiometre(\App\Entity\Compressiometre $compressiometre)
+    {
+        return $this->compressiometres->removeElement($compressiometre);
+    }
+
+    /**
+     * Get compressiometres.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getCompressiometres()
+    {
+        return $this->compressiometres;
     }
 }
