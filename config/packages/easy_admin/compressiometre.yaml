@@ -1,0 +1,25 @@
+easy_admin:
+    entities:
+        Compressiometre:
+            class: App\Entity\Compressiometre
+            controller: App\Controller\CompressiometreController
+            form:
+                title: "Ajouter un relevé de compression"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-warning' }
+                    - { type: 'section', label: 'Cylindres de gauche' }
+                    - { property: 'g1', label: "1", css_class: 'col-sm-2'}
+                    - { property: 'g2', label: "2", css_class: 'col-sm-2'}
+                    - { property: 'g3', label: "3", css_class: 'col-sm-2'}
+                    - { property: 'g4', label: "4", css_class: 'col-sm-2'}
+                    - { property: 'g5', label: "5", css_class: 'col-sm-2'}
+                    - { property: 'g6', label: "6", css_class: 'col-sm-2'}
+                    - { type: 'section', label: 'Cylindres de droites' }
+                    - { property: 'd1', label: "1", css_class: 'col-sm-2'}
+                    - { property: 'd2', label: "2", css_class: 'col-sm-2'}
+                    - { property: 'd3', label: "3", css_class: 'col-sm-2'}
+                    - { property: 'd4', label: "4", css_class: 'col-sm-2'}
+                    - { property: 'd5', label: "5", css_class: 'col-sm-2'}
+                    - { property: 'd6', label: "6", css_class: 'col-sm-2'}
+            edit:
+                title: "Modifier un relevé de compression"

@@ -74,10 +74,16 @@ class Client
      */
     private $facture;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\Todo", mappedBy="client")
+     */
+    private $todos;
+
     public function __construct()
     {
         $this->appareils = new ArrayCollection();
         $this->devis = new ArrayCollection();
+        $this->todos = new ArrayCollection();
     }
 
     public function __toString()
@@ -425,5 +431,41 @@ class Client
     public function getFacture()
     {
         return $this->facture;
+    }
+
+    /**
+     * Add todo.
+     *
+     * @param \App\Entity\Todo $todo
+     *
+     * @return Client
+     */
+    public function addTodo(\App\Entity\Todo $todo)
+    {
+        $this->todos[] = $todo;
+
+        return $this;
+    }
+
+    /**
+     * Remove todo.
+     *
+     * @param \App\Entity\Todo $todo
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeTodo(\App\Entity\Todo $todo)
+    {
+        return $this->todos->removeElement($todo);
+    }
+
+    /**
+     * Get todos.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getTodos()
+    {
+        return $this->todos;
     }
 }

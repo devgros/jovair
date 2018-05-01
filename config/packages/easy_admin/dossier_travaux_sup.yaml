@@ -9,7 +9,8 @@ easy_admin:
                     - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-primary' }
                     - { property: 'designation', label: "Anomalie découverte", css_class: 'col-sm-6'}
                     - { property: 'action_corrective', label: "Action corrective", css_class: 'col-sm-6'}
-                    - { property: 'mecanicien', label: "Effectué par", css_class: 'col-sm-6'}
+                    - { property: 'carteTravailTravauxSupFile', label: 'Carte de travail', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
+                    - { property: 'mecanicien', label: "Effectué par", css_class: 'col-sm-6 new-row'}
                     - { property: 'mecanicien_control', label: "Controlé par", css_class: 'col-sm-6'}
             edit:
                 title: "Modifier un travaux supplémentaire"

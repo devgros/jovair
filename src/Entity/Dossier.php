@@ -86,6 +86,10 @@ class Dossier
     private $scan_bc;
 
     /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
      * @Vich\UploadableField(mapping="scanBcFile", fileNameProperty="scan_bc")
      * @var File
      */
@@ -104,6 +108,10 @@ class Dossier
     private $carte_travail;
 
     /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
      * @Vich\UploadableField(mapping="carteTravailFile", fileNameProperty="carte_travail")
      * @var File
      */
@@ -688,6 +696,22 @@ class Dossier
         return $this->dossier_main_oeuvre;
     }
 
+    public function getGroupDossierMainOeuvre()
+    {
+        $groupDossierMainOeuvre = array();
+        
+        foreach($this->dossier_main_oeuvre as $key=>$dossier_main_oeuvre){
+            $groupDossierMainOeuvre[$dossier_main_oeuvre->getMainOeuvre()->getId()][] = $dossier_main_oeuvre;
+        }
+
+        return $groupDossierMainOeuvre;
+    }
+
+    public function test()
+    {
+        return "okok";
+    }
+
     /**
      * Add dossierArticle.
      *
@@ -930,4 +954,5 @@ class Dossier
     {
         return $this->heure_derniere_aprs;
     }
+
 }

@@ -148,33 +148,81 @@
 			</tr>
 			{% endif %}
 
-			<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>
-			{% if entity.dossier %}
-				{% if entity.dossier.dossierMainOeuvre|length() > 0 %}
-				{% if not pdf %}<tr><th colspan="10" class="sub_title">Main d'oeuvre du dossier :</th></tr>{% endif %}
-				{% for dossier_main_oeuvre in entity.dossier.dossierMainOeuvre %}
-					{% set prix_ht = dossier_main_oeuvre.mainOeuvre.getPeriodePrix(entity.dateCreation) %}
-					{% set total_ht = (prix_ht*dossier_main_oeuvre.quantite) %}
+			{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces externe au stock :</th></tr>{% endif %}
+			{% if entity.articleExterne|length() > 0 %}
+				{% for article_externe in entity.articleExterne %}
+					{% set prix_ht = article_externe.getPrixHt %}
+					{% set remise_ht = ((prix_ht * article_externe.remise)/100) %}
+					{% set prix_ht_remise = (prix_ht-remise_ht) %}
+					{% set total_ht = (prix_ht_remise*article_externe.quantite) %}
 					{% set tva = ((total_ht * 20)/100) %}
 					{% set total_ttc = (total_ht+tva) %}
 
+					{% set facture_total_remise = facture_total_remise + (remise_ht*article_externe.quantite) %}
 					{% set facture_total_ht = facture_total_ht + total_ht %}
 					{% set facture_total_tva = facture_total_tva + tva %}
 					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
 				<tr>
-					<td></td>
-					<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
-					<td class="text-right">{{ dossier_main_oeuvre.quantite }}</td>
+					<td>
+						{% if not pdf %}
+							<a href="{{ path('easyadmin', { action: 'edit', entity: 'DevisArticle', primary_key_name: 'id', id: article_externe.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'DevisArticle', primary_key_name: 'id', id: article_externe.id, referer: '' }) }}" target="_self" data-id="{{ article_externe.id }}" data-entity="DevisArticle" ><i class="fa fa-times"></i> </a>
+						{% endif %}
+						{{ article_externe.ref }}
+					</td>
+					<td>{{ article_externe.nom }}</td>
+					<td class="text-right">{{ article_externe.quantite }}</td>
 					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
-					<td class="text-right"></td>
-					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{% if article_externe.remise > 0 %}{{ article_externe.remise }}%{% endif %}</td>
+					<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">20.0%</td>
 					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
 				</tr>
 				{% endfor %}
-				{% if not pdf %}<tr><th colspan="10" class="sub_title">Main d'oeuvre supplémentaires :</th></tr>{% endif %}
+			{% endif %}
+			{% if not pdf %}
+			<tr>
+				<td colspan="10">
+					<a href="{{ path('easyadmin', { action: 'new', entity: 'ArticleExterne', primary_key_name: 'id', devis_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>
+				</td>
+			</tr>
+			{% endif %}
+
+			<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>
+			{% if entity.dossier %}
+				{% set groupDossierMainOeuvres = entity.dossier.getGroupDossierMainOeuvre %}
+				{% if groupDossierMainOeuvres|length() > 0 %}
+					{% if not pdf %}<tr><th colspan="10" class="sub_title">Main d'oeuvre du dossier :</th></tr>{% endif %}
+					{% for groupDossierMainOeuvre in groupDossierMainOeuvres %}
+						{% set dossier_main_oeuvre = groupDossierMainOeuvre|first %}
+						{% set quantite = 0 %}
+						
+						{% for dossier_main_oeuvre_tmp in groupDossierMainOeuvre %}
+							{% set quantite = quantite+dossier_main_oeuvre_tmp.quantite %}
+						{% endfor %}
+						{% set prix_ht = dossier_main_oeuvre.mainOeuvre.getPeriodePrix(entity.dateCreation) %}
+						{% set total_ht = (prix_ht*quantite) %}
+						{% set tva = ((total_ht * 20)/100) %}
+						{% set total_ttc = (total_ht+tva) %}
+
+						{% set facture_total_ht = facture_total_ht + total_ht %}
+						{% set facture_total_tva = facture_total_tva + tva %}
+						{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+						<tr>
+							<td></td>
+							<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
+							<td class="text-right">{{ quantite|number_format(2, '.', ',') }}</td>
+							<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+							<td class="text-right"></td>
+							<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+							<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+							<td class="text-right">20.0%</td>
+							<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+							<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+						</tr>
+					{% endfor %}
+					{% if not pdf %}<tr><th colspan="10" class="sub_title">Main d'oeuvre supplémentaires :</th></tr>{% endif %}
 				{% endif %}
 			{% endif %}
 

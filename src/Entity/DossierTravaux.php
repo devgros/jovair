@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DossierTravauxRepository")
+ * @Vich\Uploadable
  */
 class DossierTravaux
 {
@@ -39,6 +42,28 @@ class DossierTravaux
      * @ORM\Column(type="boolean")
      */
     private $is_valid = false;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $carte_travail_travaux;
+
+    /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
+     * @Vich\UploadableField(mapping="carteTravailTravauxFile", fileNameProperty="carte_travail_travaux")
+     * @var File
+     */
+    private $carteTravailTravauxFile;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Dossier", inversedBy="travaux")
@@ -179,6 +204,72 @@ class DossierTravaux
     public function getIsValid()
     {
         return $this->is_valid;
+    }
+
+    /**
+     * Set carteTravail.
+     *
+     * @param string $carteTravail
+     *
+     * @return Dossier
+     */
+    public function setCarteTravailTravaux($carteTravailTravaux)
+    {
+        $this->carte_travail_travaux = $carteTravailTravaux;
+
+        return $this;
+    }
+
+    /**
+     * Get carteTravail.
+     *
+     * @return string
+     */
+    public function getCarteTravailTravaux()
+    {
+        return $this->carte_travail_travaux;
+    }
+
+    public function setCarteTravailTravauxFile(File $image = null)
+    {
+        $this->carteTravailTravauxFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getCarteTravailTravauxFile()
+    {
+        return $this->carteTravailTravauxFile;
+    }
+
+    /**
+     * Set updatedAt.
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Dossier
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt.
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**

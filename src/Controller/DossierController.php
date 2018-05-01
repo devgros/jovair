@@ -212,6 +212,24 @@ class DossierController extends MyAdminController
 			$pdf->addPDF($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf', 'all');
 			$pdf->addPDF($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf', 'all');
 
+			foreach($entity->getTravaux() as $travaux){
+				if($travaux->getCarteTravailTravaux()){
+					$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($travaux, 'carteTravailTravauxFile'), 'all');
+				}
+			}
+
+			foreach($entity->getCnad() as $cnad){
+				if($cnad->getCarteTravailCnad()){
+					$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($cnad, 'carteTravailCnadFile'), 'all');
+				}
+			}
+
+			foreach($entity->getTravauxSup() as $travaux_sup){
+				if($travaux_sup->getCarteTravailTravauxSup()){
+					$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($travaux_sup, 'carteTravailTravauxSupFile'), 'all');
+				}
+			}
+
 			if($entity->getCarteTravail()){
 				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($entity, 'carteTravailFile'), 'all');
 			}

@@ -4,6 +4,7 @@ easy_admin:
             class: App\Entity\Article
             controller: App\Controller\ArticleController
             list:
+                max_results: 40
                 title: "Stock"
                 fields: 
                     - { property: 'nom', label: 'Désignation'}

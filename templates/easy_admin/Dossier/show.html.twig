@@ -262,9 +262,55 @@
 			</div>
 		</div>
 	</div>
-	{% if entity.statut > 0 %}
+	{#{% if entity.compressiometres|length() > 0 %}
+	{% for compressiometre in entity.compressiometres %}
 	<div class="col-sm-6 no_pad_right">
-		<div class="box box-success ">
+		<div class="box box-success">
+			<div class="box-header with-border">
+			   	<h3 class="box-title">Compressiomètre :</h3>
+				<div class="box-tools pull-right">
+	            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	            </div>
+			</div>
+			<div class="box-body">
+				<table class="table table-striped">
+					<tr class="border_bottom">
+						<th style="width:14%;"></th>
+						<th style="width:14%;" class="text-right">1</th>
+						<th style="width:14%;" class="text-right">2</th>
+						<th style="width:14%;" class="text-right">3</th>
+						<th style="width:14%;" class="text-right">4</th>
+						<th style="width:14%;" class="text-right">5</th>
+						<th style="width:14%;" class="text-right">6</th>
+					</tr>
+					<tr>
+						<th>1</th>
+						<td class="text-right">{{ compressiometre.g1 }}</td>
+						<td class="text-right">{{ compressiometre.g2 }}</td>
+						<td class="text-right">{{ compressiometre.g3 }}</td>
+						<td class="text-right">{{ compressiometre.g4 }}</td>
+						<td class="text-right">{{ compressiometre.g5 }}</td>
+						<td class="text-right">{{ compressiometre.g6 }}</td>
+					</tr>
+					<tr>
+						<th>2</th>
+						<td class="text-right">{{ compressiometre.d1 }}</td>
+						<td class="text-right">{{ compressiometre.d2 }}</td>
+						<td class="text-right">{{ compressiometre.d3 }}</td>
+						<td class="text-right">{{ compressiometre.d4 }}</td>
+						<td class="text-right">{{ compressiometre.d5 }}</td>
+						<td class="text-right">{{ compressiometre.d6 }}</td>
+					</tr>
+				</table>
+				<a href="{{ path('easyadmin', { action: 'edit', entity: 'Compressiometre', primary_key_name: 'id', id: compressiometre.id, referer: '' }) }}" class="text-green"><i class="fa fa-pencil"></i> Modifier</a>
+			</div>
+		</div>
+	</div>
+	{% endfor %}
+	{% endif %}#}
+	{% if entity.statut > 0 %}
+	<div class="col-sm-6 {#{% if entity.compressiometres|length() > 0 %}new-row no_pad_left{% else %}#} no_pad_right{#{% endif %}#}">
+		<div class="box box-default ">
 			<div class="box-header with-border">
 			   	<h3 class="box-title">Contrôle final :</h3>
 				<div class="box-tools pull-right">
