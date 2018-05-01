@@ -35,6 +35,11 @@ class DossierOutils
      */
     private $compressiometre;
 
+    public function __toString()
+    {
+        return $this->getDossier()." - ".$this->getOutillage();
+    }
+
     /**
      * Get id.
      *
@@ -102,7 +107,7 @@ class DossierOutils
      */
     public function setCompressiometre(\App\Entity\Compressiometre $compressiometre)
     {
-        $compressiometre->setDossierOutils($this);
+        //$compressiometre->setDossierOutils($this);
         $this->compressiometre = $compressiometre;
 
         return $this;

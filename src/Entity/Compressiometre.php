@@ -100,6 +100,11 @@ class Compressiometre
      */
     private $d6;
 
+    public function __toString()
+    {
+        return $this->id;
+    }
+
     /**
      * Get id.
      *
@@ -407,9 +412,9 @@ class Compressiometre
      */
     public function setDossierOutils(\App\Entity\DossierOutils $dossierOutils = null)
     {
-    	$dossierOutils->setCompressiometre($this);
         $this->dossier_outils = $dossierOutils;
-
+        $dossierOutils->setCompressiometre($this);
+        
         return $this;
     }
 
