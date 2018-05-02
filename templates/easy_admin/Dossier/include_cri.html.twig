@@ -13,7 +13,6 @@
 			<i class="fa fa-plane"></i> Bon de lancement et Compte Rendu d'intervention {{ entity.numBl }}
 			{% if not pdf %}{% if entity.statut > 0 %}<a href="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/public/dossier/{{ entity.numBl }}.pdf" target="_blank" target="_self" class="btn btn-primary pull-right no-print" style="margin-left: 10px; margin-top:-15px;"><i class="fa fa-download"></i> PDF</a>{% endif %}{% endif %}
 			<small class="pull-right">Suivant le Bon de Commande n°: {{ entity.numBc }}</small>
-
 		</h2>
 	</div>
 </div>
@@ -154,6 +153,40 @@
 			{% endfor %}
 		</table>
 		{% endif %}
+		{% for dossier_outils in entity.dossierOutils %}
+			{% if dossier_outils.compressiometre %}
+			<h4 class="alt">Relevé de compression des cylindres :</h4>
+			<table class="table table-striped">
+				<tr class="border_bottom">
+					<th style="width:14%;"></th>
+					<th style="width:14%;" class="text-right">1</th>
+					<th style="width:14%;" class="text-right">2</th>
+					<th style="width:14%;" class="text-right">3</th>
+					<th style="width:14%;" class="text-right">4</th>
+					<th style="width:14%;" class="text-right">5</th>
+					<th style="width:14%;" class="text-right">6</th>
+				</tr>
+				<tr>
+					<th>1</th>
+					<td class="text-right">{{ dossier_outils.compressiometre.g1 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.g2 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.g3 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.g4 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.g5 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.g6 }}</td>
+				</tr>
+				<tr>
+					<th>2</th>
+					<td class="text-right">{{ dossier_outils.compressiometre.d1 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.d2 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.d3 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.d4 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.d5 }}</td>
+					<td class="text-right">{{ dossier_outils.compressiometre.d6 }}</td>
+				</tr>
+			</table>
+			{% endif %}
+		{% endfor %}
 	{% if pdf %}</td></tr></table>{% else %}
 	</div>
 </div>

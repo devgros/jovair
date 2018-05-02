@@ -31,6 +31,16 @@ class DossierOutils
     private $outillage;
 
     /**
+     * @ORM\OneToOne(targetEntity="Compressiometre", inversedBy="dossier_outils", cascade={"persist", "remove"})
+     */
+    private $compressiometre;
+
+    public function __toString()
+    {
+        return $this->getDossier()." - ".$this->getOutillage();
+    }
+
+    /**
      * Get id.
      *
      * @return int
@@ -86,5 +96,30 @@ class DossierOutils
     public function getOutillage()
     {
         return $this->outillage;
+    }
+
+    /**
+     * Set compressiometre.
+     *
+     * @param \App\Entity\Compressiometre $compressiometre
+     *
+     * @return DossierOutils
+     */
+    public function setCompressiometre(\App\Entity\Compressiometre $compressiometre)
+    {
+        //$compressiometre->setDossierOutils($this);
+        $this->compressiometre = $compressiometre;
+
+        return $this;
+    }
+
+    /**
+     * Get compressiometre.
+     *
+     * @return \App\Entity\Compressiometre
+     */
+    public function getCompressiometre()
+    {
+        return $this->compressiometre;
     }
 }

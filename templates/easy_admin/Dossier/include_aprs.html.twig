@@ -47,8 +47,13 @@
 				</div>
 				<b>JOV'AIR MAINTENANCE</b><br/>
 				<div class="notice">
-					{% if entity.mecanicien %}{{ entity.mecanicien }}<br/>
-					{{ entity.mecanicien.licence }}{% endif %}
+					{% if entity.mecanicien %}
+						{{ entity.mecanicien }}<br/>
+						{{ entity.mecanicien.licence }}
+					{% else %}
+						<span contenteditable="true">Jover Sébastien</span><br/>
+						<span contenteditable="true">FR.66.009791</span>
+					{% endif %}
 				</div>
 
 				{% set data_uri = app.request.scheme ~ '://' ~ app.request.httpHost ~ '/public/dossier/' ~ entity.numBl ~ '.pdf' %}
@@ -56,7 +61,11 @@
 		</tr>
 		<tr>
 			<td colspan="2"><b>Lieu:</b><br/><b>Date:</b><br/><b>Heure:</b></td>
-			<td>{{ entity.lieuCf }}<br/>{% if entity.dateCf %}{{ entity.dateCf|date("d/m/Y") }}{% endif %}<br/>{% if entity.timeCf %}{{ entity.timeCf|slice(0, 5) }}{% endif %}</td>
+			<td>
+				{% if entity.lieuCf %}{{ entity.lieuCf }}{% else %}<span contenteditable="true">Les milles</span>{% endif %}<br/>
+				{% if entity.dateCf %}{{ entity.dateCf|date("d/m/Y") }}{% else %}<span contenteditable="true">{{ "now"|date("d/m/Y") }}</span>{% endif %}<br/>
+				{% if entity.timeCf %}{{ entity.timeCf|slice(0, 5) }}{% else %}<span contenteditable="true">{{ "now"|date("H:i") }}</span>{% endif %}
+			</td>
 		</tr>
 	</table>
 </div>

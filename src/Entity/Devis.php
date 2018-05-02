@@ -60,6 +60,12 @@ class Devis
     private $devis_article;
 
     /**
+     * @ORM\OneToMany(targetEntity="ArticleExterne", mappedBy="devis", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $article_externe;
+
+    /**
      * @ORM\OneToMany(targetEntity="DevisMainOeuvre", mappedBy="devis", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid()
      */
@@ -83,6 +89,7 @@ class Devis
     {
         $this->devis_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devis_article = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->article_externe = new \Doctrine\Common\Collections\ArrayCollection();
         $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -350,5 +357,42 @@ class Devis
     public function getFactures()
     {
         return $this->factures;
+    }
+
+    /**
+     * Add articleExterne.
+     *
+     * @param \App\Entity\ArticleExterne $articleExterne
+     *
+     * @return Devis
+     */
+    public function addArticleExterne(\App\Entity\ArticleExterne $articleExterne)
+    {
+        $articleExterne->setDevis($this);
+        $this->article_externe[] = $articleExterne;
+
+        return $this;
+    }
+
+    /**
+     * Remove articleExterne.
+     *
+     * @param \App\Entity\ArticleExterne $articleExterne
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeArticleExterne(\App\Entity\ArticleExterne $articleExterne)
+    {
+        return $this->article_externe->removeElement($articleExterne);
+    }
+
+    /**
+     * Get articleExterne.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getArticleExterne()
+    {
+        return $this->article_externe;
     }
 }

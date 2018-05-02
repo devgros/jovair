@@ -22,7 +22,11 @@ class DossierOutilsController extends MyAdminController
         $response = parent::newAction();
         $entity = $this->request->attributes->get('easyadmin')['item'];
         if ($response instanceof RedirectResponse) {
-            return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossier()->getId()]);
+            if($entity->getOutillage()->getOutillage()->getType() == "1"){
+                return $this->redirectToRoute('admin', ['entity' => 'Compressiometre', 'action' => 'new', 'dossier_outil_id' => $entity->getId()]);
+            }else{
+                return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossier()->getId()]);
+            }
         }
 
         return $response;
@@ -41,9 +45,11 @@ class DossierOutilsController extends MyAdminController
 
     protected function deleteAction()
     {
+        $entity = $this->request->attributes->get('easyadmin')['item'];
+
         $response = parent::deleteAction();
 
-        $entity = $this->request->attributes->get('easyadmin')['item'];
+        
         if ($response instanceof RedirectResponse) {
             return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getDossier()->getId()]);
         }

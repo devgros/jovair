@@ -3,11 +3,14 @@
 namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\DossierTravauxSupRepository")
+ * @Vich\Uploadable
  */
 class DossierTravauxSup
 {
@@ -29,6 +32,28 @@ class DossierTravauxSup
      * @Assert\NotBlank()
      */
     private $action_corrective;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $carte_travail_tarvaux_sup;
+
+    /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
+     * @Vich\UploadableField(mapping="carteTravailTravauxSupFile", fileNameProperty="carte_travail_tarvaux_sup")
+     * @var File
+     */
+    private $carteTravailTravauxSupFile;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedAt;
 
     /**
      * @ORM\ManyToOne(targetEntity="Dossier", inversedBy="travaux_sup")
@@ -116,6 +141,72 @@ class DossierTravauxSup
     public function getActionCorrective()
     {
         return $this->action_corrective;
+    }
+
+    /**
+     * Set carteTravail.
+     *
+     * @param string $carteTravail
+     *
+     * @return Dossier
+     */
+    public function setCarteTravailTravauxSup($carteTravailTravauxSup)
+    {
+        $this->carte_travail_tarvaux_sup = $carteTravailTravauxSup;
+
+        return $this;
+    }
+
+    /**
+     * Get carteTravail.
+     *
+     * @return string
+     */
+    public function getCarteTravailTravauxSup()
+    {
+        return $this->carte_travail_tarvaux_sup;
+    }
+
+    public function setCarteTravailTravauxSupFile(File $image = null)
+    {
+        $this->carteTravailTravauxSupFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getCarteTravailTravauxSupFile()
+    {
+        return $this->carteTravailTravauxSupFile;
+    }
+
+    /**
+     * Set updatedAt.
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Dossier
+     */
+    public function setUpdatedAt($updatedAt)
+    {
+        $this->updatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedAt.
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedAt()
+    {
+        return $this->updatedAt;
     }
 
     /**
@@ -236,5 +327,29 @@ class DossierTravauxSup
     public function getMecanicienControl()
     {
         return $this->mecanicien_control;
+    }
+
+    /**
+     * Set carteTravailTarvauxSup.
+     *
+     * @param string|null $carteTravailTarvauxSup
+     *
+     * @return DossierTravauxSup
+     */
+    public function setCarteTravailTarvauxSup($carteTravailTarvauxSup = null)
+    {
+        $this->carte_travail_tarvaux_sup = $carteTravailTarvauxSup;
+
+        return $this;
+    }
+
+    /**
+     * Get carteTravailTarvauxSup.
+     *
+     * @return string|null
+     */
+    public function getCarteTravailTarvauxSup()
+    {
+        return $this->carte_travail_tarvaux_sup;
     }
 }

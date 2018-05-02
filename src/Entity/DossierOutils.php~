@@ -24,8 +24,96 @@ class DossierOutils
     private $dossier;
 
     /**
-     * @ORM\ManyToOne(targetEntity="Outillage", inversedBy="dossier_outils")
+     * @ORM\ManyToOne(targetEntity="OutillageCertificat", inversedBy="dossier_outils")
+     * @ORM\OrderBy({"id" = "DESC"})
      * @ORM\JoinColumn(nullable=false)
      */
     private $outillage;
+
+    /**
+     * @ORM\OneToOne(targetEntity="Compressiometre", inversedBy="dossier_outils")
+     */
+    private $compressiometre;
+
+    /**
+     * Get id.
+     *
+     * @return int
+     */
+    public function getId()
+    {
+        return $this->id;
+    }
+
+    /**
+     * Set dossier.
+     *
+     * @param \App\Entity\Dossier|null $dossier
+     *
+     * @return DossierTravaux
+     */
+    public function setDossier(\App\Entity\Dossier $dossier = null)
+    {
+        $this->dossier = $dossier;
+
+        return $this;
+    }
+
+    /**
+     * Get dossier.
+     *
+     * @return \App\Entity\Dossier|null
+     */
+    public function getDossier()
+    {
+        return $this->dossier;
+    }
+
+    /**
+     * Set outillage.
+     *
+     * @param \App\Entity\OutillageCertificat|null $outillage
+     *
+     * @return DossierTravaux
+     */
+    public function setOutillage(\App\Entity\OutillageCertificat $outillage = null)
+    {
+        $this->outillage = $outillage;
+
+        return $this;
+    }
+
+    /**
+     * Get outillage.
+     *
+     * @return \App\Entity\OutillageCertificat|null
+     */
+    public function getOutillage()
+    {
+        return $this->outillage;
+    }
+
+    /**
+     * Set compressiometre.
+     *
+     * @param \App\Entity\Compressiometre $compressiometre
+     *
+     * @return DossierOutils
+     */
+    public function setCompressiometre(\App\Entity\Compressiometre $compressiometre)
+    {
+        $this->compressiometre = $compressiometre;
+
+        return $this;
+    }
+
+    /**
+     * Get compressiometre.
+     *
+     * @return \App\Entity\Compressiometre
+     */
+    public function getCompressiometre()
+    {
+        return $this->compressiometre;
+    }
 }

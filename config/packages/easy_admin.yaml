@@ -8,6 +8,7 @@ imports:
     - { resource: easy_admin/dossier_outils.yaml }
     - { resource: easy_admin/devis.yaml }
     - { resource: easy_admin/devis_article.yaml }
+    - { resource: easy_admin/article_externe.yaml }
     - { resource: easy_admin/devis_main_oeuvre.yaml }
     - { resource: easy_admin/facture.yaml }
     - { resource: easy_admin/client.yaml }
@@ -25,6 +26,7 @@ imports:
     - { resource: easy_admin/main_oeuvre.yaml }
     - { resource: easy_admin/main_oeuvre_prix.yaml }
     - { resource: easy_admin/todo.yaml }
+    - { resource: easy_admin/compressiometre.yaml }
 
 easy_admin:
     site_name: "JOV'AIR <em style='font-size: 80%;'>Maintenance<em>"
