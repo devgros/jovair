@@ -74,7 +74,20 @@
 				</tr>
 			</thead>
 			<tbody>
+			{% set is_piece = false %}
+			{% if entity.dossier %}
+				{% if entity.dossier.dossierArticle|length() > 0  %}{% set is_piece = true %}{% endif %}
+			{% endif %}
+			{% if entity.devisArticle|length() > 0 %}{% set is_piece = true %}{% endif %}
+			{% if entity.articleExterne|length() > 0 %}{% set is_piece = true %}{% endif %}
+
+			{% if not pdf %}
 				<tr><th colspan="10" class="title">Pièces :</th></tr>
+			{% else %}	
+				{% if is_piece %}<tr><th colspan="10" class="title">Pièces :</th></tr>{% endif %}
+			{% endif %}
+			
+
 			{% if entity.dossier %}
 				{% if entity.dossier.dossierArticle|length() > 0 %}
 				{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces du dossier :</th></tr>{% endif %}
@@ -189,7 +202,18 @@
 			</tr>
 			{% endif %}
 
-			<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>
+			{% set is_main_oeuvre = false %}
+			{% if entity.dossier %}
+				{% if entity.dossier.getGroupDossierMainOeuvre|length() > 0  %}{% set is_main_oeuvre = true %}{% endif %}
+			{% endif %}
+			{% if entity.devisMainOeuvre|length() > 0 %}{% set is_main_oeuvre = true %}{% endif %}
+
+			{% if not pdf %}
+				<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>
+			{% else %}	
+				{% if is_main_oeuvre %}<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>{% endif %}
+			{% endif %}
+
 			{% if entity.dossier %}
 				{% set groupDossierMainOeuvres = entity.dossier.getGroupDossierMainOeuvre %}
 				{% if groupDossierMainOeuvres|length() > 0 %}
@@ -298,7 +322,7 @@
 <div class="row">
 	<!-- accepted payments column -->
 	<div class="col-xs-8">
-		<p class="text-muted well well-sm no-shadow" style="margin-top: 10px;">
+		<p class="text-muted well well-sm no-shadow">
 			<b>Conditions de règlement appliquées sur les factures</b><br/>
 			Date limite de règlement : 30 jours nets à compter de la date d'émission de la facture<br/>
 			Taux des pénalités en cas de retard de paiement : taux directeur de refinancement de la BCE, majoré de 10 points<br/>
