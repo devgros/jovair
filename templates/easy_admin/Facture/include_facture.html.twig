@@ -74,7 +74,15 @@
 				</tr>
 			</thead>
 			<tbody>
-				<tr><th colspan="10" class="title">Pièces :</th></tr>
+			{% set is_piece = false %}
+			{% if entity.devis.dossier %}
+				{% if entity.devis.dossier.dossierArticle|length() > 0  %}{% set is_piece = true %}{% endif %}
+			{% endif %}
+			{% if entity.devis.devisArticle|length() > 0 %}{% set is_piece = true %}{% endif %}
+			{% if entity.devis.articleExterne|length() > 0 %}{% set is_piece = true %}{% endif %}
+
+			{% if is_piece %}<tr><th colspan="10" class="title">Pièces :</th></tr>{% endif %}
+				
 			{% if entity.devis.dossier %}
 				{% if entity.devis.dossier.dossierArticle|length() > 0 %}
 				{% for dossier_article in entity.devis.dossier.dossierArticle %}
@@ -135,7 +143,43 @@
 				{% endfor %}
 			{% endif %}
 
-			<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>
+			{% if entity.devis.articleExterne|length() > 0 %}
+				{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces externe au stock :</th></tr>{% endif %}
+				{% for article_externe in entity.devis.articleExterne %}
+					{% set prix_ht = article_externe.getPrixHt %}
+					{% set remise_ht = ((prix_ht * article_externe.remise)/100) %}
+					{% set prix_ht_remise = (prix_ht-remise_ht) %}
+					{% set total_ht = (prix_ht_remise*article_externe.quantite) %}
+					{% set tva = ((total_ht * 20)/100) %}
+					{% set total_ttc = (total_ht+tva) %}
+
+					{% set facture_total_remise = facture_total_remise + (remise_ht*article_externe.quantite) %}
+					{% set facture_total_ht = facture_total_ht + total_ht %}
+					{% set facture_total_tva = facture_total_tva + tva %}
+					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+
+				<tr>
+					<td>{{ article_externe.ref }}</td>
+					<td>{{ article_externe.nom }}</td>
+					<td class="text-right">{{ article_externe.quantite }}</td>
+					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{% if article_externe.remise > 0 %}{{ article_externe.remise }}%{% endif %}</td>
+					<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">20.0%</td>
+					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+				</tr>
+				{% endfor %}
+			{% endif %}
+
+			{% set is_main_oeuvre = false %}
+			{% if entity.devis.dossier %}
+				{% if entity.devis.dossier.getGroupDossierMainOeuvre|length() > 0  %}{% set is_main_oeuvre = true %}{% endif %}
+			{% endif %}
+			{% if entity.devis.devisMainOeuvre|length() > 0 %}{% set is_main_oeuvre = true %}{% endif %}
+
+			{% if is_main_oeuvre %}<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>{% endif %}
 			{% if entity.devis.dossier %}
 				{% set groupDossierMainOeuvres = entity.devis.dossier.getGroupDossierMainOeuvre %}
 				{% if groupDossierMainOeuvres|length() > 0 %}
@@ -232,7 +276,15 @@
 
 <div class="row">
 	<!-- accepted payments column -->
-	<div class="col-xs-8"></div>
+	<div class="col-xs-8">
+		<p class="text-muted well well-sm no-shadow">
+			<b>Conditions de règlement appliquées sur les factures</b><br/>
+			Date limite de règlement : 30 jours nets à compter de la date d'émission de la facture<br/>
+			Taux des pénalités en cas de retard de paiement : taux directeur de refinancement de la BCE, majoré de 10 points<br/>
+			En cas de retard de paiement, indemnité forfaitaire légale pour frais de recouvrement : 40,00 €<br/>
+			Escompte en cas de paiement anticipé : aucun
+		</p>
+	</div>
 	<!-- /.col -->
 	<div class="col-xs-4">
 		<div class="table-responsive">
