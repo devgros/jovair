@@ -21,7 +21,11 @@
 						<i class="fa fa-gear"></i>
 					</div>
 					<h3 class="widget-user-username"> {{ item.nom}}</h3>
-					<h5 class="widget-user-desc">Date de validité: <b>{{ item.getLastDateCertificat }}</b> <a title="voir le certificat" href="{{ vich_uploader_asset(item.getLastDateCertificat, 'certificatFile', 'App\\Entity\\OutillageCertificat') }}" class="text-white" target="_blank"><i class="fa fa-file-pdf-o"></i></a></h5>
+					{% if item.getLastDateCertificat %}
+					<h5 class="widget-user-desc">Date de validité: <b>{{ item.getLastDateCertificat.dateValidite|date('d/m/Y') }}</b> <a title="voir le certificat" href="{{ vich_uploader_asset(item.getLastDateCertificat, 'certificatFile', 'App\\Entity\\OutillageCertificat') }}" class="text-white" target="_blank"><i class="fa fa-file-pdf-o"></i></a></h5>
+					{% else %}
+					<span class="label label-danger">L'outillage n'a pas de certificat de validité, il faut en ajouter 1</span>
+					{% endif %}
 					
 				</div>
 				<div class="box-body no-padding">
