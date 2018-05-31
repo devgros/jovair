@@ -178,7 +178,7 @@
 				<tr>
 					<td>
 						{% if not pdf %}
-							<a href="{{ path('easyadmin', { action: 'edit', entity: 'DevisArticle', primary_key_name: 'id', id: article_externe.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'DevisArticle', primary_key_name: 'id', id: article_externe.id, referer: '' }) }}" target="_self" data-id="{{ article_externe.id }}" data-entity="DevisArticle" ><i class="fa fa-times"></i> </a>
+							<a href="{{ path('easyadmin', { action: 'edit', entity: 'ArticleExterne', primary_key_name: 'id', id: article_externe.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'ArticleExterne', primary_key_name: 'id', id: article_externe.id, referer: '' }) }}" target="_self" data-id="{{ article_externe.id }}" data-entity="ArticleExterne" ><i class="fa fa-times"></i> </a>
 						{% endif %}
 						{{ article_externe.ref }}
 					</td>

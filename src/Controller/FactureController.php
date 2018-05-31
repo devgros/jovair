@@ -8,7 +8,7 @@ class FactureController extends BaseAdminController
 {
 	protected function showAction()
     {
-        $response = parent::showAction();
+        $response = parent::showAction();	
 
         /*$facture = $this->request->attributes->get('easyadmin')['item'];
 
