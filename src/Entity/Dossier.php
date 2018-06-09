@@ -707,11 +707,6 @@ class Dossier
         return $groupDossierMainOeuvre;
     }
 
-    public function test()
-    {
-        return "okok";
-    }
-
     /**
      * Add dossierArticle.
      *
