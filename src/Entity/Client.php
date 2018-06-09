@@ -341,12 +341,12 @@ class Client
      *
      * @return Client
      */
-    public function addDevis(\App\Entity\Devis $devis)
+    /*public function addDevis(\App\Entity\Devis $devis)
     {
         $this->devis[] = $devis;
 
         return $this;
-    }
+    }*/
 
     /**
      * Remove devis.
@@ -355,10 +355,10 @@ class Client
      *
      * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
      */
-    public function removeDevis(\App\Entity\Devis $devis)
+    /*public function removeDevis(\App\Entity\Devis $devis)
     {
         return $this->devis->removeElement($devis);
-    }
+    }*/
 
     /**
      * Get devis.
