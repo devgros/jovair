@@ -77,6 +77,21 @@ class Devis
      */
     private $factures;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="DossierArticle", inversedBy="devis")
+     */
+    private $dossier_articles;
+
+    /**
+     * @ORM\ManyToMany(targetEntity="DossierMainOeuvre", inversedBy="devis")
+     */
+    private $dossier_mainoeuvres;
+
+     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $new_devis = 1;
+
     public function __toString()
     {
         return $this->num_devis;
@@ -394,5 +409,115 @@ class Devis
     public function getArticleExterne()
     {
         return $this->article_externe;
+    }
+
+    /**
+     * @return Collection|DossierArticle[]
+     */
+    public function getDossierArticles()
+    {
+        return $this->dossier_articles;
+    }
+
+    public function addDossierArticle(DossierArticle $dossier_article): self
+    {
+        if (!$this->dossier_articles->contains($dossier_article)) {
+            $this->dossier_articles[] = $dossier_article;
+            $dossier_article->addDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function addFirstDossierArticle(DossierArticle $dossier_article): self
+    {
+            $this->dossier_articles[] = $dossier_article;
+            $dossier_article->addDevis($this);
+
+        return $this;
+    }
+
+    public function addNewDossierArticle(DossierArticle $dossier_article): self
+    {
+            $this->dossier_articles[] = $dossier_article;
+
+        return $this;
+    }
+
+    public function removeDossierArticle(DossierArticle $dossier_article): self
+    {
+        if ($this->dossier_articles->contains($dossier_article)) {
+            $this->dossier_articles->removeElement($dossier_article);
+            $dossier_article->removeDevis($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|DossierMainOeuvre[]
+     */
+    public function getDossierMainOeuvres()
+    {
+        return $this->dossier_mainoeuvres;
+    }
+
+    public function addDossierMainOeuvre(DossierMainOeuvre $dossier_mainoeuvre): self
+    {
+        if (!$this->dossier_mainoeuvres->contains($dossier_mainoeuvre)) {
+            $this->dossier_mainoeuvres[] = $dossier_mainoeuvre;
+            $dossier_mainoeuvre->addDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function addFirstDossierMainOeuvre(DossierMainOeuvre $dossier_mainoeuvre): self
+    {
+            $this->dossier_mainoeuvres[] = $dossier_mainoeuvre;
+            $dossier_mainoeuvre->addDevis($this);
+
+        return $this;
+    }
+
+    public function addNewDossierMainOeuvre(DossierMainOeuvre $dossier_mainoeuvre): self
+    {
+        $this->dossier_mainoeuvres[] = $dossier_mainoeuvre;
+
+        return $this;
+    }
+
+    public function removeDossierMainOeuvre(DossierMainOeuvre $dossier_mainoeuvre): self
+    {
+        if ($this->dossier_mainoeuvres->contains($dossier_mainoeuvre)) {
+            $this->dossier_mainoeuvres->removeElement($dossier_mainoeuvre);
+            $dossier_mainoeuvre->removeDevis($this);
+        }
+
+        return $this;
+    }
+
+    /**
+     * Set new_devis.
+     *
+     * @param int $new_devis
+     *
+     * @return Devis
+     */
+    public function setNewDevis($new_devis)
+    {
+        $this->new_devis = $new_devis;
+
+        return $this;
+    }
+
+    /**
+     * Get new_devis.
+     *
+     * @return int
+     */
+    public function getNewDevis()
+    {
+        return $this->new_devis;
     }
 }

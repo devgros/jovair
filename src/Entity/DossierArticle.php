@@ -41,6 +41,11 @@ class DossierArticle
      */
     private $article_formone;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Devis", mappedBy="dossier_articles")
+     */
+    private $devis;
+
     public function __toString()
     {
         return $this->dossier->getNumBl()." - ".$this->article_formone->getSn()." | qte:".$this->quantite;
@@ -150,5 +155,49 @@ class DossierArticle
     public function getArticleFormone()
     {
         return $this->article_formone;
+    }
+
+    public function getDossierId()
+    {
+        return $this->dossier->getId();
+    }
+
+    public function getDossierArticleLabel()
+    {
+        return $this->article_formone->getArticle()->getNom()." | sn:".$this->article_formone->getSn()." | qte:".$this->quantite;
+    }
+
+    /**
+     * @return Collection|Devis[]
+     */
+    public function getDevis(): Collection
+    {
+        return $this->devis;
+    }
+
+    public function addDevis(Devis $devis): self
+    {
+        if (!$this->devis->contains($devis)) {
+            $this->devis[] = $devis;
+        }
+
+        return $this;
+    }
+
+    public function addNewDevis(Devis $devis): self
+    {
+        $this->devis[] = $devis;
+        
+
+        return $this;
+    }
+
+    public function removeDevis(Devis $devis): self
+    {
+        if ($this->devis->contains($devis)) {
+            $this->devis->removeElement($devis);
+        }
+
+        return $this;
     }
 }

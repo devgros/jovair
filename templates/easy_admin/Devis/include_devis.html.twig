@@ -2,7 +2,7 @@
 	<div class="col-xs-12">
 		<h2 class="page-header">
 			<img src="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/img/logo_min.png" width="70"  />
-			Jov'air Maintenance 
+			Jov'air Maintenance
 			<small class="pull-right"><br/>Date: {{ entity.dateCreation|date('d/m/Y') }}</small>
 		</h2>
 	</div>
@@ -92,6 +92,18 @@
 				{% if entity.dossier.dossierArticle|length() > 0 %}
 				{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces du dossier :</th></tr>{% endif %}
 				{% for dossier_article in entity.dossier.dossierArticle %}
+
+					{% set is_da_ok = false %}
+					{% if entity.newDevis %}
+						{% if dossier_article in entity.dossierArticles %}
+							{% set is_da_ok = true %}
+						{% endif %}
+					{% else %}
+						{% set is_da_ok = true %}
+					{% endif %}
+
+					{% if is_da_ok %}
+
 					{% set marge_ht = ((dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation)*dossier_article.articleFormone.article.marge)/100) %}
 					{% set prix_ht = dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation) + marge_ht %}
 					{% set remise_ht = ((prix_ht * dossier_article.remise)/100) %}
@@ -116,6 +128,7 @@
 					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
 				</tr>
+					{% endif %}
 				{% endfor %}
 				{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces supplémentaires :</th></tr>{% endif %}
 				{% endif %}
@@ -136,7 +149,7 @@
 					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
 				<tr>
 					<td>
-						{% if not pdf %}
+						{% if not pdf and entity.statut == 0 %}
 							<a href="{{ path('easyadmin', { action: 'edit', entity: 'DevisArticle', primary_key_name: 'id', id: devis_article.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'DevisArticle', primary_key_name: 'id', id: devis_article.id, referer: '' }) }}" target="_self" data-id="{{ devis_article.id }}" data-entity="DevisArticle" ><i class="fa fa-times"></i> </a>
 						{% endif %}
 						{{ devis_article.articleFormone.sn }}
@@ -153,7 +166,7 @@
 				</tr>
 				{% endfor %}
 			{% endif %}
-			{% if not pdf %}
+			{% if not pdf and entity.statut == 0 %}
 			<tr>
 				<td colspan="10">
 					<a href="{{ path('easyadmin', { action: 'new', entity: 'DevisArticle', primary_key_name: 'id', devis_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>
@@ -177,7 +190,7 @@
 					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
 				<tr>
 					<td>
-						{% if not pdf %}
+						{% if not pdf and entity.statut == 0 %}
 							<a href="{{ path('easyadmin', { action: 'edit', entity: 'ArticleExterne', primary_key_name: 'id', id: article_externe.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'ArticleExterne', primary_key_name: 'id', id: article_externe.id, referer: '' }) }}" target="_self" data-id="{{ article_externe.id }}" data-entity="ArticleExterne" ><i class="fa fa-times"></i> </a>
 						{% endif %}
 						{{ article_externe.ref }}
@@ -194,7 +207,7 @@
 				</tr>
 				{% endfor %}
 			{% endif %}
-			{% if not pdf %}
+			{% if not pdf and entity.statut == 0 %}
 			<tr>
 				<td colspan="10">
 					<a href="{{ path('easyadmin', { action: 'new', entity: 'ArticleExterne', primary_key_name: 'id', devis_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>
@@ -223,7 +236,18 @@
 						{% set quantite = 0 %}
 						
 						{% for dossier_main_oeuvre_tmp in groupDossierMainOeuvre %}
-							{% set quantite = quantite+dossier_main_oeuvre_tmp.quantite %}
+							{% set is_dmo_ok = false %}
+							{% if entity.newDevis %}
+								{% if dossier_main_oeuvre_tmp in entity.dossierMainoeuvres %}
+									{% set is_dmo_ok = true %}
+								{% endif %}
+							{% else %}
+								{% set is_dmo_ok = true %}
+							{% endif %}
+
+							{% if is_dmo_ok %}
+								{% set quantite = quantite+dossier_main_oeuvre_tmp.quantite %}
+							{% endif %}
 						{% endfor %}
 						{% set prix_ht = dossier_main_oeuvre.mainOeuvre.getPeriodePrix(entity.dateCreation) %}
 						{% set total_ht = (prix_ht*quantite) %}
@@ -233,6 +257,7 @@
 						{% set facture_total_ht = facture_total_ht + total_ht %}
 						{% set facture_total_tva = facture_total_tva + tva %}
 						{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+						{% if quantite > 0 %}
 						<tr>
 							<td></td>
 							<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
@@ -245,6 +270,7 @@
 							<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 							<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
 						</tr>
+						{% endif %}
 					{% endfor %}
 					{% if not pdf %}<tr><th colspan="10" class="sub_title">Main d'oeuvre supplémentaires :</th></tr>{% endif %}
 				{% endif %}
@@ -265,7 +291,7 @@
 					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
 				<tr>
 					<td>
-						{% if not pdf %}<a href="{{ path('easyadmin', { action: 'edit', entity: 'DevisMainOeuvre', primary_key_name: 'id', id: devis_main_oeuvre.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'DevisMainOeuvre', primary_key_name: 'id', id: devis_main_oeuvre.id, referer: '' }) }}" target="_self" data-id="{{ devis_main_oeuvre.id }}" data-entity="DevisMainOeuvre" ><i class="fa fa-times"></i> </a>{% endif %}
+						{% if not pdf and entity.statut == 0 %}<a href="{{ path('easyadmin', { action: 'edit', entity: 'DevisMainOeuvre', primary_key_name: 'id', id: devis_main_oeuvre.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'DevisMainOeuvre', primary_key_name: 'id', id: devis_main_oeuvre.id, referer: '' }) }}" target="_self" data-id="{{ devis_main_oeuvre.id }}" data-entity="DevisMainOeuvre" ><i class="fa fa-times"></i> </a>{% endif %}
 					</td>
 					<td>{{ devis_main_oeuvre.mainOeuvre }}</td>
 					<td class="text-right">{{ devis_main_oeuvre.quantite }}</td>
@@ -279,7 +305,7 @@
 				</tr>
 				{% endfor %}
 			{% endif %}
-			{% if not pdf %}
+			{% if not pdf and entity.statut == 0 %}
 			<tr>
 				<td colspan="10">
 					<a href="{{ path('easyadmin', { action: 'new', entity: 'DevisMainOeuvre', primary_key_name: 'id', devis_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>
@@ -367,16 +393,31 @@
 <div class="row no-print">
 	<div class="col-xs-12">
     {% block item_actions %}
-        {% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
-        {% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
+        {% set actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
+        {% set request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
 
-        {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
-            actions: _show_actions,
-            request_parameters: _request_parameters,
-            translation_domain: _entity_config.translation_domain,
-            trans_parameters: _trans_parameters,
-            item_id: _entity_id
-        }, with_context = false) }}
+        {% for action in actions %}
+        	{% set show_btn = true %} 
+        	{% if action.name == "validate" and entity.statut == 1 %}
+        		{% set show_btn = false %} 
+        	{% endif %}
+		    {% if 'list' == action.name %}
+		        {% set action_href = request_parameters.referer|default('') ? request_parameters.referer|easyadmin_urldecode : path('easyadmin', request_parameters|merge({ action: 'list' })) %}
+		    {% elseif 'method' == action.type %}
+		        {% set action_href = path('easyadmin', request_parameters|merge({ action: action.name, id: _entity_id })) %}
+		    {% elseif 'route' == action.type %}
+		        {% set action_href = path(action.name, request_parameters|merge({ action: action.name, id: _entity_id })) %}
+		    {% endif %}
+
+		    {% if show_btn %}
+		    <a class="{{ action.css_class|default('') }}" title="{{ action.title|default('') is empty ? '' : action.title|trans(_trans_parameters, _entity_config.translation_domain) }}" href="{{ action_href }}" target="{{ action.target }}">
+		        {%- if action.icon %}<i class="fa fa-{{ action.icon }}"></i> {% endif -%}
+		        {%- if action.label is defined and not action.label is empty -%}
+		            {{ action.label|trans(arguments = _trans_parameters|merge({ '%entity_id%': _entity_id }), domain = _entity_config.translation_domain) }}
+		        {%- endif -%}
+		    </a>
+			{% endif %}
+		{% endfor %}
     {% endblock item_actions %}
     </div>
 </div>

@@ -76,6 +76,11 @@ class ArticleExterne
      */
     private $devis;
 
+    public function __toString()
+    {
+        return $this->nom;
+    }
+
     /**
      * Get id.
      *

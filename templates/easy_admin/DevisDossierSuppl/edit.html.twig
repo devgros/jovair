@@ -1,0 +1,34 @@
+{% extends '@EasyAdmin/default/edit.html.twig' %}
+
+
+{% block entity_form %}
+	{{ form_start(form) }}
+		{% if form.dossierArticles is defined or form.dossierMainoeuvres is defined %}
+		<div class="col-xs-12 col-sm-12">
+			<div class="box box-success">
+				<div class="box-header with-border">
+					<h3 class="box-title">Lignes du Proformat</h3>
+				</div>
+
+				<div class="box-body">
+					<div class="row">
+						{% if form.dossierArticles is defined %}
+						<div class="col-xs-12 col-sm-6">
+							{{ form_row(form.dossierArticles) }}
+							<span class="help-block"><i class="fa fa-info-circle"></i> Cocher les articles à prendre en compte pour ce pro format</span>
+						</div>
+						{% endif %}
+						{% if form.dossierMainoeuvres is defined %}
+						<div class="col-xs-12 col-sm-6">
+							{{ form_row(form.dossierMainoeuvres) }}
+							<span class="help-block"><i class="fa fa-info-circle"></i> Cocher les mains d'oeuvre à prendre en compte pour ce pro format</span>
+						</div>
+						{% endif %}
+					</div>
+				</div>
+			</div>
+		</div>
+		{% endif %}
+	{{ form_end(form) }}
+
+{% endblock entity_form %}

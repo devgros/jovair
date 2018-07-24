@@ -40,6 +40,11 @@ class DossierMainOeuvre
      */
     private $main_oeuvre;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="Devis", mappedBy="dossier_mainoeuvres")
+     */
+    private $devis;
+
     public function __toString()
     {
         return $this->dossier->getNumBl()." - ".$this->main_oeuvre->getNom()." | qte:".$this->quantite;
@@ -149,5 +154,49 @@ class DossierMainOeuvre
     public function getDateRealisation()
     {
         return $this->date_realisation;
+    }
+
+    public function getDossierId()
+    {
+        return $this->dossier->getId();
+    }
+
+    public function getDossierMainOeuvreLabel()
+    {
+        return $this->main_oeuvre->getNom()." | qte:".$this->quantite;
+    }
+
+    /**
+     * @return Collection|Devis[]
+     */
+    public function getDevis(): Collection
+    {
+        return $this->devis;
+    }
+
+    public function addDevis(Devis $devis): self
+    {
+        if (!$this->devis->contains($devis)) {
+            $this->devis[] = $devis;
+        }
+
+        return $this;
+    }
+
+    public function addNewDevis(Devis $devis): self
+    {
+        $this->devis[] = $devis;
+        
+
+        return $this;
+    }
+
+    public function removeDevis(Devis $devis): self
+    {
+        if ($this->devis->contains($devis)) {
+            $this->devis->removeElement($devis);
+        }
+
+        return $this;
     }
 }

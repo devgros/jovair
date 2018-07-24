@@ -3,15 +3,17 @@ easy_admin:
         MainOeuvre:
             class: App\Entity\MainOeuvre
             controller: App\Controller\MainOeuvreController
-            disabled_actions: ['show']
+            disabled_actions: ['show', 'delete']
             list:
                 title: "Main d'oeuvre"
                 actions:
                     - { name: 'edit', icon: 'pencil', label: 'Modifier', css_class: 'btn btn-secondary ' }
-                    - { name: 'delete', icon: 'times', label: 'Supprimer', css_class: 'btn btn-secondary text-danger' }
+                    - { name: 'deleted', icon: 'times', label: 'Retirer', css_class: 'btn btn-secondary text-danger' }
+                    #- { name: 'delete', icon: 'times', label: 'Supprimer', css_class: 'btn btn-secondary text-danger' }
                 fields: 
                     - { property: 'nom', label: 'Désignation'}
                     - { property: 'last_prix', label: 'Prix Ht (€)', css_class: 'text-right'}
+                dql_filter: 'entity.deleted = 0'
             show:
                 fields: 
                     - { property: 'nom', label: "Désignation", css_class: 'col-sm-6'}
@@ -25,3 +27,17 @@ easy_admin:
                     - { property: 'prix_ht', label: 'Prix HT', type: 'text', type_options: { required: true }, css_class: 'col-sm-6'}
             edit:
                 title: "Modifier une main d'oeuvre"
+
+        MainOeuvreSuppr:
+            class: App\Entity\MainOeuvre
+            controller: App\Controller\MainOeuvreController
+            disabled_actions: ['new', 'edit', 'show', 'delete']
+            list:
+                max_results: 40
+                title: "Main d'oeuvre retiré"
+                fields: 
+                    - { property: 'nom', label: 'Désignation'}
+                    - { property: 'deletedAt', label: 'Date de retrait', format: 'd/m/Y'}
+                actions:
+                    - { name: 'undeleted', icon: 'plus-circle', label: "Réactiver", css_class: 'text-success' }
+                dql_filter: 'entity.deleted = 1'
