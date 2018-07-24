@@ -10,7 +10,7 @@ class FactureController extends BaseAdminController
     {
         $response = parent::showAction();	
 
-        $facture = $this->request->attributes->get('easyadmin')['item'];
+        /*$facture = $this->request->attributes->get('easyadmin')['item'];
 
         if($facture->getNumFacture() == "F349-18-JOV'AIR"){
         
@@ -27,7 +27,7 @@ class FactureController extends BaseAdminController
 					),
 					$path_pdf
 				);
-		}
+		}*/
 		
 
         return $response;
