@@ -43,4 +43,27 @@ class ArticleController extends MyAdminController
             'referer' => $referer,
         ));
     }
+
+    public function deletedAction()
+    {
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $entity = $easyadmin['item'];
+        $entity->setDeleted(1);
+        $entity->setDeletedAt(new \DateTime());
+
+        $this->em->flush();
+
+        return $this->redirectToRoute('admin', ['entity' => 'Article', 'action' => 'list', 'menuIndex' => '6']);
+    }
+
+    public function undeletedAction()
+    {
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $entity = $easyadmin['item'];
+        $entity->setDeleted(0);
+        $entity->setDeletedAt(null);
+        $this->em->flush();
+
+        return $this->redirectToRoute('admin', ['entity' => 'ArticleSuppr', 'action' => 'list', 'menuIndex' => '15']);
+    }
 }

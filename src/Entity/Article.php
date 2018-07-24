@@ -40,6 +40,18 @@ class Article
     private $seuil_alert;
 
     /**
+     * @ORM\Column(type="integer")
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $deleted = 0;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $deletedAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="ArticlePrix", mappedBy="article", cascade={"ALL"}, indexBy="date_change")
      * @ORM\OrderBy({"date_change" = "DESC"})
      */
@@ -300,5 +312,54 @@ class Article
             $qte += $formone->getQuantite();
         }
         return $qte;
+    }
+
+
+    /**
+     * Set deleted.
+     *
+     * @param int $deleted
+     *
+     * @return Article
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted.
+     *
+     * @return int
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt.
+     *
+     * @param \DateTime $deletedAt
+     *
+     * @return Article
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt.
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
 }

@@ -86,6 +86,18 @@
 			{% if entity.devis.dossier %}
 				{% if entity.devis.dossier.dossierArticle|length() > 0 %}
 				{% for dossier_article in entity.devis.dossier.dossierArticle %}
+
+					{% set is_da_ok = false %}
+					{% if entity.devis.newDevis %}
+						{% if dossier_article in entity.devis.dossierArticles %}
+							{% set is_da_ok = true %}
+						{% endif %}
+					{% else %}
+						{% set is_da_ok = true %}
+					{% endif %}
+
+					{% if is_da_ok %}
+
 					{% set marge_ht = ((dossier_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation)*dossier_article.articleFormone.article.marge)/100) %}
 					{% set prix_ht = dossier_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation) + marge_ht %}
 					{% set remise_ht = ((prix_ht * dossier_article.remise)/100) %}
@@ -110,6 +122,7 @@
 					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
 				</tr>
+					{% endif %}
 				{% endfor %}
 				{% endif %}
 			{% endif %}
@@ -186,10 +199,22 @@
 					{% for groupDossierMainOeuvre in groupDossierMainOeuvres %}
 						{% set dossier_main_oeuvre = groupDossierMainOeuvre|first %}
 						{% set quantite = 0 %}
-						
+
 						{% for dossier_main_oeuvre_tmp in groupDossierMainOeuvre %}
-							{% set quantite = quantite+dossier_main_oeuvre_tmp.quantite %}
+							{% set is_dmo_ok = false %}
+							{% if entity.devis.newDevis %}
+								{% if dossier_main_oeuvre_tmp in entity.devis.dossierMainoeuvres %}
+									{% set is_dmo_ok = true %}
+								{% endif %}
+							{% else %}
+								{% set is_dmo_ok = true %}
+							{% endif %}
+
+							{% if is_dmo_ok %}
+								{% set quantite = quantite+dossier_main_oeuvre_tmp.quantite %}
+							{% endif %}
 						{% endfor %}
+
 						{% set prix_ht = dossier_main_oeuvre.mainOeuvre.getPeriodePrix(entity.dateCreation) %}
 						{% set total_ht = (prix_ht*quantite) %}
 						{% set tva = ((total_ht * 20)/100) %}
@@ -198,6 +223,7 @@
 						{% set facture_total_ht = facture_total_ht + total_ht %}
 						{% set facture_total_tva = facture_total_tva + tva %}
 						{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+						{% if quantite > 0 %}
 						<tr>
 							<td></td>
 							<td>{{ dossier_main_oeuvre.mainOeuvre }}</td>
@@ -210,6 +236,7 @@
 							<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 							<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
 						</tr>
+						{% endif %}
 					{% endfor %}
 				{% endif %}
 			{% endif %}

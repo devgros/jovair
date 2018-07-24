@@ -35,6 +35,18 @@ class MainOeuvre
     private $prix_ht;
 
     /**
+     * @ORM\Column(type="integer")
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $deleted = 0;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $deletedAt;
+
+    /**
      * @ORM\OneToMany(targetEntity="DossierMainOeuvre", mappedBy="main_oeuvre", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid()
      */
@@ -246,5 +258,53 @@ class MainOeuvre
     public function getDevisMainOeuvre()
     {
         return $this->devis_main_oeuvre;
+    }
+
+    /**
+     * Set deleted.
+     *
+     * @param int $deleted
+     *
+     * @return MainOeuvre
+     */
+    public function setDeleted($deleted)
+    {
+        $this->deleted = $deleted;
+
+        return $this;
+    }
+
+    /**
+     * Get deleted.
+     *
+     * @return int
+     */
+    public function getDeleted()
+    {
+        return $this->deleted;
+    }
+
+    /**
+     * Set deletedAt.
+     *
+     * @param \DateTime $deletedAt
+     *
+     * @return MainOeuvre
+     */
+    public function setDeletedAt($deletedAt)
+    {
+        $this->deletedAt = $deletedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get deletedAt.
+     *
+     * @return \DateTime
+     */
+    public function getDeletedAt()
+    {
+        return $this->deletedAt;
     }
 }

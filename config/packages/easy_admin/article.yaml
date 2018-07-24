@@ -3,6 +3,7 @@ easy_admin:
         Article:
             class: App\Entity\Article
             controller: App\Controller\ArticleController
+            disabled_actions: ['delete']
             list:
                 max_results: 40
                 title: "Stock"
@@ -17,7 +18,8 @@ easy_admin:
                     - { name: 'addFormone', icon: 'plus-circle', label: "FormOne" }
                     - { name: 'show', icon: 'search', label: false }
                     - { name: 'edit', icon: 'pencil', label: false }
-                    - { name: 'delete', icon: 'times', label: false }
+                    - { name: 'deleted', icon: 'times', label: false, css_class: 'text-danger' }
+                dql_filter: 'entity.deleted = 0'
             show:
                 title: "Stock"
                 fields: 
@@ -42,3 +44,18 @@ easy_admin:
                     - { property: 'seuil_alert', label: "Seuil d'alerte", type_options: { attr: {min: '0' }}, css_class: 'col-sm-6'}
             edit:
                 title: "Modifier un article du stock"
+
+        ArticleSuppr:
+            class: App\Entity\Article
+            controller: App\Controller\ArticleController
+            disabled_actions: ['new', 'edit', 'show', 'delete']
+            list:
+                max_results: 40
+                title: "Article retiré du stock"
+                fields: 
+                    - { property: 'nom', label: 'Désignation'}
+                    - { property: 'pn', label: 'Pn'}
+                    - { property: 'deletedAt', label: 'Date de retrait du stock', format: 'd/m/Y'}
+                actions:
+                    - { name: 'undeleted', icon: 'plus-circle', label: "Remettre au stock", css_class: 'text-success' }
+                dql_filter: 'entity.deleted = 1'

@@ -7,6 +7,12 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use App\Entity\Facture;
 
+use EasyCorp\Bundle\EasyAdminBundle\Form\Util\LegacyFormHelper;
+use Doctrine\ORM\EntityRepository;
+use App\Entity\DossierArticle;
+use App\Entity\DossierMainOeuvre;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+
 class DevisController extends BaseAdminController
 {
 	protected function prePersistEntity($entity)
@@ -114,8 +120,28 @@ class DevisController extends BaseAdminController
 	{
 		$response = parent::newAction();
         $entity = $this->request->attributes->get('easyadmin')['item'];
+        
         if ($response instanceof RedirectResponse) {
-            return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'show', 'id' => $entity->getId(), 'menuIndex'=>'2']);
+            
+            $nb_devis_dossier = count($entity->getDossier()->getDevis());
+           	if($nb_devis_dossier > 1){
+           		//Selection des article et main d'oeuvre à ignorer
+           		return $this->redirectToRoute('admin', ['entity' => 'DevisDossierSuppl', 'action' => 'edit', 'id' => $entity->getId(), 'menuIndex'=>'2']);
+           	}else{
+           		//creation de la liste des articles et main d'oeuvre associé au dossier
+
+           		foreach($entity->getDossier()->getDossierArticle() as $dossier_article){
+           			$entity->addFirstDossierArticle($dossier_article);
+           		}
+           		foreach($entity->getDossier()->getDossierMainOeuvre() as $dossier_main_oeuvre){
+           			$entity->addFirstDossierMainOeuvre($dossier_main_oeuvre);
+           		}
+
+
+           		$this->em->flush();
+
+           		return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'show', 'id' => $entity->getId(), 'menuIndex'=>'2']);
+           	}
         }
 
         return $response;
@@ -130,5 +156,57 @@ class DevisController extends BaseAdminController
         }
 
         return $response;
+    }
+
+    public function createDevisEntityFormBuilder($entity, $view)
+    {
+        $formBuilder = parent::createEntityFormBuilder($entity, $view);
+
+        if($entity->getDossier() and $entity->getNewDevis() and $entity->getStatut() == 0)
+        {
+
+	        $dossier_id = $entity->getDossier()->getId();
+
+	        $formBuilder->add('dossierArticles', EntityType::class, array( 
+	        	'class' => DossierArticle::class,
+	        	'choice_label' => 'getDossierArticleLabel',
+	        	'label' => "Articles à ajouter",
+	        	'required' => false,
+	        	//'help' => "Cocher les articles à prendre en compte pour ce pro format",
+	        	//'choice_label' => 'id', 
+	        	'multiple' => true, 'expanded' => true, 
+	            'query_builder' => function (EntityRepository $er) use ( $dossier_id ) {
+	                return $er->createQueryBuilder('da')
+	                	->innerJoin('da.dossier', 'd')
+	                	->where('d.id = :id')                   
+	                    ->setParameter('id', $dossier_id)
+	                ;
+	            }
+	        ));
+
+	        $formBuilder->add('dossierMainoeuvres', EntityType::class, array( 
+	        	'class' => DossierMainOeuvre::class, 
+	        	'choice_label' => 'getDossierMainOeuvreLabel',
+	        	'label' => "Main d'oeuvre à ajouter",
+	        	'required' => false,
+	        	//'help' => "Cocher les articles à prendre en compte pour ce pro format",
+	        	//'choice_label' => 'id', 
+	        	'multiple' => true, 'expanded' => true, 
+	            'query_builder' => function (EntityRepository $er) use ( $dossier_id ) {
+	                return $er->createQueryBuilder('da')
+	                	->innerJoin('da.dossier', 'd')
+	                	->where('d.id = :id')                   
+	                    ->setParameter('id', $dossier_id)
+	                ;
+	            }
+	        ));
+	    }
+
+        return $formBuilder;
+    }
+
+    public function createDevisDossierSupplEntityFormBuilder($entity, $view)
+    {
+        return $this->createDevisEntityFormBuilder($entity, $view);
     }
 }

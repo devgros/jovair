@@ -54,6 +54,9 @@ easy_admin:
             - label: "Atelier"            
             - { entity: 'Outillage', label: 'Outillages', icon: 'gears' } 
             - { entity: 'Mecanicien', label: 'Mécaniciens', icon: 'users' } 
+            - label: "Historique inventaire"
+            - { entity: 'ArticleSuppr', label: 'Ancien stock', icon: 'tags' } 
+            - { entity: 'MainOeuvreSuppr', label: "Ancienne main d'oeuvre", icon: 'wrench' } 
             
             
             
