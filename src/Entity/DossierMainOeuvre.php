@@ -169,7 +169,7 @@ class DossierMainOeuvre
     /**
      * @return Collection|Devis[]
      */
-    public function getDevis(): Collection
+    public function getDevis()
     {
         return $this->devis;
     }
