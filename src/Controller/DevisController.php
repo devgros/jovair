@@ -123,25 +123,27 @@ class DevisController extends BaseAdminController
         
         if ($response instanceof RedirectResponse) {
             
-            $nb_devis_dossier = count($entity->getDossier()->getDevis());
-           	if($nb_devis_dossier > 1){
-           		//Selection des article et main d'oeuvre à ignorer
-           		return $this->redirectToRoute('admin', ['entity' => 'DevisDossierSuppl', 'action' => 'edit', 'id' => $entity->getId(), 'menuIndex'=>'2']);
-           	}else{
-           		//creation de la liste des articles et main d'oeuvre associé au dossier
+            if($entity->getDossier()){
+	            $nb_devis_dossier = count($entity->getDossier()->getDevis());
+	           	if($nb_devis_dossier > 1){
+	           		//Selection des article et main d'oeuvre à ignorer
+	           		return $this->redirectToRoute('admin', ['entity' => 'DevisDossierSuppl', 'action' => 'edit', 'id' => $entity->getId(), 'menuIndex'=>'2']);
+	           	}else{
+	           		//creation de la liste des articles et main d'oeuvre associé au dossier
 
-           		foreach($entity->getDossier()->getDossierArticle() as $dossier_article){
-           			$entity->addFirstDossierArticle($dossier_article);
-           		}
-           		foreach($entity->getDossier()->getDossierMainOeuvre() as $dossier_main_oeuvre){
-           			$entity->addFirstDossierMainOeuvre($dossier_main_oeuvre);
-           		}
+	           		foreach($entity->getDossier()->getDossierArticle() as $dossier_article){
+	           			$entity->addFirstDossierArticle($dossier_article);
+	           		}
+	           		foreach($entity->getDossier()->getDossierMainOeuvre() as $dossier_main_oeuvre){
+	           			$entity->addFirstDossierMainOeuvre($dossier_main_oeuvre);
+	           		}
 
 
-           		$this->em->flush();
+	           		$this->em->flush();
 
-           		return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'show', 'id' => $entity->getId(), 'menuIndex'=>'2']);
-           	}
+	           		return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'show', 'id' => $entity->getId(), 'menuIndex'=>'2']);
+	           	}
+	        }
         }
 
         return $response;
