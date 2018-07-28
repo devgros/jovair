@@ -166,7 +166,6 @@ class DossierController extends MyAdminController
 
 				//creation de la liste des articles et main d'oeuvre associé au dossier si c'est le 1er devis sur le dossier
 				$nb_devis_dossier = count($devis->getDossier()->getDevis());
-				dump($nb_devis_dossier);
            		if($nb_devis_dossier == 1){
            			foreach($devis->getDossier()->getDossierArticle() as $dossier_article){
 	           			$devis->addFirstDossierArticle($dossier_article);
