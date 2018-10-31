@@ -104,12 +104,12 @@
 
 					{% if is_da_ok %}
 
-					{% set marge_ht = ((dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation)*dossier_article.articleFormone.article.marge)/100) %}
+					{% set marge_ht = ((dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation)*dossier_article.articleFormone.article.marge)/100)|number_format(2, '.', ',') %}
 					{% set prix_ht = dossier_article.articleFormone.article.getPeriodePrix(entity.dateCreation) + marge_ht %}
-					{% set remise_ht = ((prix_ht * dossier_article.remise)/100) %}
+					{% set remise_ht = ((prix_ht * dossier_article.remise)/100)|number_format(2, '.', ',') %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*dossier_article.quantite) %}
-					{% set tva = ((total_ht * 20)/100) %}
+					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_remise = facture_total_remise + remise_ht %}
@@ -135,12 +135,12 @@
 			{% endif %}
 			{% if entity.devisArticle|length() > 0 %}
 				{% for devis_article in entity.devisArticle %}
-					{% set marge_ht = ((devis_article.articleFormone.article.getPeriodePrix(entity.dateCreation)*devis_article.articleFormone.article.marge)/100) %}
+					{% set marge_ht = ((devis_article.articleFormone.article.getPeriodePrix(entity.dateCreation)*devis_article.articleFormone.article.marge)/100)|number_format(2, '.', ',') %}
 					{% set prix_ht = devis_article.articleFormone.article.getPeriodePrix(entity.dateCreation) + marge_ht %}
-					{% set remise_ht = ((prix_ht * devis_article.remise)/100) %}
+					{% set remise_ht = ((prix_ht * devis_article.remise)/100)|number_format(2, '.', ',') %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*devis_article.quantite) %}
-					{% set tva = ((total_ht * 20)/100) %}
+					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_remise = facture_total_remise + (remise_ht*devis_article.quantite) %}
@@ -178,10 +178,10 @@
 			{% if entity.articleExterne|length() > 0 %}
 				{% for article_externe in entity.articleExterne %}
 					{% set prix_ht = article_externe.getPrixHt %}
-					{% set remise_ht = ((prix_ht * article_externe.remise)/100) %}
+					{% set remise_ht = ((prix_ht * article_externe.remise)/100)|number_format(2, '.', ',') %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*article_externe.quantite) %}
-					{% set tva = ((total_ht * 20)/100) %}
+					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_remise = facture_total_remise + (remise_ht*article_externe.quantite) %}
@@ -251,7 +251,7 @@
 						{% endfor %}
 						{% set prix_ht = dossier_main_oeuvre.mainOeuvre.getPeriodePrix(entity.dateCreation) %}
 						{% set total_ht = (prix_ht*quantite) %}
-						{% set tva = ((total_ht * 20)/100) %}
+						{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
 						{% set total_ttc = (total_ht+tva) %}
 
 						{% set facture_total_ht = facture_total_ht + total_ht %}
@@ -279,10 +279,10 @@
 			{% if entity.devisMainOeuvre|length() > 0 %}
 				{% for devis_main_oeuvre in entity.devisMainOeuvre %}
 					{% set prix_ht = devis_main_oeuvre.mainOeuvre.getPeriodePrix(entity.dateCreation) %}
-					{% set remise_ht = ((prix_ht * devis_main_oeuvre.remise)/100) %}
+					{% set remise_ht = ((prix_ht * devis_main_oeuvre.remise)/100)|number_format(2, '.', ',') %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*devis_main_oeuvre.quantite) %}
-					{% set tva = ((total_ht * 20)/100) %}
+					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_remise = facture_total_remise + (remise_ht*devis_main_oeuvre.quantite) %}
@@ -319,7 +319,7 @@
 				{% for dossier_outils in entity.dossier.dossierOutils %}
 					{% set prix_ht = dossier_outils.outillage.outillage.getPeriodePrix(entity.dateCreation) %}
 					{% set total_ht = prix_ht %}
-					{% set tva = ((total_ht * 20)/100) %}
+					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_ht = facture_total_ht + total_ht %}
