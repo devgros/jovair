@@ -86,7 +86,7 @@ class ArticleFormone
 
     public function __toString()
     {
-        return $this->article->getNom()." - pn:".$this->article->getPn()." - sn:".$this->sn." - qte:".$this->quantite;
+        return "Pn:".$this->article->getPn().' | '.$this->article->getNom()." | Sn:".$this->sn." | qte:".$this->quantite;
     }
 
     /**

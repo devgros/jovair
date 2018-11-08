@@ -7,22 +7,33 @@ easy_admin:
             class: App\Entity\Devis
             controller: App\Controller\DevisController
             show:
+                role: ROLE_SUPER_ADMIN
                 actions:
                     - { name: 'generatePdf', icon: 'download', target: "_blank", label: "PDF", css_class: 'btn btn-secondary' }
                     - { name: 'validate', icon: 'check', label: "Générer la facture", css_class: 'btn btn-danger' }
             list:
+                role: ROLE_SUPER_ADMIN
                 title: "Pro format"
                 fields: 
                     - { property: 'num_devis', label: 'N° de Pro format'}
-                    - { property: 'date_creation', label: 'Date de création', format: 'd/m/Y'}
+
                     - { property: 'client', label: 'Client'}
+                    - { property: 'appareil', label: 'Appareil'}
                     - { property: 'dossier', label: 'Dossier'}
+                    - { property: 'dossierTitre', label: 'Titre du dossier'}
                     - { property: 'statut', label: "Statut", template: 'statut_list.html.twig', statut: '%statut_devis%'}
                 actions:
                     - { name: 'new', label: 'Créer un Pro format' }
                     - { name: 'show', icon: 'search', label: false }
                     - { name: 'edit', icon: 'pencil', label: false }
                     - { name: 'delete', icon: 'times', label: false }
+            search:
+                role: ROLE_SUPER_ADMIN
+                fields:
+                    - { property: 'num_devis'}
+                    - { property: 'client', searchField: ['nom', 'prenom', 'entreprise']}
+                    - { property: 'dossier', searchField: ['num_bl', 'titre', 'appareil.immatriculation']}
+                    
             form:
                 title: "Ajouter un Pro format"
                 fields:
@@ -31,7 +42,13 @@ easy_admin:
                     - { property: 'dossier', label: "Dossier", css_class: 'col-sm-6'}
                     - { property: 'commentaire', label: "Observation", css_class: 'col-sm-12'}
             edit:
+                role: ROLE_SUPER_ADMIN
                 title: "Modifier un Pro format"
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN
+
                 
         DevisDossierSuppl:
             class: App\Entity\Devis

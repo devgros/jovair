@@ -1,0 +1,23 @@
+{% extends '@EasyAdmin/default/list.html.twig' %}
+
+{% block content_title_wrapper %}
+  <h1 class="title">
+    {{ block('content_title') }}
+    {# Show applied filters informations #}
+    {% if requestFilters|length > 0 %}
+      
+    {% endif %}
+    <span class="pull-right">
+        <div class="btn-group">
+            <button type="button" class="btn btn-warning dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                Statut <span class="caret"></span>
+            </button>
+            <ul class="dropdown-menu">
+                <li><a href="{{ path('easyadmin', { action: 'list', entity: 'Dossier', menuIndex: '1', submenuIndex: '1', 'filters[entity.statut]': '0' }) }}">En Cours</a></li>
+                <li><a href="{{ path('easyadmin', { action: 'list', entity: 'Dossier', menuIndex: '1', submenuIndex: '1', 'filters[entity.statut]': '1' }) }}">Terminé</a></li>
+                <li><a href="{{ path('easyadmin', { action: 'list', entity: 'Dossier', menuIndex: '1', submenuIndex: '1' }) }}">Tous</a></li>
+            </ul>
+        </div>
+    </span>
+  </h1>
+{% endblock %}

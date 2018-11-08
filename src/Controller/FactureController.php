@@ -2,10 +2,12 @@
 
 namespace App\Controller;
 
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
+use App\Controller\AdminController as MyAdminController;
 
-class FactureController extends BaseAdminController
+class FactureController extends MyAdminController
 {
+    
+	
 	protected function showAction()
     {
         $response = parent::showAction();	

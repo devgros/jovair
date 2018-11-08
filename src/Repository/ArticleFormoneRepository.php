@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use Doctrine\ORM\EntityRepository;
 use App\Entity\ArticleFormone;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
@@ -25,4 +26,12 @@ class ArticleFormoneRepository extends ServiceEntityRepository
         ;
     }
     */
+
+    public static function getListQuantityNotNull(EntityRepository $er){
+        $queryBuilder = $er->createQueryBuilder('a');
+        $queryBuilder->select('a')
+                    ->where('a.quantite > 0');
+
+        return $queryBuilder;
+    }
 }

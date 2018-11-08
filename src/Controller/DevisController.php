@@ -2,7 +2,7 @@
 
 namespace App\Controller;
 
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
+use App\Controller\AdminController as MyAdminController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 
 use App\Entity\Facture;
@@ -13,7 +13,7 @@ use App\Entity\DossierArticle;
 use App\Entity\DossierMainOeuvre;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 
-class DevisController extends BaseAdminController
+class DevisController extends MyAdminController
 {
 	protected function prePersistEntity($entity)
 	{
@@ -210,5 +210,5 @@ class DevisController extends BaseAdminController
     public function createDevisDossierSupplEntityFormBuilder($entity, $view)
     {
         return $this->createDevisEntityFormBuilder($entity, $view);
-    }
+    }	
 }

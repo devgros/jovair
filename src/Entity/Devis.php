@@ -238,6 +238,24 @@ class Devis
         return $this->dossier;
     }
 
+    public function getAppareil()
+    {
+        if($this->dossier){
+            return $this->dossier->getAppareil();
+        }else{
+            return "";
+        }
+    }
+
+    public function getDossierTitre()
+    {
+        if($this->dossier){
+            return $this->dossier->getTitre();
+        }else{
+            return "";
+        }
+    }
+
 
     /**
      * Set commentaire.
