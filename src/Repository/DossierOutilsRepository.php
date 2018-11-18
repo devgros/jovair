@@ -20,6 +20,7 @@ class DossierOutilsRepository extends ServiceEntityRepository
         $subqueryBuilder = $er->createQueryBuilder('o');
  
         $subquery = $subqueryBuilder->select('MAX(o.date_validite)')
+                                    ->where($subqueryBuilder->expr()->gt('o.date_validite', 'CURRENT_TIMESTAMP()'))
                                     ->groupBy('o.outillage');
 
        $queryBuilder = $er->createQueryBuilder('oc');

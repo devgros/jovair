@@ -14,6 +14,7 @@ use Gedmo\Mapping\Annotation as Gedmo;
  */
 class Dossier
 {
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

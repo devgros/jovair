@@ -163,6 +163,25 @@ class Facture
         return $this->devis->getDossier();
     }
 
+    public function getAppareil()
+    {
+        if($this->getDossier()){
+            return $this->getDossier()->getAppareil();
+        }else{
+            return "";
+        }
+    }
+
+    public function getDossierTitre()
+    {
+        if($this->getDossier()){
+            return $this->getDossier()->getTitre();
+        }else{
+            return "";
+        }
+    }
+
+
     /**
      * Set facturePaye.
      *

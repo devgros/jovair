@@ -41,9 +41,9 @@ easy_admin:
             js:
         menu:
             - { label: 'Gestion' }
-            - { entity: 'Dossier', label: 'Dossiers', icon: 'folder-open' } 
-            - { entity: 'Devis', label: 'Pro format', icon: 'calculator' }
-            - { entity: 'Facture', label: 'Factures', icon: 'euro' }
+            - { entity: 'Dossier', label: 'Dossiers', icon: 'folder-open', params: { 'filters[entity.statut]': '0' } } 
+            - { entity: 'Devis', label: 'Pro format', icon: 'calculator', params: { 'filters[entity.statut]': '0' }, role: ROLE_SUPER_ADMIN }
+            - { entity: 'Facture', label: 'Factures', icon: 'euro', role: ROLE_SUPER_ADMIN }
             - { entity: 'Todo', label: 'Notes', icon: 'sticky-note' }
             - { label: 'Inventaire' }
             - { entity: 'Article', label: 'Stock', icon: 'tags' } 
@@ -82,3 +82,7 @@ endroid_qr_code:
     #logo_path: '%kernel.root_dir%/../vendor/endroid/qr-code/assets/images/symfony.png'
     logo_width: 100
     validate_result: false # checks if the result is readable
+
+
+easy_admin_extension:
+    minimum_role: ROLE_ADMIN

@@ -5,15 +5,26 @@ easy_admin:
             controller: App\Controller\FactureController
             disabled_actions: ['new', 'delete']
             list:
+                role: ROLE_SUPER_ADMIN
                 title: "Factures"
                 fields: 
                     - { property: 'num_facture', label: 'N° facture'}
-                    - { property: 'date_creation', label: 'Date de création', format: 'd/m/Y'}
+                    - { property: 'devis', label: 'Proforma', searchField: ['num_devis']}
+                    - { property: 'dossier', label: 'Dossier'}
+                    - { property: 'appareil', label: 'Appareil'}
+                    - { property: 'dossierTitre', label: 'Titre du dossier'}
                     - { property: 'client', label: 'Client'}
-                    - { property: 'devis.dossier', label: 'Dossier'}
-                    - { property: 'devis', label: 'Proforma'}
                     - { property: 'facture_paye', label: 'Payée ?', type: 'toggle' }
+            search:
+                role: ROLE_SUPER_ADMIN
+                fields:
+                    - { property: 'num_facture'}
+                    - { property: 'devis', searchField: ['num_devis', 'dossier.num_bl', 'dossier.appareil.immatriculation', 'dossier.titre']}
+                    - { property: 'client', searchField: ['nom', 'prenom', 'entreprise']}
             edit:
+                role: ROLE_SUPER_ADMIN
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: 'État de la facture', background: 'box-success' }
                     - { property: 'facture_paye', label: 'La facture est-elle payée ?' }
+            show:
+                role: ROLE_SUPER_ADMIN
