@@ -5,6 +5,9 @@ namespace App\Controller;
 use App\Controller\AdminController as MyAdminController;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
+use Symfony\Component\HttpFoundation\Request;
+use App\Form\ExportStockType;
+use App\Entity\Article;
 
 class ArticleController extends MyAdminController
 {
@@ -65,5 +68,31 @@ class ArticleController extends MyAdminController
         $this->em->flush();
 
         return $this->redirectToRoute('admin', ['entity' => 'ArticleSuppr', 'action' => 'list', 'menuIndex' => '15']);
+    }
+
+    public function exportAction()
+    {
+        $form = $this->createForm(ExportStockType::class, array());
+        $form->handleRequest($this->request);
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            $fields = $form->getData();
+            $articles = $this->getDoctrine()->getRepository(Article::class)->findAll();
+
+            $date = new \Datetime();
+            //$path_pdf = $this->container->get('kernel')->getProjectDir().'/public/stock/export_'.$date->format("YmdHis").'.pdf';
+            
+            /*$this->container->get('knp_snappy.pdf')->generateFromHtml(
+                $this->renderView(
+                    'easy_admin/Article/pdf_export.html.twig',
+                    array('entity' => $entity, 'fields' => $fields)
+                ),
+                $path_pdf
+            );*/
+            //$url = $this->request->getScheme().'://'.$this->request->getHttpHost().$this->request->getBasePath().'/public/devis/devis_'.$entity->getNumDevis().'.pdf';
+            //return new RedirectResponse($url);
+        }
+        
+        return $this->render('easy_admin/Article/export.html.twig', array('form' => $form->createView()));
     }
 }

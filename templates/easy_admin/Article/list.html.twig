@@ -1,0 +1,13 @@
+{% extends '@EasyAdmin/default/list.html.twig' %}
+
+{% block content_title_wrapper %}
+  <h1 class="title">
+    {{ block('content_title') }}
+
+    {#<span class="pull-right">
+        <div class="btn-group">
+            <a href="{{ path('easyadmin', { action: 'export', entity: 'Article', menuIndex: '6', submenuIndex: '1' }) }}" class="btn btn-info"><i class="fa fa-download"></i> Export</a>
+        </div>
+    </span>#}
+  </h1>
+{% endblock %}
