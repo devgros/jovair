@@ -28,6 +28,7 @@
 					{{ entity.client.adresse }}<br>
 					{{ entity.client.cp }} {{ entity.client.ville }}<br>
 					Email: {{ entity.client.email }}<br>
+					{% if entity.isTvaIntra %}N° TVA intracommunautaire: {{ entity.numTvaIntra }}{% endif %}
 					</address>
 				</td>
 				<td>
@@ -68,9 +69,11 @@
 					<th class="text-right">Remise</th>
 					<th class="text-right">PU Remisé HT</th>
 					<th class="text-right">Total HT</th>
+					{% if not entity.isTvaIntra %}
 					<th class="text-right">Taux TVA</th>
 					<th class="text-right">TVA</th>
 					<th class="text-right">Total TTC</th>
+					{% endif %}
 				</tr>
 			</thead>
 			<tbody>
@@ -124,9 +127,11 @@
 					<td class="text-right">{% if dossier_article.remise > 0 %}{{ dossier_article.remise }}%{% endif %}</td>
 					<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.isTvaIntra %}
 					<td class="text-right">20.0%</td>
 					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
 				</tr>
 					{% endif %}
 				{% endfor %}
@@ -160,9 +165,11 @@
 					<td class="text-right">{% if devis_article.remise > 0 %}{{ devis_article.remise }}%{% endif %}</td>
 					<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.isTvaIntra %}
 					<td class="text-right">20.0%</td>
 					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
 				</tr>
 				{% endfor %}
 			{% endif %}
@@ -201,9 +208,11 @@
 					<td class="text-right">{% if article_externe.remise > 0 %}{{ article_externe.remise }}%{% endif %}</td>
 					<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.isTvaIntra %}
 					<td class="text-right">20.0%</td>
 					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
 				</tr>
 				{% endfor %}
 			{% endif %}
@@ -266,9 +275,11 @@
 							<td class="text-right"></td>
 							<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
 							<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+							{% if not entity.isTvaIntra %}
 							<td class="text-right">20.0%</td>
 							<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 							<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+							{% endif %}
 						</tr>
 						{% endif %}
 					{% endfor %}
@@ -299,9 +310,11 @@
 					<td class="text-right">{% if devis_main_oeuvre.remise > 0 %}{{ devis_main_oeuvre.remise }}%{% endif %}</td>
 					<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.isTvaIntra %}
 					<td class="text-right">20.0%</td>
 					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
 				</tr>
 				{% endfor %}
 			{% endif %}
@@ -333,9 +346,11 @@
 					<td class="text-right"></td>
 					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.isTvaIntra %}
 					<td class="text-right">20.0%</td>
 					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
 					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
 				</tr>
 				{% endfor %}
 				{% endif %}
@@ -364,6 +379,7 @@
 					<th style="width:50%">Total HT :</th>
 					<td class="text-right">{{ facture_total_ht|number_format(2, '.', ',') }} €</td>
 				</tr>
+				{% if not entity.isTvaIntra %}
 				<tr>
 					<th>TVA (20.0%) :</th>
 					<td class="text-right">{{ facture_total_tva|number_format(2, '.', ',') }} €</td>
@@ -372,6 +388,7 @@
 					<th>Total TTC :</th>
 					<td class="text-right">{{ facture_total_ttc|number_format(2, '.', ',') }} €</td>
 				</tr>
+				{% endif %}
 				{% if facture_total_remise > 0 %}
 				<tr><td colspan="2"></td></tr>
 				<tr>

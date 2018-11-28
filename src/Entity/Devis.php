@@ -92,6 +92,16 @@ class Devis
      */
     private $new_devis = 1;
 
+    /**
+     * @ORM\Column(type="boolean", nullable=true)
+     */
+    private $is_tva_intra;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $num_tva_intra;
+
     public function __toString()
     {
         return $this->num_devis;
@@ -537,5 +547,29 @@ class Devis
     public function getNewDevis()
     {
         return $this->new_devis;
+    }
+
+    public function getIsTvaIntra(): ?bool
+    {
+        return $this->is_tva_intra;
+    }
+
+    public function setIsTvaIntra(?bool $is_tva_intra): self
+    {
+        $this->is_tva_intra = $is_tva_intra;
+
+        return $this;
+    }
+
+    public function getNumTvaIntra(): ?string
+    {
+        return $this->num_tva_intra;
+    }
+
+    public function setNumTvaIntra(?string $num_tva_intra): self
+    {
+        $this->num_tva_intra = $num_tva_intra;
+
+        return $this;
     }
 }

@@ -1,0 +1,43 @@
+{% extends 'easy_admin/layout_pdf.html.twig' %}
+
+{% block page_title %}Export du stock: {{ date_export|date('d/m/Y') }}{% endblock %}
+
+{% block body %}
+
+<div class="row">
+	<div class="col-xs-12">
+		<h2 class="page-header">
+			<img src="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/img/logo_min.png" width="70"  />
+			Jov'air Maintenance 
+			<small class="pull-right"><br/>Export du stock: {{ date_export|date('d/m/Y') }}</small>
+		</h2>
+	</div>
+</div>
+<div class="row invoice-info">
+	<div class="col-xs-12 table-responsive">
+		<table class="table table-striped invoice-info">
+			<tr>
+				{% for field in fields %}
+					{% if field == 'pn'%}<th>Pn</th>{% endif %}
+					{% if field == 'nom'%}<th>Désignation</th>{% endif %}
+					{% if field == 'last_prix'%}<th class="text-right">Prix Ht (€)</th>{% endif %}
+					{% if field == 'marge'%}<th class="text-right">Marge (%)</th>{% endif %}
+					{% if field == 'quantite'%}<th class="text-right">Quantité</th>{% endif %}
+				{% endfor %}
+			</tr>
+			{% for article in articles %}
+			<tr>
+				{% for field in fields %}
+					{% if field == 'pn'%}<td>{{ article.getPn() }}</td>{% endif %}
+					{% if field == 'nom'%}<td>{{ article.getNom() }}</td>{% endif %}
+					{% if field == 'last_prix'%}<td class="text-right">{{ article.getLastPrix() }}</td>{% endif %}
+					{% if field == 'marge'%}<td class="text-right">{{ article.getMarge() }}</td>{% endif %}
+					{% if field == 'quantite'%}<td class="text-right">{{ article.getquantite() }}</td>{% endif %}
+				{% endfor %}
+			</tr>
+			{% endfor %}
+		</table>
+	</div>
+</div>
+	
+{% endblock %}

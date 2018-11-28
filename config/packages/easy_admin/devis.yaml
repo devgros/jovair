@@ -41,6 +41,8 @@ easy_admin:
                     - { property: 'client', label: "Client", css_class: 'col-sm-6'}
                     - { property: 'dossier', label: "Dossier", css_class: 'col-sm-6'}
                     - { property: 'commentaire', label: "Observation", css_class: 'col-sm-12'}
+                    - { property: 'is_tva_intra', label: "TVA intracommunautaire", css_class: 'col-sm-6'}
+                    - { property: 'num_tva_intra', label: "Numéro de TVA intracommunautaire", css_class: 'col-sm-6'}
             edit:
                 role: ROLE_SUPER_ADMIN
                 title: "Modifier un Pro format"
