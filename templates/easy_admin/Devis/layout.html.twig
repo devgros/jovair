@@ -29,6 +29,10 @@
 					$('#devis_dossier').closest('.form-group').removeClass('has-error');
 				}
 			});
+
+			$('#devis_is_tva_intra').click(function() {
+			    $("#tva_intra_field").toggle(this.checked);
+			});
         });
     </script>
 {% endblock body_javascript %}

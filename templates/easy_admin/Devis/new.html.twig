@@ -20,6 +20,12 @@
 						<div class="col-xs-12 col-sm-12">
 							{{ form_row(form.commentaire) }}
 						</div>
+						<div class="col-xs-12 col-sm-6">
+							{{ form_row(form.is_tva_intra) }}
+						</div>
+						<div class="col-xs-12 col-sm-6" id="tva_intra_field" style="display: none;">
+							{{ form_row(form.num_tva_intra) }}
+						</div>
 					</div>
 				</div>
 			</div>

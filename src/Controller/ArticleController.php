@@ -8,6 +8,8 @@ use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\HttpFoundation\Request;
 use App\Form\ExportStockType;
 use App\Entity\Article;
+use Symfony\Component\HttpFoundation\Response;
+
 
 class ArticleController extends MyAdminController
 {
@@ -78,19 +80,22 @@ class ArticleController extends MyAdminController
         if ($form->isSubmitted() && $form->isValid()) {
             $fields = $form->getData();
             $articles = $this->getDoctrine()->getRepository(Article::class)->findAll();
-
             $date = new \Datetime();
-            //$path_pdf = $this->container->get('kernel')->getProjectDir().'/public/stock/export_'.$date->format("YmdHis").'.pdf';
+
+            $filename = 'export_'.$date->format("YmdHis").'.pdf';
+            $path_pdf = $this->container->get('kernel')->getProjectDir().'/public/stock/'.$filename;
+
+            $content = $this->renderView('easy_admin/Article/pdf_export.html.twig',array('articles' => $articles, 'fields' => $fields, 'date_export' => $date));
             
-            /*$this->container->get('knp_snappy.pdf')->generateFromHtml(
-                $this->renderView(
-                    'easy_admin/Article/pdf_export.html.twig',
-                    array('entity' => $entity, 'fields' => $fields)
-                ),
-                $path_pdf
-            );*/
-            //$url = $this->request->getScheme().'://'.$this->request->getHttpHost().$this->request->getBasePath().'/public/devis/devis_'.$entity->getNumDevis().'.pdf';
-            //return new RedirectResponse($url);
+            return new Response(
+                $this->container->get('knp_snappy.pdf')->getOutputFromHtml($content),
+                200,
+                array(
+                    'Content-Type'          => 'application/pdf',
+                    'Content-Disposition'   => 'attachment; filename="'.$filename
+                )
+            );
+            
         }
         
         return $this->render('easy_admin/Article/export.html.twig', array('form' => $form->createView()));
