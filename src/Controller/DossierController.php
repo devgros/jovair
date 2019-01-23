@@ -7,6 +7,9 @@ use Symfony\Component\HttpFoundation\RedirectResponse;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Symfony\Component\HttpFoundation\Request;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\HttpFoundation\BinaryFileResponse;
+use Symfony\Component\HttpFoundation\ResponseHeaderBag;
+use Symfony\Component\Routing\Generator\URLGeneratorInterface;
 
 use App\Entity\Devis;
 use App\Entity\Mecanicien;
@@ -102,18 +105,28 @@ class DossierController extends MyAdminController
     	return $new_ht;
     }
 
-	protected function validateAction(){
+    protected function validateAction(){
 		$this->request->query->set("menuIndex", "1");
 		$id = $this->request->query->get('id');
 		$easyadmin = $this->request->attributes->get('easyadmin');
 		$entity = $easyadmin['item'];
+		if($entity->getDateCf() != null){
+			$value_date = $entity->getDateCf()->format('Y-m-d');
+		}else{
+			$value_date = date('Y-m-d');
+		}
+		if($entity->getTimeCf() != null){
+			$value_time = substr($entity->getTimeCf(), 0, 5);
+		}else{
+			$value_time = date('H:i');
+		}
 		
 		$editForm = $this->createFormBuilder($entity)
 			->add('horametreAprs', NumberType::class, array("label"=>"Horamètre APRS", 'required' => false, 'attr' => ['min' => '0']))
 			->add('remarqueAprs', TextType::class, array("label"=>"Remarques CRS", 'required' => false))
 			->add('isValidCtrlOk', CheckboxType::class, array('label'=> "Sous réserve de l’exécution satisfaisante du vol de contrôle", 'required' => false))
-			->add('dateCf', DateType::class, array("label"=>"Date du contrôle final", 'widget'=> 'single_text', 'attr' => ['value'=>date('Y-m-d')]))
-			->add('timeCf', TimeType::class, array("label"=>"Heure du contrôle final", 'input'  => 'string', 'widget'=> 'single_text', 'attr' => ['value'=>date('H:i')]))
+			->add('dateCf', DateType::class, array("label"=>"Date du contrôle final", 'widget'=> 'single_text', 'attr' => ['value'=>$value_date]))
+			->add('timeCf', TimeType::class, array("label"=>"Heure du contrôle final", 'input'  => 'string', 'widget'=> 'single_text', 'attr' => ['value'=>$value_time]))
 			->add('lieuCf', TextType::class, array("label"=>"Lieu du contrôle final"))
 			
 			->add('carteTravailFile', VichFileType::class, [
@@ -122,64 +135,17 @@ class DossierController extends MyAdminController
 				'allow_delete' => true,
 			])
 			->add('mecanicien', EntityType::class, array('class' => Mecanicien::class, 'attr' => ['data-widget' => 'select2']))
-			->add('save', SubmitType::class, array('label' => 'Cloturer le dossier', 'attr' => ['class'=>"btn btn-danger"]))
+			->add('save', SubmitType::class, array('label' => 'PDF', 'attr' => ['class'=>"btn btn-success"]))
 			->getForm()
 		;
 
 		$editForm->handleRequest($this->request);
 		if ($editForm->isSubmitted() && $editForm->isValid()) {
-			$entity->setStatut(1);
 			$this->em->flush();
-
-			/*
-			 * CREATION DU PRO FORMAT SI NON EXISTANT
-			 */
-			$devis = $this->em->getRepository('App:Devis')->findBy(array('dossier'=>$entity->getId()));
-			if(!$devis){
-				$devis = new Devis();
-				$devis->setDossier($entity);
-
-				$last_devis =  $this->em->getRepository('App:Devis')->getLastDevis();
-				if(sizeof($last_devis)>0){
-					$last_num_devis = $last_devis[0]->getNumDevis();
-					$last_num = substr($last_num_devis, 1, 3);
-					$last_year = substr($last_num_devis, 5, 2);
-					$current_year = date("y");
-					if($current_year > $last_year){
-						$new_num = "D001-".$current_year."-JOV'AIR";
-					}else{
-						$new_num = 'D'.str_pad(($last_num+1), 3, "0", STR_PAD_LEFT)."-".$current_year."-JOV'AIR";
-					}
-				}else{
-					$new_num = "D001-".date("y")."-JOV'AIR";
-				}
-				$devis->setNumDevis($new_num);
-				$devis->setStatut(0);
-				if(!$devis->getClient()){
-					$client = $devis->getDossier()->getAppareil()->getClient();
-					$devis->setClient($client);
-				}
-
-
-				$this->em->persist($devis);
-				$this->em->flush();
-
-				//creation de la liste des articles et main d'oeuvre associé au dossier si c'est le 1er devis sur le dossier
-				$nb_devis_dossier = count($devis->getDossier()->getDevis());
-           		if($nb_devis_dossier == 1){
-           			foreach($devis->getDossier()->getDossierArticle() as $dossier_article){
-	           			$devis->addFirstDossierArticle($dossier_article);
-	           		}
-	           		foreach($devis->getDossier()->getDossierMainOeuvre() as $dossier_main_oeuvre){
-	           			$devis->addFirstDossierMainOeuvre($dossier_main_oeuvre);
-	           		}
-           		}
-           		$this->em->flush();
-			}
-
 			/*
 			 * GENERATION PDF DOSSIER
 			 */
+			
 			if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf')) {
 				unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');
 			}
@@ -201,10 +167,11 @@ class DossierController extends MyAdminController
 				$this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf',
 				array('orientation'=>'Landscape')
 			);
+			$url = $this->generateUrl('dossier_qrcode', array('entity'=> 'Dossier', 'id'=> $entity->getId()), URLGeneratorInterface::ABSOLUTE_URL);
 			$this->container->get('knp_snappy.pdf')->generateFromHtml(
 				$this->renderView(
 					'easy_admin/Dossier/pdf_aprs.html.twig',
-					array('entity' => $entity)
+					array('entity' => $entity, 'url'=> $url)
 				),
 				$this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf'
 			);
@@ -256,10 +223,10 @@ class DossierController extends MyAdminController
 
 			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');
 			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf');
-			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf');
+			//unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf');
 
-			return $this->redirectToRoute('dossier_cri', ['entity' => 'Dossier', 'id' => $entity->getId()]);
-
+			return $this->redirectToRoute('dossier_aprs', ['entity' => 'Dossier', 'id' => $entity->getId()]);
+			
 		}
 
 
@@ -271,5 +238,102 @@ class DossierController extends MyAdminController
 		);
 
 		return $this->render("easy_admin/Dossier/validate.html.twig", $parameters);
+	}
+
+	protected function getDossierAction(){
+		$this->request->query->set("menuIndex", "1");
+		$id = $this->request->query->get('id');
+		$easyadmin = $this->request->attributes->get('easyadmin');
+		$entity = $easyadmin['item'];
+
+		if($entity->getStatut() > 0){
+			$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier_final/'.$entity->getNumBl().'.pdf';
+		}else{
+			$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'.pdf';
+		}
+
+		$response = new BinaryFileResponse($dossier_path);
+		$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $entity->getNumBl().'.pdf');
+
+		return $response;
+	}
+
+	protected function cloturerAction(){
+		$this->request->query->set("menuIndex", "1");
+		$id = $this->request->query->get('id');
+		$easyadmin = $this->request->attributes->get('easyadmin');
+		$entity = $easyadmin['item'];
+		
+		$editForm = $this->createFormBuilder($entity)
+			->add('dossierFinalFile', VichFileType::class, [
+				"label"=>"Télécharger le dossier final",
+				'required' => false,
+				'allow_delete' => true,
+			])
+			->add('save', SubmitType::class, array('label' => 'Cloturer', 'attr' => ['class'=>"btn btn-success"]))
+			->getForm()
+		;
+
+		$editForm->handleRequest($this->request);
+		if ($editForm->isSubmitted() && $editForm->isValid()) {
+			$entity->setStatut(1);
+			$this->em->flush();
+
+			/*
+			 * CREATION DU PRO FORMAT SI NON EXISTANT
+			 */
+			
+			/*$devis = $this->em->getRepository('App:Devis')->findBy(array('dossier'=>$entity->getId()));
+			if(!$devis){
+				$devis = new Devis();
+				$devis->setDossier($entity);
+
+				$last_devis =  $this->em->getRepository('App:Devis')->getLastDevis();
+				if(sizeof($last_devis)>0){
+					$last_num_devis = $last_devis[0]->getNumDevis();
+					$last_num = substr($last_num_devis, 1, 3);
+					$last_year = substr($last_num_devis, 5, 2);
+					$current_year = date("y");
+					if($current_year > $last_year){
+						$new_num = "D001-".$current_year."-JOV'AIR";
+					}else{
+						$new_num = 'D'.str_pad(($last_num+1), 3, "0", STR_PAD_LEFT)."-".$current_year."-JOV'AIR";
+					}
+				}else{
+					$new_num = "D001-".date("y")."-JOV'AIR";
+				}
+				$devis->setNumDevis($new_num);
+				$devis->setStatut(0);
+				if(!$devis->getClient()){
+					$client = $devis->getDossier()->getAppareil()->getClient();
+					$devis->setClient($client);
+				}
+
+
+				$this->em->persist($devis);
+				$this->em->flush();
+
+				//creation de la liste des articles et main d'oeuvre associé au dossier si c'est le 1er devis sur le dossier
+				$nb_devis_dossier = count($devis->getDossier()->getDevis());
+           		if($nb_devis_dossier == 1){
+           			foreach($devis->getDossier()->getDossierArticle() as $dossier_article){
+	           			$devis->addFirstDossierArticle($dossier_article);
+	           		}
+	           		foreach($devis->getDossier()->getDossierMainOeuvre() as $dossier_main_oeuvre){
+	           			$devis->addFirstDossierMainOeuvre($dossier_main_oeuvre);
+	           		}
+           		}
+           		$this->em->flush();
+			}*/
+		}
+
+		$parameters = array(
+			'form' => $editForm->createView(),
+			'entity_fields' => array(),
+			'entity' => $entity,
+			'delete_form' => $editForm->createView(),
+		);
+
+		return $this->render("easy_admin/Dossier/cloturer.html.twig", $parameters);
 	}
 }

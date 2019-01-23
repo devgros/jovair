@@ -4,6 +4,6 @@
 
 {% block body %}
 
-	{% include  'easy_admin/Dossier/include_aprs.html.twig' with {'entity': entity, pdf: true } %}
+	{% include  'easy_admin/Dossier/include_aprs.html.twig' with {'entity': entity, 'url': url, pdf: true } %}
 	
 {% endblock %}
