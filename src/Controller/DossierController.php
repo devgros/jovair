@@ -283,7 +283,7 @@ class DossierController extends MyAdminController
 			 * CREATION DU PRO FORMAT SI NON EXISTANT
 			 */
 			
-			/*$devis = $this->em->getRepository('App:Devis')->findBy(array('dossier'=>$entity->getId()));
+			$devis = $this->em->getRepository('App:Devis')->findBy(array('dossier'=>$entity->getId()));
 			if(!$devis){
 				$devis = new Devis();
 				$devis->setDossier($entity);
@@ -324,7 +324,8 @@ class DossierController extends MyAdminController
 	           		}
            		}
            		$this->em->flush();
-			}*/
+			}
+			return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getId()]);
 		}
 
 		$parameters = array(
