@@ -246,7 +246,7 @@ class DossierController extends MyAdminController
 		$easyadmin = $this->request->attributes->get('easyadmin');
 		$entity = $easyadmin['item'];
 
-		if($entity->getStatut() > 0){
+		if($entity->getStatut() > 0 && $entity->getDossierFinal() != null){
 			$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier_final/'.$entity->getNumBl().'.pdf';
 		}else{
 			$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'.pdf';
