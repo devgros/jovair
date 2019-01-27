@@ -1,0 +1,45 @@
+{% extends '@EasyAdmin/default/edit.html.twig' %}
+
+{% block content_title %}
+{% spaceless %}Cloture du dossier {{ entity.numBl }}{% endspaceless %}
+{% endblock %}
+
+{% block main %}
+	{% block entity_form %}
+	{{ form_start(form) }}
+	<div class="row">
+		<div class="col-xs-12 col-sm-12">
+			<div class="box box-danger">
+				<div class="box-header with-border">
+					<h3 class="box-title">Dossier Final :</h3>
+					<div class="box-tools pull-right">
+						<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+					</div>
+				</div>
+				<div class="box-body">
+					<div class="row">
+						<div class="col-xs-12 col-sm-6">
+							<div class="form-group  field-entity">
+								{{ form_label(form.dossierFinalFile) }}
+								{{ form_widget(form.dossierFinalFile) }}
+								{{ form_errors(form.dossierFinalFile) }}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+        <div class="col-xs-12 form-actions">
+			<div class="form-group">
+		        <div class="form-actions-row">
+		            {{ form_widget(form.save) }}
+		            <a href="{{ path('easyadmin', { action: 'show', entity: 'Dossier', primary_key_name: 'id', id: entity.id }) }}" class="btn btn-secondary">Retour au dossier</a>
+		            {{ form_widget(form) }}
+		        </div>
+		    </div>
+		</div>
+	</div>
+	{{ form_end(form) }}
+	{% endblock entity_form %}
+	{% block delete_form %}{% endblock delete_form %}
+{% endblock %}

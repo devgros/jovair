@@ -56,8 +56,7 @@
 					{% endif %}
 				</div>
 
-				{% set data_uri = app.request.scheme ~ '://' ~ app.request.httpHost ~ '/public/dossier/' ~ entity.numBl ~ '.pdf' %}
-				<img src="{{ qr_code_data_uri(data_uri) }}" />
+				<img src="{{ qr_code_data_uri(url) }}" />
 		</tr>
 		<tr>
 			<td colspan="2"><b>Lieu:</b><br/><b>Date:</b><br/><b>Heure:</b></td>

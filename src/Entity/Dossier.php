@@ -125,6 +125,28 @@ class Dossier
     private $updatedAt;
 
     /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $dossier_final;
+
+    /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
+     * @Vich\UploadableField(mapping="dossierFinalFile", fileNameProperty="dossier_final")
+     * @var File
+     */
+    private $dossierFinalFile;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $updatedDfAt;
+
+    /**
      * @Assert\GreaterThanOrEqual(0)
      */
     private $heure_derniere_aprs;
@@ -557,6 +579,72 @@ class Dossier
     public function getUpdatedAt()
     {
         return $this->updatedAt;
+    }
+
+    /**
+     * Set dossierFinal.
+     *
+     * @param string $dossierFinal
+     *
+     * @return Dossier
+     */
+    public function setDossierFinal($dossierFinal)
+    {
+        $this->dossier_final = $dossierFinal;
+
+        return $this;
+    }
+
+    /**
+     * Get dossierFinal.
+     *
+     * @return string
+     */
+    public function getDossierFinal()
+    {
+        return $this->dossier_final;
+    }
+
+    public function setDossierFinalFile(File $image = null)
+    {
+        $this->dossierFinalFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->updatedDfAt = new \DateTime('now');
+        }
+    }
+
+    public function getDossierFinalFile()
+    {
+        return $this->dossierFinalFile;
+    }
+
+    /**
+     * Set updatedDfAt.
+     *
+     * @param \DateTime $updatedDfAt
+     *
+     * @return Dossier
+     */
+    public function setUpdatedDfAt($updatedDfAt)
+    {
+        $this->updatedDfAt = $updatedDfAt;
+
+        return $this;
+    }
+
+    /**
+     * Get updatedDfAt.
+     *
+     * @return \DateTime
+     */
+    public function getUpdatedDfAt()
+    {
+        return $this->updatedDfAt;
     }
 
     /**

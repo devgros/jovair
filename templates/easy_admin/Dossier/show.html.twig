@@ -343,13 +343,12 @@
 	<div class="form-group form-actions">
 		<div class="col-sm-10 col-sm-offset-2">
 		{% block item_actions %}
-			{#{% set _show_actions_tmp = easyadmin_get_actions_for_show_item(_entity_config.name) %}
-			{% if entity.statut > 0 %}
-				{% set _show_actions = {'dossier_cri': _show_actions_tmp.dossier_cri, 'dossier_crs': _show_actions_tmp.dossier_crs, 'dossier_aprs': _show_actions_tmp.dossier_aprs, 'list': _show_actions_tmp.list } %}
+			{% set _show_actions_tmp = easyadmin_get_actions_for_show_item(_entity_config.name) %}
+			{% if entity.dateCf == null %}
+				{% set _show_actions = {'validate': _show_actions_tmp.validate, 'edit': _show_actions_tmp.edit, 'delete': _show_actions_tmp.delete, 'list': _show_actions_tmp.list} %}
 			{% else %}
-				{% set _show_actions = _show_actions_tmp %}
-			{% endif %}#}
-			{% set _show_actions = easyadmin_get_actions_for_show_item(_entity_config.name) %}
+				{% set _show_actions = {'validate': _show_actions_tmp.validate, 'getDossier': _show_actions_tmp.getDossier, 'cloturer': _show_actions_tmp.cloturer, 'edit': _show_actions_tmp.edit, 'delete': _show_actions_tmp.delete, 'list': _show_actions_tmp.list} %}
+			{% endif %}
 			{% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
 
 			{{ include('@EasyAdmin/default/includes/_actions.html.twig', {
