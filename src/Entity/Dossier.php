@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\HttpFoundation\File\File;
 use Vich\UploaderBundle\Mapping\Annotation as Vich;
@@ -221,6 +223,7 @@ class Dossier
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_outils = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devis = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->article_externe_dossier = new ArrayCollection();
     }
 
     /**
@@ -1037,6 +1040,37 @@ class Dossier
     public function getHeureDerniereAprs()
     {
         return $this->heure_derniere_aprs;
+    }
+
+    /**
+     * @return Collection|ArticleExterneDossier[]
+     */
+    public function getArticleExterneDossier(): Collection
+    {
+        return $this->article_externe_dossier;
+    }
+
+    public function addArticleExterneDossier(ArticleExterneDossier $articleExterneDossier): self
+    {
+        if (!$this->article_externe_dossier->contains($articleExterneDossier)) {
+            $this->article_externe_dossier[] = $articleExterneDossier;
+            $articleExterneDossier->setDossier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleExterneDossier(ArticleExterneDossier $articleExterneDossier): self
+    {
+        if ($this->article_externe_dossier->contains($articleExterneDossier)) {
+            $this->article_externe_dossier->removeElement($articleExterneDossier);
+            // set the owning side to null (unless already changed)
+            if ($articleExterneDossier->getDossier() === $this) {
+                $articleExterneDossier->setDossier(null);
+            }
+        }
+
+        return $this;
     }
 
 }
