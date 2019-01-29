@@ -41,7 +41,7 @@ h1 > .label {  font-size: 75%; }
 .box-purple { border-top-color:#605ca8 !important; }
 .box-tools.alt { position:relative; top:-10px; right:-10px; }
 .box-tools.alt > .btn-box-tool > i { font-size: 2em; }
-.aprs { width:6cm; }
+.aprs { width:6cm; margin-left:20px; }
 .table-crs { width:100%; }
 .table-aprs, .table-crs { background: #FFFFFF; border: 1px solid #000; }
 .table-aprs td, .table-crs td { border: 1px solid #000 !important; }
@@ -94,3 +94,5 @@ textarea, body.new textarea, body.edit textarea { min-height: 100px !important; 
 .notifications-menu li { line-height:20px; font-weight:normal; }
 .navbar-nav > .notifications-menu > .dropdown-menu { width:400px; }
 .row_title_cri th { border-top:none !important; background:#fff!important; padding:0 !important; }
+#flash-messages .alert{ margin:0 10px; }
+#flash-messages .alert h4 { margin-bottom:0; }

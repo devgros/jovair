@@ -15,6 +15,7 @@ easy_admin:
                     - { property: 'dossierTitre', label: 'Titre du dossier'}
                     - { property: 'client', label: 'Client'}
                     - { property: 'facture_paye', label: 'Payée ?', type: 'toggle' }
+                    - { property: 'paiement_liquide', label: 'En liquide ?', type: 'toggle' }
             search:
                 role: ROLE_SUPER_ADMIN
                 fields:

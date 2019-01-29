@@ -11,9 +11,10 @@ easy_admin:
                     #- { name: 'dossier_cri', type: 'route', icon: 'eye', label: "CRI", css_class: 'btn btn-info' }
                     #- { name: 'dossier_crs', type: 'route', icon: 'eye', label: "CRS", css_class: 'btn btn-info' }
                     #- { name: 'dossier_aprs', type: 'route', icon: 'eye', label: "APRS", css_class: 'btn btn-info' }
-                    - { name: 'validate', icon: 'eye', label: "APRS", css_class: 'btn btn-info' }
-                    - { name: 'getDossier', icon: 'print', label: "Dossier", css_class: 'btn btn-warning', target: '_blank' }
-                    - { name: 'cloturer', icon: 'check', label: "Cloturer le dossier", css_class: 'btn btn-danger' }
+                    - { name: 'aprs', icon: 'eye', label: "APRS", css_class: 'btn btn-secondary', target: '_blank' }
+                    - { name: 'getDossier', icon: 'print', label: "Dossier", css_class: 'btn btn-secondary', target: '_blank' }
+                    - { name: 'generate', icon: 'refresh', label: "Regénérer", css_class: 'btn btn-warning' }
+                    - { name: 'cloturer', icon: 'check', label: "Cloturer", css_class: 'btn btn-danger' }
                     #- { name: 'validate', icon: 'check', label: "Cloturer le dossier", css_class: 'btn btn-danger' }
             list:
                 title: "Dossiers"

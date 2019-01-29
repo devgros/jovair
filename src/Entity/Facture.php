@@ -35,6 +35,11 @@ class Facture
     private $facture_paye;
 
     /**
+     * @ORM\Column(type="boolean")
+     */
+    private $paiement_liquide;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Client", inversedBy="facture")
      * @ORM\JoinColumn(nullable=true)
      */
@@ -204,5 +209,29 @@ class Facture
     public function getFacturePaye()
     {
         return $this->facture_paye;
+    }
+
+    /**
+     * Set paiementLiquide.
+     *
+     * @param bool $paiementLiquide
+     *
+     * @return Facture
+     */
+    public function setPaiementLiquide($paiementLiquide)
+    {
+        $this->paiement_liquide = $paiementLiquide;
+
+        return $this;
+    }
+
+    /**
+     * Get paiementLiquide.
+     *
+     * @return bool
+     */
+    public function getPaiementLiquide()
+    {
+        return $this->paiement_liquide;
     }
 }

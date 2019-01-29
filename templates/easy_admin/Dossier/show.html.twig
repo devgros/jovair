@@ -309,7 +309,6 @@
 		{% endif %}
 	{% endfor %}
 
-	{% if entity.statut > 0 %}
 	<div class="col-sm-6 {% if is_compressiometre %}new-row no_pad_left{% else %} no_pad_right{% endif %}">
 		<div class="box box-default ">
 			<div class="box-header with-border">
@@ -319,6 +318,7 @@
 	            </div>
 			</div>
 			<div class="box-body">
+				{% if entity.dateCf != null %}
 				<table class="table table-striped">
 					<tr class="border_bottom">
 						<th>Date</th>
@@ -326,6 +326,7 @@
 						<th>Lieu</th>
 						<th>Mécanicien</th>
 						<th>Signature</th>
+						<th class="text-right" width="10"></th>
 					</tr>
 					<tr>						
 						<td>{% if entity.dateCf %}{{ entity.dateCf|date("d/m/Y") }}{% endif %}</td>
@@ -333,21 +334,24 @@
 						<td>{{ entity.lieuCf }}</td>
 						<td>{{ entity.mecanicien }} ({{ entity.mecanicien.licence }})</td>
 						<td><img src="{{ vich_uploader_asset(entity.mecanicien, 'signatureFile', 'App\\Entity\\Mecanicien') }}" width="65" /></td>
+						<td><a href="{{ path('easyadmin', { action: 'validate', entity: 'Dossier', id: entity.id }) }}" class="btn btn-secondary"><i class="fa fa-pencil"></i></a></td>
 					</tr>
 				</table>
+				{% else %}
+					<a href="{{ path('easyadmin', { action: 'validate', entity: 'Dossier', id: entity.id }) }}" class="btn btn-danger"><i class="fa fa-pencil"></i> Effectuer le contrôle final</a>
+				{% endif %}
 			</div>
 		</div>
 	</div>
-	{% endif %}
 
 	<div class="form-group form-actions">
 		<div class="col-sm-10 col-sm-offset-2">
 		{% block item_actions %}
 			{% set _show_actions_tmp = easyadmin_get_actions_for_show_item(_entity_config.name) %}
 			{% if entity.dateCf == null %}
-				{% set _show_actions = {'validate': _show_actions_tmp.validate, 'edit': _show_actions_tmp.edit, 'delete': _show_actions_tmp.delete, 'list': _show_actions_tmp.list} %}
+				{% set _show_actions = {'edit': _show_actions_tmp.edit, 'delete': _show_actions_tmp.delete, 'list': _show_actions_tmp.list} %}
 			{% else %}
-				{% set _show_actions = {'validate': _show_actions_tmp.validate, 'getDossier': _show_actions_tmp.getDossier, 'cloturer': _show_actions_tmp.cloturer, 'edit': _show_actions_tmp.edit, 'delete': _show_actions_tmp.delete, 'list': _show_actions_tmp.list} %}
+				{% set _show_actions = {'aprs': _show_actions_tmp.aprs, 'getDossier': _show_actions_tmp.getDossier, 'generate': _show_actions_tmp.generate, 'cloturer': _show_actions_tmp.cloturer, 'edit': _show_actions_tmp.edit, 'delete': _show_actions_tmp.delete, 'list': _show_actions_tmp.list} %}
 			{% endif %}
 			{% set _request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
 

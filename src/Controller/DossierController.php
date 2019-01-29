@@ -135,98 +135,18 @@ class DossierController extends MyAdminController
 				'allow_delete' => true,
 			])
 			->add('mecanicien', EntityType::class, array('class' => Mecanicien::class, 'attr' => ['data-widget' => 'select2']))
-			->add('save', SubmitType::class, array('label' => 'PDF', 'attr' => ['class'=>"btn btn-success"]))
+			->add('save', SubmitType::class, array('label' => 'Valider le contrôle final', 'attr' => ['class'=>"btn btn-success"]))
 			->getForm()
 		;
 
 		$editForm->handleRequest($this->request);
 		if ($editForm->isSubmitted() && $editForm->isValid()) {
 			$this->em->flush();
-			/*
-			 * GENERATION PDF DOSSIER
-			 */
 			
-			if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf')) {
-				unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');
-			}
+			$this->generateDossier($entity);
 
-			if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf')) {
-				unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf');
-			}
-
-			if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf')) {
-				unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf');
-			}
-
-
-			$this->container->get('knp_snappy.pdf')->generateFromHtml(
-				$this->renderView(
-					'easy_admin/Dossier/pdf_crs.html.twig',
-					array('entity' => $entity)
-				),
-				$this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf',
-				array('orientation'=>'Landscape')
-			);
-			$url = $this->generateUrl('dossier_qrcode', array('entity'=> 'Dossier', 'id'=> $entity->getId()), URLGeneratorInterface::ABSOLUTE_URL);
-			$this->container->get('knp_snappy.pdf')->generateFromHtml(
-				$this->renderView(
-					'easy_admin/Dossier/pdf_aprs.html.twig',
-					array('entity' => $entity, 'url'=> $url)
-				),
-				$this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf'
-			);
-			$this->container->get('knp_snappy.pdf')->generateFromHtml(
-	            $this->renderView(
-	                'easy_admin/Dossier/pdf_cri.html.twig',
-	                array('entity' => $entity)
-	            ),
-	            $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf'
-	        );
-
-	        $pdf = new \PDFMerger();
-
-	        if($entity->getScanBc()){
-				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($entity, 'scanBcFile'), 'all');
-			}
-	        $pdf->addPDF($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf', 'all');
-			$pdf->addPDF($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf', 'all');
-			$pdf->addPDF($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf', 'all');
-
-			foreach($entity->getTravaux() as $travaux){
-				if($travaux->getCarteTravailTravaux()){
-					$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($travaux, 'carteTravailTravauxFile'), 'all');
-				}
-			}
-
-			foreach($entity->getCnad() as $cnad){
-				if($cnad->getCarteTravailCnad()){
-					$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($cnad, 'carteTravailCnadFile'), 'all');
-				}
-			}
-
-			foreach($entity->getTravauxSup() as $travaux_sup){
-				if($travaux_sup->getCarteTravailTravauxSup()){
-					$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($travaux_sup, 'carteTravailTravauxSupFile'), 'all');
-				}
-			}
-
-			if($entity->getCarteTravail()){
-				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($entity, 'carteTravailFile'), 'all');
-			}
-			foreach($entity->getDossierArticle() as $article){
-				if($article->getArticleFormone()->getFormone()){
-					$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($article->getArticleFormone(), 'formoneFile'), 'all');
-				}
-			}
-
-			$pdf->merge('file', $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'.pdf');
-
-			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');
-			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf');
-			//unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf');
-
-			return $this->redirectToRoute('dossier_aprs', ['entity' => 'Dossier', 'id' => $entity->getId()]);
-			
+			//return $this->redirectToRoute('dossier_aprs', ['entity' => 'Dossier', 'id' => $entity->getId()]);
+			return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getId()]);
 		}
 
 
@@ -240,6 +160,117 @@ class DossierController extends MyAdminController
 		return $this->render("easy_admin/Dossier/validate.html.twig", $parameters);
 	}
 
+	protected function generateAction(){
+		$this->request->query->set("menuIndex", "1");
+		$id = $this->request->query->get('id');
+		$easyadmin = $this->request->attributes->get('easyadmin');
+		$entity = $easyadmin['item'];
+
+		$this->generateDossier($entity);
+		$this->get('session')->getFlashBag()->set('success', 'Le dossier a bien été regénéré !');
+		return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getId()]);
+	}
+
+	protected function generateDossier($entity){
+		/*
+		 * GENERATION PDF DOSSIER
+		 */
+		
+		if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf')) {
+			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');
+		}
+
+		if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf')) {
+			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf');
+		}
+
+		if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf')) {
+			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf');
+		}
+
+
+		$this->container->get('knp_snappy.pdf')->generateFromHtml(
+			$this->renderView(
+				'easy_admin/Dossier/pdf_crs.html.twig',
+				array('entity' => $entity)
+			),
+			$this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf',
+			array('orientation'=>'Landscape')
+		);
+		$url = $this->generateUrl('dossier_qrcode', array('entity'=> 'Dossier', 'id'=> $entity->getId()), URLGeneratorInterface::ABSOLUTE_URL);
+		$this->container->get('knp_snappy.pdf')->generateFromHtml(
+			$this->renderView(
+				'easy_admin/Dossier/pdf_aprs.html.twig',
+				array('entity' => $entity, 'url'=> $url)
+			),
+			$this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf'
+		);
+		$this->container->get('knp_snappy.pdf')->generateFromHtml(
+            $this->renderView(
+                'easy_admin/Dossier/pdf_cri.html.twig',
+                array('entity' => $entity)
+            ),
+            $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf'
+        );
+
+        $pdf = new \PDFMerger();
+
+        if($entity->getScanBc()){
+			$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($entity, 'scanBcFile'), 'all');
+		}
+        $pdf->addPDF($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf', 'all');
+		$pdf->addPDF($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf', 'all');
+		$pdf->addPDF($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf', 'all');
+
+		foreach($entity->getTravaux() as $travaux){
+			if($travaux->getCarteTravailTravaux()){
+				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($travaux, 'carteTravailTravauxFile'), 'all');
+			}
+		}
+
+		foreach($entity->getCnad() as $cnad){
+			if($cnad->getCarteTravailCnad()){
+				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($cnad, 'carteTravailCnadFile'), 'all');
+			}
+		}
+
+		foreach($entity->getTravauxSup() as $travaux_sup){
+			if($travaux_sup->getCarteTravailTravauxSup()){
+				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($travaux_sup, 'carteTravailTravauxSupFile'), 'all');
+			}
+		}
+
+		if($entity->getCarteTravail()){
+			$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($entity, 'carteTravailFile'), 'all');
+		}
+		foreach($entity->getDossierArticle() as $article){
+			if($article->getArticleFormone()->getFormone()){
+				$pdf->addPDF($this->container->get('kernel')->getProjectDir().$this->get("vich_uploader.templating.helper.uploader_helper")->asset($article->getArticleFormone(), 'formoneFile'), 'all');
+			}
+		}
+
+		$pdf->merge('file', $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'.pdf');
+
+		unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');
+		unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRS.pdf');
+		//unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf');
+	}
+
+	protected function aprsAction(){
+		$this->request->query->set("menuIndex", "1");
+		$id = $this->request->query->get('id');
+		$easyadmin = $this->request->attributes->get('easyadmin');
+		$entity = $easyadmin['item'];
+
+		$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_APRS.pdf';
+
+		$response = new BinaryFileResponse($dossier_path);
+		$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $entity->getNumBl().'_APRS.pdf');
+
+		return $response;
+		//return $this->redirectToRoute('dossier_aprs', ['entity' => 'Dossier', 'id' => $id]);
+	}
+
 	protected function getDossierAction(){
 		$this->request->query->set("menuIndex", "1");
 		$id = $this->request->query->get('id');
@@ -247,15 +278,18 @@ class DossierController extends MyAdminController
 		$entity = $easyadmin['item'];
 
 		if($entity->getStatut() > 0 && $entity->getDossierFinal() != null){
-			$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier_final/'.$entity->getNumBl().'.pdf';
+			$dossier_path = 'dossier_final';
 		}else{
-			$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'.pdf';
+			$dossier_path = 'dossier';
 		}
 
-		$response = new BinaryFileResponse($dossier_path);
-		$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $entity->getNumBl().'.pdf');
+		$url = $this->request->getScheme().'://'.$this->request->getHttpHost().$this->request->getBasePath().'/public/'.$dossier_path.'/'.$entity->getNumBl().'.pdf';
+		return new RedirectResponse($url);
 
-		return $response;
+		//$response = new BinaryFileResponse($dossier_path);
+		//$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_INLINE, $entity->getNumBl().'.pdf');
+
+		//return $response;
 	}
 
 	protected function cloturerAction(){
@@ -325,6 +359,17 @@ class DossierController extends MyAdminController
            		}
            		$this->em->flush();
 			}
+
+			if($entity->getStatut() > 0 && $entity->getDossierFinal() != null){
+				$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier_final/'.$entity->getNumBl().'.pdf';
+			}else{
+				$dossier_path = $this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'.pdf';
+			}
+
+			//$response = new BinaryFileResponse($dossier_path);
+			//$response->setContentDisposition(ResponseHeaderBag::DISPOSITION_ATTACHMENT, $entity->getNumBl().'.pdf');
+			//$response->send();
+
 			return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $entity->getId()]);
 		}
 
