@@ -3,6 +3,7 @@
 .env
 /public/bundles/
 /public/dossier/
+/public/dossier_final/
 /public/facture/
 /public/devis/
 /public/uploads/
