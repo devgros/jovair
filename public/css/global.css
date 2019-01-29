@@ -41,7 +41,7 @@ h1 > .label {  font-size: 75%; }
 .box-purple { border-top-color:#605ca8 !important; }
 .box-tools.alt { position:relative; top:-10px; right:-10px; }
 .box-tools.alt > .btn-box-tool > i { font-size: 2em; }
-.aprs { width:6cm; }
+.aprs { width:6cm; margin-left:20px; }
 .table-crs { width:100%; }
 .table-aprs, .table-crs { background: #FFFFFF; border: 1px solid #000; }
 .table-aprs td, .table-crs td { border: 1px solid #000 !important; }
