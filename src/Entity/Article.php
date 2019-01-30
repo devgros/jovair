@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 
@@ -68,6 +70,12 @@ class Article
      */
     private $prix_ht;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\ArticleMarge", mappedBy="article", cascade={"ALL"}, indexBy="date_change")
+     * @ORM\OrderBy({"date_change" = "DESC"})
+     */
+    private $article_marge;
+
     public function __toString()
     {
         return $this->nom;
@@ -79,6 +87,7 @@ class Article
     {
         $this->article_prix = new \Doctrine\Common\Collections\ArrayCollection();
         $this->article_formone = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->article_marge = new ArrayCollection();
     }
 
     /**
@@ -161,6 +170,34 @@ class Article
     public function getMarge()
     {
         return $this->marge;
+    }
+
+    public function getLastMarge(){
+        if($this->article_marge->isEmpty()){
+            return $this->marge; 
+        }else{
+            return $this->article_marge->first(); 
+        }
+    }
+
+    public function getPeriodeMarge($date){
+        if($this->article_marge->isEmpty()){
+            return $this->marge; 
+        }else{
+            $marge = 0;
+            foreach($this->article_marge as $article_marge){
+                if($article_marge->getDateChange() < $date){
+                    $marge = $article_marge->getMarge();
+                    break;
+                }
+            }
+            if($marge == 0){
+                $article_marge = $this->article_marge->last();
+                $marge = $article_marge->getMarge();
+            }
+            
+            return $marge;
+        }
     }
 
     /**
@@ -361,5 +398,32 @@ class Article
     public function getDeletedAt()
     {
         return $this->deletedAt;
+    }
+
+    /**
+     * @return Collection|ArticleMarge[]
+     */
+    public function getArticleMarge(): Collection
+    {
+        return $this->article_marge;
+    }
+
+    public function addArticleMarge(ArticleMarge $articleMarge): self
+    {
+        if (!$this->article_marge->contains($articleMarge)) {
+            $this->article_marge[] = $articleMarge;
+            $articleMarge->setArticle($this);
+        }
+
+        return $this;
+    }
+
+    public function removeArticleMarge(ArticleMarge $articleMarge): self
+    {
+        if ($this->article_marge->contains($articleMarge)) {
+            $this->article_marge->removeElement($articleMarge);
+        }
+
+        return $this;
     }
 }

@@ -16,6 +16,7 @@ class ArticleController extends MyAdminController
     protected function createEditForm($entity, array $entityProperties)
     {
         $entity->setPrixHt($entity->getLastPrix()->getPrixHt());
+        //$entity->setPrixHt($entity->getLastPrix()->getPrixHt());
 
         return parent::createEditForm($entity, $entityProperties);
     }
