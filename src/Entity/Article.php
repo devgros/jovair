@@ -184,14 +184,14 @@ class Article
         if($this->article_marge->isEmpty()){
             return $this->marge; 
         }else{
-            $marge = 0;
+            $marge = null;
             foreach($this->article_marge as $article_marge){
                 if($article_marge->getDateChange() < $date){
                     $marge = $article_marge->getMarge();
                     break;
                 }
             }
-            if($marge == 0){
+            if($marge == null){
                 $article_marge = $this->article_marge->last();
                 $marge = $article_marge->getMarge();
             }
