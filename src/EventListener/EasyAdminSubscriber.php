@@ -8,6 +8,7 @@ use Symfony\Component\HttpFoundation\Session\Session;
 use app\entity\Alerte;
 use app\entity\Article;
 use app\entity\ArticlePrix;
+use app\entity\ArticleMarge;
 use app\entity\MainOeuvre;
 use app\entity\MainOeuvrePrix;
 use app\entity\Outillage;
@@ -23,9 +24,9 @@ class EasyAdminSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents()
     {
         return array(
-            'easy_admin.post_persist' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('addOutillagePrix'), array('newQteArticle'), array('newOutillageCertificat')),
-            'easy_admin.post_update' => array(array('addArticlePrix'), array('addMainOeuvrePrix'), array('addOutillagePrix')),
-            'easy_admin.pre_edit' => array(array('storeQteArticle')),
+            'easy_admin.post_persist' => array(array('addArticlePrix'), array('addArticleMarge'), array('addMainOeuvrePrix'), array('addOutillagePrix'), array('newQteArticle'), array('newOutillageCertificat')),
+            'easy_admin.post_update' => array(array('addArticlePrix'), array('addArticleMarge'), array('addMainOeuvrePrix'), array('addOutillagePrix')),
+            'easy_admin.pre_edit' => array(array('storeQteArticle'), array('addFirstArticleMarge')),
             'easy_admin.pre_update' => array(array('updateQteArticle')),
             'easy_admin.pre_remove' => array(array('restockQteArticle'), array('removeCompressiometre')),
         );
@@ -49,6 +50,47 @@ class EasyAdminSubscriber implements EventSubscriberInterface
                 $article_prix->setArticle($entity);
                 $event['em']->persist($article_prix);
                 $event['em']->flush($article_prix);
+            }
+        }
+    }
+
+    public function addFirstArticleMarge(GenericEvent $event)
+    {
+        $entity = $event->getSubject();
+        if($entity['name'] == "Article")
+        {
+            $old_article = $event['em']->getRepository(Article::class, 'default')->find($event['request']->get('id'));
+            if($old_article->getArticleMarge()->isEmpty())
+            {
+                $article_marge = new ArticleMarge();
+                $article_marge->setMarge($old_article->getMarge());
+                $article_marge->setArticle($old_article);
+                $event['em']->persist($article_marge);
+                $article_marge->setDateChange(new \Datetime('2018-01-01'));
+                $event['em']->persist($article_marge);
+                $event['em']->flush($article_marge);
+            }
+        }
+    }
+
+    public function addArticleMarge(GenericEvent $event)
+    {
+        $entity = $event->getSubject();
+        if ($entity instanceof Article) {
+            $create_articlemarge = false;
+            if($entity->getArticleMarge()->isEmpty())
+            {
+                $create_articlemarge = true;
+            }else{
+                if($entity->getMarge() != $entity->getLastMarge()->getMarge()) $create_articlemarge = true;
+            }
+            if($create_articlemarge)
+            {
+                $article_marge = new ArticleMarge();
+                $article_marge->setMarge($entity->getMarge());
+                $article_marge->setArticle($entity);
+                $event['em']->persist($article_marge);
+                $event['em']->flush($article_marge);
             }
         }
     }

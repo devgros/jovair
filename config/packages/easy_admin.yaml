@@ -21,6 +21,7 @@ imports:
     - { resource: easy_admin/outillage_certificat.yaml }
     - { resource: easy_admin/article.yaml }
     - { resource: easy_admin/article_prix.yaml }
+    - { resource: easy_admin/article_marge.yaml }
     - { resource: easy_admin/article_formone.yaml }
     - { resource: easy_admin/mecanicien.yaml }
     - { resource: easy_admin/main_oeuvre.yaml }

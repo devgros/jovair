@@ -11,7 +11,7 @@ easy_admin:
                     - { property: 'nom', label: 'Désignation'}
                     - { property: 'pn', label: 'Pn'}
                     - { property: 'last_prix', label: 'Prix Ht (€)', css_class: 'text-right'}
-                    - { property: 'marge', label: 'Marge (%)', css_class: 'text-right' }
+                    - { property: 'last_marge', label: 'Marge (%)', css_class: 'text-right' }
                     - { property: 'quantite', label: 'Quantité', css_class: 'text-right'}
                     - { property: 'seuil_alert', label: "Seuil d'alerte", css_class: 'text-right'}
                 actions:
@@ -26,11 +26,12 @@ easy_admin:
                     - { property: 'nom', label: "Désignation", css_class: 'col-sm-6'}
                     - { property: 'pn', label: 'Pn', css_class: 'col-sm-6'}
                     - { property: 'last_prix', label: "Prix Ht (€)", css_class: 'col-sm-6'}
-                    - { property: 'marge', label: "Marge (%)", css_class: 'col-sm-6'}
+                    - { property: 'last_marge', label: "Marge (%)", css_class: 'col-sm-6'}
                     - { property: 'quantite', label: "Quantité total", css_class: 'col-sm-6'}
                     - { property: 'seuil_alert', label: "Seuil d'alerte", css_class: 'col-sm-6'}
+                    - { property: 'article_prix', label: 'Historique des prix', css_class: 'new-row col-sm-6', template: 'list_article_prix.html.twig'}
+                    - { property: 'article_marge', label: 'Historique des marges', css_class: 'col-sm-6', template: 'list_article_marge.html.twig'}
                     - { property: 'article_formone', label: 'Form one', css_class: 'new-row col-sm-6', template: 'list_formone.html.twig'}
-                    - { property: 'article_prix', label: 'Historique des prix', css_class: 'col-sm-6', template: 'list_article_prix.html.twig'}
                 actions:
                     - { name: 'addFormone', icon: 'plus-circle', label: "FormOne", css_class: 'btn btn-secondary' }   
             form:
