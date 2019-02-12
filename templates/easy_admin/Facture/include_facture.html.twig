@@ -101,12 +101,12 @@
 
 					{% if is_da_ok %}
 
-					{% set marge_ht = ((dossier_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation)*dossier_article.articleFormone.article.getPeriodeMarge(entity.devis.dateCreation))/100)|number_format(2, '.', ',') %}
-					{% set prix_ht = dossier_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation) + marge_ht|number_format(2, '.', ',') %}
-					{% set remise_ht = ((prix_ht * dossier_article.remise)/100)|number_format(2, '.', ',') %}
+					{% set marge_ht = ((dossier_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation)*dossier_article.articleFormone.article.getPeriodeMarge(entity.devis.dateCreation))/100)|round(2, 'common') %}
+					{% set prix_ht = dossier_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation) + marge_ht|round(2, 'common') %}
+					{% set remise_ht = ((prix_ht * dossier_article.remise)/100)|round(2, 'common') %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*dossier_article.quantite) %}
-					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
+					{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_remise = facture_total_remise + remise_ht %}
@@ -133,13 +133,13 @@
 			{% endif %}
 			{% if entity.devis.devisArticle|length() > 0 %}
 				{% for devis_article in entity.devis.devisArticle %}
-					{% set marge_ht = ((devis_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation)*devis_article.articleFormone.article.getPeriodeMarge(entity.devis.dateCreation))/100)|number_format(2, '.', ',') %}
-					{% set prix_ht = devis_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation) + marge_ht|number_format(2, '.', ',') %}
+					{% set marge_ht = ((devis_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation)*devis_article.articleFormone.article.getPeriodeMarge(entity.devis.dateCreation))/100)|round(2, 'common') %}
+					{% set prix_ht = devis_article.articleFormone.article.getPeriodePrix(entity.devis.dateCreation) + marge_ht|round(2, 'common') %}
 
-					{% set remise_ht = ((prix_ht * devis_article.remise)/100)|number_format(2, '.', ',') %}
+					{% set remise_ht = ((prix_ht * devis_article.remise)/100)|round(2, 'common') %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*devis_article.quantite) %}
-					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
+					{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_remise = facture_total_remise + remise_ht %}
@@ -167,10 +167,10 @@
 				{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces externe au stock :</th></tr>{% endif %}
 				{% for article_externe in entity.devis.articleExterne %}
 					{% set prix_ht = article_externe.getPrixHt %}
-					{% set remise_ht = ((prix_ht * article_externe.remise)/100)|number_format(2, '.', ',') %}
+					{% set remise_ht = ((prix_ht * article_externe.remise)/100)|round(2, 'common') %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*article_externe.quantite) %}
-					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
+					{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_remise = facture_total_remise + (remise_ht*article_externe.quantite) %}
@@ -226,7 +226,7 @@
 
 						{% set prix_ht = dossier_main_oeuvre.mainOeuvre.getPeriodePrix(entity.dateCreation) %}
 						{% set total_ht = (prix_ht*quantite) %}
-						{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
+						{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
 						{% set total_ttc = (total_ht+tva) %}
 
 						{% set facture_total_ht = facture_total_ht + total_ht %}
@@ -255,10 +255,10 @@
 			{% if entity.devis.devisMainOeuvre|length() > 0 %}
 				{% for devis_main_oeuvre in entity.devis.devisMainOeuvre %}
 					{% set prix_ht = devis_main_oeuvre.mainOeuvre.getPeriodePrix(entity.devis.dateCreation) %}
-					{% set remise_ht = ((prix_ht * devis_main_oeuvre.remise)/100)|number_format(2, '.', ',') %}
+					{% set remise_ht = ((prix_ht * devis_main_oeuvre.remise)/100)|round(2, 'common') %}
 					{% set prix_ht_remise = (prix_ht-remise_ht) %}
 					{% set total_ht = (prix_ht_remise*devis_main_oeuvre.quantite) %}
-					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
+					{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_remise = facture_total_remise + remise_ht %}
@@ -288,7 +288,7 @@
 				{% for dossier_outils in entity.devis.dossier.dossierOutils %}
 					{% set prix_ht = dossier_outils.outillage.outillage.getPeriodePrix(entity.devis.dateCreation) %}
 					{% set total_ht = prix_ht %}
-					{% set tva = ((total_ht * 20)/100)|number_format(2, '.', ',') %}
+					{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
 					{% set total_ttc = (total_ht+tva) %}
 
 					{% set facture_total_ht = facture_total_ht + total_ht %}
