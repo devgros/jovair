@@ -5,6 +5,7 @@ imports:
     - { resource: easy_admin/dossier_travaux_sup.yaml }
     - { resource: easy_admin/dossier_main_oeuvre.yaml }
     - { resource: easy_admin/dossier_article.yaml }
+    - { resource: easy_admin/dossier_article_externe.yaml }
     - { resource: easy_admin/dossier_outils.yaml }
     - { resource: easy_admin/devis.yaml }
     - { resource: easy_admin/devis_article.yaml }

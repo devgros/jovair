@@ -1,0 +1,18 @@
+easy_admin:
+    entities:
+        DossierArticleExterne:
+            class: App\Entity\DossierArticleExterne
+            controller: App\Controller\DossierArticleExterneController
+            form:
+                title: "Ajouter un article externe au stock"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-danger' }
+                    - { property: 'nom', label: "Désignation", css_class: 'col-sm-4'}
+                    - { property: 'pn', label: "Pn", css_class: 'col-sm-4'}
+                    - { property: 'sn', label: "Sn", css_class: 'col-sm-4'}
+                    - { property: 'quantite', label: "Quantité", css_class: 'col-sm-4 new-row'}
+                    - { property: 'prix_ht', label: "Prix unitaire HT", css_class: 'col-sm-4'}
+                    - { property: 'remise', label: "Remise (%)", css_class: 'col-sm-4'}
+                    #- { property: 'formoneExterneFile', label: 'Form one', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-3'}
+            edit:
+                title: "Modifier un article externe au stock"
