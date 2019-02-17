@@ -163,36 +163,73 @@
 				{% endfor %}
 			{% endif %}
 
-			{% if entity.devis.articleExterne|length() > 0 %}
+			{% if entity.devis.articleExterne|length() > 0 or entity.dossier.dossierArticleExternes|length() > 0 %}
 				{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces externe au stock :</th></tr>{% endif %}
-				{% for article_externe in entity.devis.articleExterne %}
-					{% set prix_ht = article_externe.getPrixHt %}
-					{% set remise_ht = ((prix_ht * article_externe.remise)/100)|round(2, 'common') %}
-					{% set prix_ht_remise = (prix_ht-remise_ht) %}
-					{% set total_ht = (prix_ht_remise*article_externe.quantite) %}
-					{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
-					{% set total_ttc = (total_ht+tva) %}
 
-					{% set facture_total_remise = facture_total_remise + (remise_ht*article_externe.quantite) %}
-					{% set facture_total_ht = facture_total_ht + total_ht %}
-					{% set facture_total_tva = facture_total_tva + tva %}
-					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+				{% if entity.dossier.dossierArticleExternes|length() > 0 %}
+					{% for article_externe_dossier in entity.dossier.dossierArticleExternes %}
+						{% set prix_ht = article_externe_dossier.getPrixHt %}
+						{% set remise_ht = ((prix_ht * article_externe_dossier.remise)/100)|round(2, 'common') %}
+						{% set prix_ht_remise = (prix_ht-remise_ht) %}
+						{% set total_ht = (prix_ht_remise*article_externe_dossier.quantite) %}
+						{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+						{% set total_ttc = (total_ht+tva) %}
 
-				<tr>
-					<td>{{ article_externe.ref }}</td>
-					<td>{{ article_externe.nom }}</td>
-					<td class="text-right">{{ article_externe.quantite }}</td>
-					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
-					<td class="text-right">{% if article_externe.remise > 0 %}{{ article_externe.remise }}%{% endif %}</td>
-					<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
-					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
-					{% if not entity.devis.isTvaIntra %}
-					<td class="text-right">20.0%</td>
-					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
-					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
-					{% endif %}
-				</tr>
-				{% endfor %}
+						{% set facture_total_remise = facture_total_remise + (remise_ht*article_externe_dossier.quantite) %}
+						{% set facture_total_ht = facture_total_ht + total_ht %}
+						{% set facture_total_tva = facture_total_tva + tva %}
+						{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+
+					<tr>
+						<td>
+							{{ article_externe_dossier.pn }}
+						</td>
+						<td>{{ article_externe_dossier.nom }}</td>
+						<td class="text-right">{{ article_externe_dossier.quantite }}</td>
+						<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+						<td class="text-right">{% if article_externe_dossier.remise > 0 %}{{ article_externe_dossier.remise }}%{% endif %}</td>
+						<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
+						<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+						{% if not entity.devis.isTvaIntra %}
+						<td class="text-right">20.0%</td>
+						<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+						<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+						{% endif %}
+					</tr>
+
+					{% endfor %}
+				{% endif %}
+
+				{% if entity.devis.articleExterne|length() > 0 %}
+					{% for article_externe in entity.devis.articleExterne %}
+						{% set prix_ht = article_externe.getPrixHt %}
+						{% set remise_ht = ((prix_ht * article_externe.remise)/100)|round(2, 'common') %}
+						{% set prix_ht_remise = (prix_ht-remise_ht) %}
+						{% set total_ht = (prix_ht_remise*article_externe.quantite) %}
+						{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+						{% set total_ttc = (total_ht+tva) %}
+
+						{% set facture_total_remise = facture_total_remise + (remise_ht*article_externe.quantite) %}
+						{% set facture_total_ht = facture_total_ht + total_ht %}
+						{% set facture_total_tva = facture_total_tva + tva %}
+						{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+
+					<tr>
+						<td>{{ article_externe.ref }}</td>
+						<td>{{ article_externe.nom }}</td>
+						<td class="text-right">{{ article_externe.quantite }}</td>
+						<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+						<td class="text-right">{% if article_externe.remise > 0 %}{{ article_externe.remise }}%{% endif %}</td>
+						<td class="text-right">{{ prix_ht_remise|number_format(2, '.', ',') }} €</td>
+						<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+						{% if not entity.devis.isTvaIntra %}
+						<td class="text-right">20.0%</td>
+						<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+						<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+						{% endif %}
+					</tr>
+					{% endfor %}
+				{% endif %}
 			{% endif %}
 
 			{% set is_main_oeuvre = false %}

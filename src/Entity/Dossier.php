@@ -206,6 +206,11 @@ class Dossier
      */
     private $devis;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\DossierArticleExterne", mappedBy="dossier", orphanRemoval=true)
+     */
+    private $dossier_article_externes;
+
     public function __toString()
     {
         return $this->num_bl;
@@ -223,6 +228,7 @@ class Dossier
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_outils = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devis = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dossier_article_externes = new ArrayCollection();
     }
 
     /**
@@ -1039,6 +1045,37 @@ class Dossier
     public function getHeureDerniereAprs()
     {
         return $this->heure_derniere_aprs;
+    }
+
+    /**
+     * @return Collection|DossierArticleExterne[]
+     */
+    public function getDossierArticleExternes(): Collection
+    {
+        return $this->dossier_article_externes;
+    }
+
+    public function addDossierArticleExterne(DossierArticleExterne $dossier_article_externe): self
+    {
+        if (!$this->dossier_article_externes->contains($dossier_article_externe)) {
+            $this->dossier_article_externes[] = $dossier_article_externe;
+            $dossier_article_externe->setDossier($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDossierArticleExterne(DossierArticleExterne $dossier_article_externe): self
+    {
+        if ($this->dossier_article_externes->contains($dossier_article_externe)) {
+            $this->dossier_article_externes->removeElement($dossier_article_externe);
+            // set the owning side to null (unless already changed)
+            if ($dossier_article_externe->getDossier() === $this) {
+                $dossier_article_externe->setDossier(null);
+            }
+        }
+
+        return $this;
     }
 
 }

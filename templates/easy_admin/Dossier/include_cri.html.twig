@@ -113,7 +113,7 @@
 {% if pdf %}<table class="table table-pdf"><tr><td style="width:50%">{% else %}
 <div class="row">
 	<div class="col-xs-12 col-sm-6" {% if pdf %}{% endif %}>{% endif %}
-		{% if entity.dossierArticle|length() > 0 %}
+		{% if entity.dossierArticle|length() > 0 or entity.dossierArticleExternes|length() > 0 %}
 		<h4 class="alt">Pièces utilisés :</h4>
 		<table class="table table-striped">
 			<tr class="border_bottom">
@@ -122,14 +122,26 @@
 				<th>Sn</th>
 				<th class="text-right">Qte</th>
 			</tr>
-			{% for dossier_article in entity.dossierArticle %}
-			<tr>
-				<td>{{ dossier_article.articleFormone.article.pn }}</td>
-				<td>{{ dossier_article.articleFormone.article.nom }}</td>
-				<td>{{ dossier_article.articleFormone.sn }}</td>
-				<td class="text-right">{{ dossier_article.quantite }}</td>
-			</tr>
-			{% endfor %}
+			{% if entity.dossierArticle|length() > 0 %}
+				{% for dossier_article in entity.dossierArticle %}
+				<tr>
+					<td>{{ dossier_article.articleFormone.article.pn }}</td>
+					<td>{{ dossier_article.articleFormone.article.nom }}</td>
+					<td>{{ dossier_article.articleFormone.sn }}</td>
+					<td class="text-right">{{ dossier_article.quantite }}</td>
+				</tr>
+				{% endfor %}
+			{% endif %}
+			{% if entity.dossierArticleExternes|length() > 0 %}
+				{% for dossier_article_externe in entity.dossierArticleExternes %}
+				<tr>
+					<td>{{ dossier_article_externe.pn }}</td>
+					<td>{{ dossier_article_externe.nom }}</td>
+					<td>{{ dossier_article_externe.sn }}</td>
+					<td class="text-right">{{ dossier_article_externe.quantite }}</td>
+				</tr>
+				{% endfor %}
+			{% endif %}
 		</table>
 		{% endif %}
 	{% if pdf %}</td><td>{% else %}
