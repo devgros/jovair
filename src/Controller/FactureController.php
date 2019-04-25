@@ -14,7 +14,7 @@ class FactureController extends MyAdminController
 
         $facture = $this->request->attributes->get('easyadmin')['item'];
 
-        /*if($facture->getNumFacture() == "F076-19-JOV'AIR"){
+        if($facture->getNumFacture() == "F083-19-JOV'AIR"){
         
 	        $path_pdf = $this->container->get('kernel')->getProjectDir().'/public/facture/facture_'.$facture->getNumFacture().'.pdf';
 
@@ -29,7 +29,7 @@ class FactureController extends MyAdminController
 					),
 					$path_pdf
 				);
-		}*/
+		}
 		
 
         return $response;
