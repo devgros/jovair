@@ -2,11 +2,13 @@ easy_admin:
     entities:
         Mecanicien:
             class: App\Entity\Mecanicien
+            controller: App\Controller\MecanicienController
             image_base_path: '%app.path.signature_images%'
             #disabled_actions: ['delete']
             disabled_actions: ['show']
             list:
                 actions:
+                    - { name: 'carnet', icon: 'clipboard', title: 'Carnet de mécanicien', label: false, css_class: 'btn btn-secondary text-white' }
                     - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-secondary text-white' }
                     - { name: 'delete', icon: 'times', label: false, css_class: 'btn btn-secondary text-danger ' }
                 title: "Mécaniciens"

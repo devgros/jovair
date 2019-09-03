@@ -146,7 +146,7 @@
 						<td>{{ dossier_travaux_sup.designation }}</td>
 						<td>{{ dossier_travaux_sup.actionCorrective }}</td>
 						<td class="text-right">{{ dossier_travaux_sup.mecanicien.trigramme }}</td>
-						<td class="text-right">{{ dossier_travaux_sup.mecanicienControl.trigramme }}</td>
+						<td class="text-right">{% if dossier_travaux_sup.mecanicienControl %}{{ dossier_travaux_sup.mecanicienControl.trigramme }}{% endif %}</td>
 						<td class="text-right">
 							<a href="{{ path('easyadmin', { action: 'edit', entity: 'DossierTravauxSup', primary_key_name: 'id', id: dossier_travaux_sup.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
 						</td>

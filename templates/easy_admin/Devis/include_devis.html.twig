@@ -183,6 +183,7 @@
 
 			{% if not pdf %}<tr><th colspan="10" class="sub_title">Pièces externe au stock :</th></tr>{% endif %}
 
+			{% if entity.dossier %}
 			{% if entity.dossier.dossierArticleExternes|length() > 0 %}
 				{% for article_externe_dossier in entity.dossier.dossierArticleExternes %}
 					{% set prix_ht = article_externe_dossier.getPrixHt %}
@@ -215,6 +216,7 @@
 				</tr>
 
 				{% endfor %}
+			{% endif %}
 			{% endif %}
 
 			{% if entity.articleExterne|length() > 0 %}

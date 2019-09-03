@@ -69,7 +69,7 @@ class DossierTravauxSup
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
-     * @Gedmo\Timestampable(on="change", field={"mecanicien"})
+     * @Gedmo\Timestampable(on="create")
      */
     private $date_signature;
 

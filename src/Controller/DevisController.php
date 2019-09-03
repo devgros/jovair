@@ -96,6 +96,7 @@ class DevisController extends MyAdminController
 		$facture->setDevis($entity);
 		$facture->setFacturePaye(false);
 		$facture->setPaiementLiquide(false);
+		$facture->setAvoir(false);
 		$facture->setClient($entity->getClient());
 		$this->em->persist($facture);
 
@@ -107,7 +108,7 @@ class DevisController extends MyAdminController
 		$this->container->get('knp_snappy.pdf')->generateFromHtml(
 				$this->renderView(
 					'easy_admin/Facture/pdf_facture.html.twig',
-					array('entity' => $facture)
+					array('entity' => $facture, 'is_avoir' => false)
 				),
 				$path_pdf
 			);
