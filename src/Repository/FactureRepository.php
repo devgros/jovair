@@ -22,4 +22,15 @@ class FactureRepository extends ServiceEntityRepository
             ->getResult();
         return $result;
     }
+
+    public function getLastAvoir()
+    {
+        $result = $this->createQueryBuilder('f')
+            ->where('f.num_avoir IS NOT NULL')
+            ->setMaxResults( 1 )
+            ->orderBy('f.num_avoir', 'DESC')
+            ->getQuery()
+            ->getResult();
+        return $result;
+    }
 }

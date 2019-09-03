@@ -1,11 +1,22 @@
 {% extends '@EasyAdmin/default/list.html.twig' %}
 
 {% block item_actions %}
+    
+    {% set isAvoir = item.avoir %}
 	{% set new_list_item_actions = [] %}
 	{% for key, item in _list_item_actions %}
-		{% if key == "show" %}
-			{% set new_list_item_actions = new_list_item_actions|merge({key: item}) %}
-		{% endif %}
+        {% if key == "show" %}
+            {% set new_list_item_actions = new_list_item_actions|merge({"show": item}) %}
+        {% endif %}
+        {% if isAvoir %}
+            {% if key == "showAvoir" %}
+                {% set new_list_item_actions = new_list_item_actions|merge({"showAvoir": item}) %}
+            {% endif %}
+        {% else %}
+            {% if key == "addAvoir" %}
+                {% set new_list_item_actions = new_list_item_actions|merge({"addAvoir": item}) %}
+            {% endif %}
+        {% endif %}
 	{% endfor %}
     {{ include('@EasyAdmin/default/includes/_actions.html.twig', {
         actions: new_list_item_actions,
@@ -15,3 +26,38 @@
         item_id: _item_id
     }, with_context = false) }}
 {% endblock item_actions %}
+
+{% block body_javascript %}
+    <div id="modal-avoir" class="modal fade">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <h4>Voulez-vous créer un avoir pour cette facture ?</h4>
+                    <p>Cette action est irréversible.</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" data-dismiss="modal" class="btn">Annuler</button>
+                    <button type="button" id="modal-avoir-button" class="btn btn-primary">Créer un avoir</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {{ parent() }}
+
+    <script type="text/javascript">
+        $(function() {
+            $('.action-addAvoir').on('click', function(e) {
+                e.preventDefault();
+                var link = $(this).attr('href');
+                console.log(link);
+                $('#modal-avoir').modal({ backdrop: true, keyboard: true })
+                    .off('click', '#modal-avoir-button')
+                    .on('click', '#modal-avoir-button', function () {
+                        location.href = link;
+                        $('#modal-avoir').modal('hide');
+                    });
+            });
+        });
+    </script>
+{% endblock %}

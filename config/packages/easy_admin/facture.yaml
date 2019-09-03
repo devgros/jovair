@@ -16,6 +16,10 @@ easy_admin:
                     - { property: 'client', label: 'Client'}
                     - { property: 'facture_paye', label: 'Payée ?', type: 'toggle' }
                     - { property: 'paiement_liquide', label: 'En liquide ?', type: 'toggle' }
+                actions:
+                    - { name: 'show', icon: 'search', label: false }
+                    - { name: 'addAvoir', icon: 'plus-circle', label: "Avoir" }
+                    - { name: 'showAvoir', icon: 'eye', label: "Avoir" }
             search:
                 role: ROLE_SUPER_ADMIN
                 fields:

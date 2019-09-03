@@ -50,6 +50,21 @@ class Facture
      */
     private $devis;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $avoir;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     */
+    private $num_avoir;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $date_avoir;
+
 
     public function __toString()
     {
@@ -233,5 +248,41 @@ class Facture
     public function getPaiementLiquide()
     {
         return $this->paiement_liquide;
+    }
+
+    public function getAvoir(): ?bool
+    {
+        return $this->avoir;
+    }
+
+    public function setAvoir(bool $avoir): self
+    {
+        $this->avoir = $avoir;
+
+        return $this;
+    }
+
+    public function getNumAvoir(): ?string
+    {
+        return $this->num_avoir;
+    }
+
+    public function setNumAvoir(?string $num_avoir): self
+    {
+        $this->num_avoir = $num_avoir;
+
+        return $this;
+    }
+
+    public function getDateAvoir(): ?\DateTimeInterface
+    {
+        return $this->date_avoir;
+    }
+
+    public function setDateAvoir(?\DateTimeInterface $date_avoir): self
+    {
+        $this->date_avoir = $date_avoir;
+
+        return $this;
     }
 }

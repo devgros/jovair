@@ -1,9 +1,9 @@
 {% extends 'easy_admin/layout_pdf.html.twig' %}
 
-{% block page_title %}Facture n°: {{ entity.numFacture }}{% endblock %}
+{% block page_title %}{% if is_avoir %}Avoir n°: {{ entity.numAvoir }} {% else %}Facture n°: {{ entity.numFacture }}{% endif %}{% endblock %}
 
 {% block body %}
 
-	{% include  'easy_admin/Facture/include_facture.html.twig' with {'entity': entity, pdf: true } %}
+	{% include  'easy_admin/Facture/include_facture.html.twig' with {'entity': entity, pdf: true, 'is_avoir': is_avoir } %}
 	
 {% endblock %}
