@@ -101,8 +101,8 @@
 			<tr>
 				<td>{{ dossier_travaux_sup.designation }}</td>
 				<td>{{ dossier_travaux_sup.actionCorrective }}</td>
-				<td class="text-right">{{ dossier_travaux_sup.mecanicien.trigramme }}</td>
-				<td class="text-right">{{ dossier_travaux_sup.mecanicienControl.trigramme }}</td>
+				<td class="text-right">{% if dossier_travaux_sup.mecanicien %}{{ dossier_travaux_sup.mecanicien.trigramme }}{% endif %}</td>
+				<td class="text-right">{% if dossier_travaux_sup.mecanicienControl %}{{ dossier_travaux_sup.mecanicienControl.trigramme }}{% endif %}</td>
 			</tr>
 			{% endfor %}
 		</table>
