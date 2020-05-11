@@ -93,7 +93,7 @@ class FactureController extends MyAdminController
     public function showAvoirAction()
     {
         //regenerer Avoir
-        $avoir = $this->request->attributes->get('easyadmin')['item'];
+        /*$avoir = $this->request->attributes->get('easyadmin')['item'];
 
         if($avoir->getNumAvoir() == "FA002-20-JOV'AIR"){
         
@@ -110,7 +110,7 @@ class FactureController extends MyAdminController
                 ),
                 $path_pdf
             );
-        }
+        }*/
 
         $response = parent::showAction();
         return $response;
