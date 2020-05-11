@@ -12,6 +12,7 @@ class FactureController extends MyAdminController
     {
         $response = parent::showAction();
 
+        //regenerer Facture
         /*$facture = $this->request->attributes->get('easyadmin')['item'];
 
         if($facture->getNumFacture() == "F083-19-JOV'AIR"){
@@ -29,8 +30,7 @@ class FactureController extends MyAdminController
 					),
 					$path_pdf
 				);
-		}*/
-		
+		}*/		
 
         return $response;
     }
@@ -92,6 +92,26 @@ class FactureController extends MyAdminController
 
     public function showAvoirAction()
     {
+        //regenerer Avoir
+        $avoir = $this->request->attributes->get('easyadmin')['item'];
+
+        if($avoir->getNumAvoir() == "FA002-20-JOV'AIR"){
+        
+            $path_pdf = $this->container->get('kernel')->getProjectDir().'/public/avoir/avoir_'.$avoir->getNumAvoir().'.pdf';
+
+            if(file_exists($path_pdf)){
+                unlink($path_pdf);
+            }
+
+            $this->container->get('knp_snappy.pdf')->generateFromHtml(
+                $this->renderView(
+                    'easy_admin/Facture/pdf_facture.html.twig',
+                    array('entity' => $avoir, 'is_avoir' => true)
+                ),
+                $path_pdf
+            );
+        }
+
         $response = parent::showAction();
         return $response;
     }
