@@ -412,8 +412,15 @@
 	<div class="col-xs-4">
 		<div class="table-responsive">
 			<table class="table">
+				{% if facture_total_remise > 0 %}
 				<tr>
-					<th style="width:50%">Total HT :</th>
+					<th>Votre remise (HT) pour mémoire : </th>
+					<td class="text-right">{{ facture_total_remise|number_format(2, '.', ',') }} €</td>
+				</tr>
+				<tr><td colspan="2"></td></tr>
+				{% endif %}
+				<tr>
+					<th style="width:60%">Total HT :</th>
 					<td class="text-right">{{ facture_total_ht|number_format(2, '.', ',') }} €</td>
 				</tr>
 				{% if not entity.isTvaIntra %}
@@ -423,14 +430,7 @@
 				</tr>
 				<tr>
 					<th>Total TTC :</th>
-					<td class="text-right">{{ facture_total_ttc|number_format(2, '.', ',') }} €</td>
-				</tr>
-				{% endif %}
-				{% if facture_total_remise > 0 %}
-				<tr><td colspan="2"></td></tr>
-				<tr>
-					<th>Votre remise (HT) pour mémoire : </th>
-					<td class="text-right">{{ facture_total_remise|number_format(2, '.', ',') }} €</td>
+					<td class="text-right"><b>{{ facture_total_ttc|number_format(2, '.', ',') }} €</b></td>
 				</tr>
 				{% endif %}
 			</table>
