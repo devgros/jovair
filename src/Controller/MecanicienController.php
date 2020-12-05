@@ -4,15 +4,11 @@ namespace App\Controller;
 
 use App\Controller\AdminController as MyAdminController;
 use Symfony\Component\Routing\Generator\URLGeneratorInterface;
+use Symfony\Component\HttpFoundation\RedirectResponse;
 
 class MecanicienController extends MyAdminController
 {
-    public function carnetAction()
-    {
-        $id = $this->request->query->get('id');
-        $easyadmin = $this->request->attributes->get('easyadmin');
-        $entity = $easyadmin['item'];
-
+    private function generateCarnet($entity){
         $items = array();
 
         $i = 0;
@@ -128,12 +124,50 @@ class MecanicienController extends MyAdminController
         krsort($items);
         //dump($items);
 
+        return $items;
+    }
+
+    public function carnetAction()
+    {
+        $id = $this->request->query->get('id');
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $entity = $easyadmin['item'];
+
+        $items = $this->generateCarnet($entity);
+
 
         $parameters = array(
             'entity' => $entity,
-            'items' => $items
+            'items' => $items,
+            'id' =>  $id
         );
 
         return $this->render("easy_admin/Mecanicien/carnet.html.twig", $parameters);
+    }
+
+    
+    public function exportAction()
+    {
+        $id = $this->request->query->get('id');
+        $easyadmin = $this->request->attributes->get('easyadmin');
+        $entity = $easyadmin['item'];
+
+        $items = $this->generateCarnet($entity);
+
+        $path_pdf = $this->container->get('kernel')->getProjectDir().'/public/carnet_mecanicien/carnet_'.$entity->getTrigramme().'_'.date("Y-m-d").'.pdf';
+
+        if(file_exists($path_pdf)){
+            unlink($path_pdf);
+        }
+        
+        $this->container->get('knp_snappy.pdf')->generateFromHtml(
+            $this->renderView(
+                'easy_admin/Mecanicien/pdf_carnet.html.twig',
+                array('entity' => $entity, 'items' => $items)
+            ),
+            $path_pdf
+        );
+        $url = $this->request->getScheme().'://'.$this->request->getHttpHost().$this->request->getBasePath().'/public/carnet_mecanicien/carnet_'.$entity->getTrigramme().'_'.date("Y-m-d").'.pdf';
+        return new RedirectResponse($url);
     }
 }

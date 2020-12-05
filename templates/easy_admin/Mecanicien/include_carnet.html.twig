@@ -1,0 +1,98 @@
+<div class="table-responsive">
+	<table class="table">
+		<thead>
+			<tr>
+				<th><span>DATE</span></th>
+				<th><span>TYPE</span></th>
+				<th><span>IMMAT</span></th>
+				<th><span>ATA</span></th>
+				<th><span>TACHE</span></th>
+				<th><span>LIEU</span></th>
+				<th><span>EXECUTION</span></th>
+				<th><span>CONTROLE</span></th>
+				<th><span>APRS</span></th>
+				<th><span>QR CODE</span></th>
+			</tr>
+		</thead>
+		<tbody>
+			{% set last_dossier_id = null %}
+			{% set new_dossier_line = false %}
+			{% for dated_items in items %}
+				{% for dossier_id, dossier_id_item in dated_items %}
+					{% if dossier_id != last_dossier_id %}
+						{% set last_dossier_id = dossier_id %}
+						{% set new_dossier_line = true %}
+					{% else %}
+						{% set new_dossier_line = false %}
+					{% endif %}
+					{% for items in dossier_id_item %}
+						{% if items['type'] == "travaux" or items['type'] == "cnad"  or items['type'] == "travauxSup" %}
+							{% if items['obj'].dateSignature is not null %}
+								{% set date = items['obj'].dateSignature|date("d/m/Y") %}
+							{% else %}
+								{% if items['obj'].dossier.dateCf is not null %}
+									{% set date = items['obj'].dossier.dateCf|date("d/m/Y") %}
+								{% else %}
+									{% set date = items['obj'].dossier.dateCreation|date("d/m/Y") %}
+								{% endif %}
+							{% endif %}
+							
+						{% elseif items['type'] == "travauxCtrl" or items['type'] == "cnadCtrl" or items['type'] == "travauxSupCtrl" %}
+							{% if items['obj'].dateSignatureControl is not null %}
+								{% set date = items['obj'].dateSignatureControl|date("d/m/Y") %}
+							{% else %}
+								{% if items['obj'].dossier.dateCf is not null %}
+									{% set date = items['obj'].dossier.dateCf|date("d/m/Y") %}
+								{% else %}
+									{% set date = items['obj'].dossier.dateCreation|date("d/m/Y") %}
+								{% endif %}
+							{% endif %}
+							
+						{% else %}
+							{% set date = items['obj'].dateCf|date("d/m/Y") %}
+						{% endif %}
+
+						{% if items['type'] == "aprs" %}
+							{% set marque = items['obj'].appareil.marqueCellule %}
+							{% set model = items['obj'].appareil.modelCellule %}
+							{% set immat = items['obj'].appareil.immatriculation %}
+							{% set titre_dossier = items['obj'].titre %}
+							{% set tache = items['obj'].titre %}
+							{% set lieu = items['obj'].lieuCf %}
+							{% set qrcode = items['qrcode'] %}
+						{% else %}
+							{% set marque = items['obj'].dossier.appareil.marqueCellule %}
+							{% set model = items['obj'].dossier.appareil.modelCellule %}
+							{% set immat = items['obj'].dossier.appareil.immatriculation %}
+							{% set titre_dossier = items['obj'].dossier.titre %}
+							{% set tache = items['obj'].designation %}
+							{% set lieu = "" %}
+							{% set qrcode = "" %}
+						{% endif %}
+
+						{% if new_dossier_line %}
+							<tr class="active">
+								<td colspan="10"><b>{{ titre_dossier }}</b></td>
+							</tr>
+							{% set new_dossier_line = false %}
+						{% endif %}
+
+						<tr>
+							<td>{{ date }}</td>
+							<td>{{ marque }} {{ model }}</td>
+							<td>{{ immat }}</td>
+							<td></td>
+							<td>{{ tache }}</td>
+							<td>{{ lieu }}</td>
+							<td><i class="fa fa-fw fa{% if items['type'] == "travaux" or items['type'] == "cnad"  or items['type'] == "travauxSup" %}-check{% endif %}-square-o fa-2x"></i></td>
+							<td><i class="fa a-fw fa{% if items['type'] == "travauxCtrl" or items['type'] == "cnadCtrl" or items['type'] == "travauxSupCtrl" %}-check{% endif %}-square-o fa-2x"></i></td>
+							<td><i class="fa fa-fw fa{% if items['type'] == "aprs" %}-check{% endif %}-square-o fa-2x"></i></td>
+							<td>{% if items['type'] == "aprs" %}<img src="{{ qr_code_data_uri(items['qrcode'], { size: 70, margin: 0 }) }}" />{% endif %}</td>
+						</tr>
+					{% endfor %}
+				{% endfor %}
+				
+			{% endfor %}
+		</tbody>
+	</table>
+</div>
