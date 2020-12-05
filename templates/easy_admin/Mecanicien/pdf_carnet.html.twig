@@ -1,0 +1,18 @@
+{% extends 'easy_admin/layout_pdf.html.twig' %}
+
+{% block page_title %}Carnet de mécanicien de {{ entity }} ({{entity.trigramme}} du {{ "now"|date("m/d/Y") }}{% endblock %}
+
+{% block body %}
+
+	<div class="row">
+        <div class="col-sm-12">
+            {% block content_title_wrapper %}
+                <h3 class="title">{% spaceless %}Carnet de mécanicien de {{ entity }} ({{entity.trigramme}}) du {{ "now"|date("m/d/Y") }}{% endspaceless %}
+                </h3>
+            {% endblock %}
+        </div>
+    </div>
+
+	{% include  'easy_admin/Mecanicien/include_carnet.html.twig' with {'entity': entity, 'items': items, pdf: true } %}
+	
+{% endblock %}
