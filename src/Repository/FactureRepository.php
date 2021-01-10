@@ -33,4 +33,19 @@ class FactureRepository extends ServiceEntityRepository
             ->getResult();
         return $result;
     }
+
+    public function getFactureByMonth($month, $year)
+    {
+
+        $date_month = new \DateTime($year.'-'.$month.'-01 00:00:00');
+
+        $result = $this->createQueryBuilder('f')
+            ->where('f.date_creation BETWEEN :first_day AND :last_day')
+            ->setParameter('first_day', $date_month->format( 'Y-m-d  H:i:s' ))
+            ->setParameter('last_day', $date_month->format( 'Y-m-t  23:59:59' ))
+            ->orderBy('f.date_creation', 'ASC')
+            ->getQuery()
+            ->getResult();
+        return $result;
+    }
 }
