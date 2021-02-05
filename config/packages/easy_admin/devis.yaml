@@ -35,6 +35,7 @@ easy_admin:
                     - { property: 'dossier', searchField: ['num_bl', 'titre', 'appareil.immatriculation']}
                     
             form:
+                role: ROLE_SUPER_ADMIN
                 title: "Ajouter un Pro format"
                 fields:
                     #- { type: 'group', css_class: 'col-sm-12', label: 'Informations générales', background: 'box-success' }

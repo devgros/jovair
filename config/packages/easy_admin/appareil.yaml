@@ -4,6 +4,7 @@ easy_admin:
             class: App\Entity\Appareil
             controller: App\Controller\AppareilController
             list:
+                role: ROLE_SUPER_ADMIN
                 title: "Appareils"
                 fields: 
                     - { property: 'immatriculation', label: 'Immatriculation'}
@@ -22,6 +23,7 @@ easy_admin:
                     - { name: 'edit', icon: 'pencil', label: false }
                     - { name: 'delete', icon: 'times', label: false }
             show:
+                role: ROLE_SUPER_ADMIN
                 title: "Appareil"
                 fields: 
                     - { property: 'client', label: 'Client', css_class: 'col-sm-6'}
@@ -34,6 +36,7 @@ easy_admin:
                     - { name: 'addAmmCellule', icon: 'plus-circle', label: "AMM cellule", css_class: 'btn btn-secondary' }
                     - { name: 'addAmmMoteur', icon: 'plus-circle', label: "AMM moteur", css_class: 'btn btn-secondary' }
             form:
+                role: ROLE_SUPER_ADMIN
                 title: "Ajouter un appareil"
                 fields:
                     - { type: 'group', css_class: 'col-sm-6', label: 'Informations générales' }
@@ -81,4 +84,9 @@ easy_admin:
                     - { property: 'ht_helice2', label: 'HT', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
                     - { property: 'hrg_helice2', label: 'HRG', css_class: 'col-sm-1', type_options: { attr: {min: '0' }}}
             edit:
+                role: ROLE_SUPER_ADMIN
                 title: "Modifier un appareil"
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN

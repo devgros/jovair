@@ -4,11 +4,13 @@ easy_admin:
             class: App\Entity\Client
             disabled_actions: ['show']
             list:
+                role: ROLE_SUPER_ADMIN
                 title: "Clients"
                 actions:
                     - { name: 'edit', icon: 'pencil', label: 'Modifier', css_class: 'btn btn-secondary' }
                     - { name: 'delete', icon: 'times', label: 'Supprimer', css_class: 'btn btn-secondary text-danger' }       
             form:
+                role: ROLE_SUPER_ADMIN
                 title: "Ajouter un client"
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-purple' }
@@ -22,4 +24,11 @@ easy_admin:
                     - { property: 'ville', label: 'Ville', css_class: 'col-sm-4'}
                     
             edit:
+                role: ROLE_SUPER_ADMIN
                 title: "Modifier un client"
+            show:
+                role: ROLE_SUPER_ADMIN
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN

@@ -5,6 +5,7 @@ easy_admin:
             controller: App\Controller\ArticleController
             disabled_actions: ['delete']
             list:
+                role: ROLE_SUPER_ADMIN
                 max_results: 40
                 title: "Stock"
                 fields: 
@@ -21,6 +22,7 @@ easy_admin:
                     - { name: 'deleted', icon: 'times', label: false, css_class: 'text-danger' }
                 dql_filter: 'entity.deleted = 0'
             show:
+                role: ROLE_SUPER_ADMIN
                 title: "Stock"
                 fields: 
                     - { property: 'nom', label: "Désignation", css_class: 'col-sm-6'}
@@ -35,6 +37,7 @@ easy_admin:
                 actions:
                     - { name: 'addFormone', icon: 'plus-circle', label: "FormOne", css_class: 'btn btn-secondary' }   
             form:
+                role: ROLE_SUPER_ADMIN
                 title: "Ajouter un article au stock"
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-primary' }
@@ -44,13 +47,19 @@ easy_admin:
                     - { property: 'marge', label: 'Marge', css_class: 'col-sm-6'}
                     - { property: 'seuil_alert', label: "Seuil d'alerte", type_options: { attr: {min: '0' }}, css_class: 'col-sm-6'}
             edit:
+                role: ROLE_SUPER_ADMIN
                 title: "Modifier un article du stock"
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN
 
         ArticleSuppr:
             class: App\Entity\Article
             controller: App\Controller\ArticleController
             disabled_actions: ['new', 'edit', 'show', 'delete']
             list:
+                role: ROLE_SUPER_ADMIN
                 max_results: 40
                 title: "Article retiré du stock"
                 fields: 
@@ -60,3 +69,13 @@ easy_admin:
                 actions:
                     - { name: 'undeleted', icon: 'plus-circle', label: "Remettre au stock", css_class: 'text-success' }
                 dql_filter: 'entity.deleted = 1'
+            show:
+                role: ROLE_SUPER_ADMIN
+            form:
+                role: ROLE_SUPER_ADMIN
+            edit:
+                role: ROLE_SUPER_ADMIN
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN

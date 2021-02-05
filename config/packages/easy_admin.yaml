@@ -46,19 +46,19 @@ easy_admin:
             - { entity: 'Dossier', label: 'Dossiers', icon: 'folder-open', params: { 'filters[entity.statut]': '0' } } 
             - { entity: 'Devis', label: 'Pro format', icon: 'calculator', params: { 'filters[entity.statut]': '0' }, role: ROLE_SUPER_ADMIN }
             - { entity: 'Facture', label: 'Factures', icon: 'euro', role: ROLE_SUPER_ADMIN }
-            - { entity: 'Todo', label: 'Notes', icon: 'sticky-note' }
-            - { label: 'Inventaire' }
-            - { entity: 'Article', label: 'Stock', icon: 'tags' } 
-            - { entity: 'MainOeuvre', label: "Main d'oeuvre", icon: 'wrench' } 
-            - { label: 'Clients' }
-            - { entity: 'Client', label: 'Clients', icon: 'address-book' } 
-            - { entity: 'Appareil', label: 'Appareils', icon: 'plane' } 
-            - label: "Atelier"            
-            - { entity: 'Outillage', label: 'Outillages', icon: 'gears' } 
-            - { entity: 'Mecanicien', label: 'Mécaniciens', icon: 'users' } 
-            - label: "Historique inventaire"
-            - { entity: 'ArticleSuppr', label: 'Ancien stock', icon: 'tags' } 
-            - { entity: 'MainOeuvreSuppr', label: "Ancienne main d'oeuvre", icon: 'wrench' } 
+            - { entity: 'Todo', label: 'Notes', icon: 'sticky-note', role: ROLE_SUPER_ADMIN }
+            - { label: 'Inventaire', role: ROLE_SUPER_ADMIN }
+            - { entity: 'Article', label: 'Stock', icon: 'tags', role: ROLE_SUPER_ADMIN } 
+            - { entity: 'MainOeuvre', label: "Main d'oeuvre", icon: 'wrench', role: ROLE_SUPER_ADMIN } 
+            - { label: 'Clients', role: ROLE_SUPER_ADMIN }
+            - { entity: 'Client', label: 'Clients', icon: 'address-book', role: ROLE_SUPER_ADMIN } 
+            - { entity: 'Appareil', label: 'Appareils', icon: 'plane', role: ROLE_SUPER_ADMIN } 
+            - { label: "Atelier", role: ROLE_SUPER_ADMIN }            
+            - { entity: 'Outillage', label: 'Outillages', icon: 'gears', role: ROLE_SUPER_ADMIN } 
+            - { entity: 'Mecanicien', label: 'Mécaniciens', icon: 'users', role: ROLE_SUPER_ADMIN } 
+            - { label: "Historique inventaire", role: ROLE_SUPER_ADMIN }
+            - { entity: 'ArticleSuppr', label: 'Ancien stock', icon: 'tags', role: ROLE_SUPER_ADMIN } 
+            - { entity: 'MainOeuvreSuppr', label: "Ancienne main d'oeuvre", icon: 'wrench', role: ROLE_SUPER_ADMIN } 
             
             
             

@@ -7,12 +7,14 @@ easy_admin:
             #disabled_actions: ['delete']
             disabled_actions: ['show']
             list:
+                role: ROLE_SUPER_ADMIN
                 actions:
                     - { name: 'carnet', icon: 'clipboard', title: 'Carnet de mécanicien', label: false, css_class: 'btn btn-secondary text-white' }
                     - { name: 'edit', icon: 'pencil', label: false, css_class: 'btn btn-secondary text-white' }
                     - { name: 'delete', icon: 'times', label: false, css_class: 'btn btn-secondary text-danger ' }
                 title: "Mécaniciens"
             form:
+                role: ROLE_SUPER_ADMIN
                 title: "Ajouter un mécanicien"
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: '' }
@@ -22,4 +24,11 @@ easy_admin:
                     - { property: 'trigramme', label: 'Trigramme', css_class: 'col-sm-6'}
                     - { property: 'signatureFile', label: 'Signature', type: 'vich_image', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
             edit:
+                role: ROLE_SUPER_ADMIN
                 title: "Modifier un mécanicien"
+            show:
+                role: ROLE_SUPER_ADMIN
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN
