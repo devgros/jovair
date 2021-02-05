@@ -48,3 +48,5 @@ easy_admin:
                     - { property: 'cnad', label: false, type: 'collection', type_options: { entry_type: 'App\Form\DossierCnadType', mapped: true, allow_add: true, required: false, allow_delete: true, by_reference: false, entry_options: {label: false} }, css_class: 'col-sm-12'}
             edit:
                 title: "Modifier un dossier"
+            delete:
+                role: ROLE_SUPER_ADMIN

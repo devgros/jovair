@@ -4,6 +4,7 @@ easy_admin:
             class: App\Entity\Todo
             controller: App\Controller\TodoController
             list:
+                role: ROLE_SUPER_ADMIN
                 title: "Notes"
                 fields: 
                     - { property: 'titre', label: 'Titre'}
@@ -18,6 +19,7 @@ easy_admin:
                     - { name: 'edit', icon: 'pencil', label: false }
                     - { name: 'delete', icon: 'times', label: false }
             show:
+                role: ROLE_SUPER_ADMIN
                 title: "Notes"
                 fields: 
                     - { property: 'titre', label: 'Titre', css_class: 'col-sm-6'}
@@ -25,6 +27,7 @@ easy_admin:
                     - { property: 'client', label: 'Client', css_class: 'col-sm-6'}
                     - { property: 'appareil', label: 'Appareil', css_class: 'col-sm-6'}
             form:
+                role: ROLE_SUPER_ADMIN
                 title: "Ajouter une note"
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: 'Informations générales' }
@@ -34,4 +37,9 @@ easy_admin:
                     - { property: 'client', label: 'Client', css_class: 'col-sm-6'}
                     - { property: 'appareil', label: 'Appareil', css_class: 'col-sm-6'}
             edit:
+                role: ROLE_SUPER_ADMIN
                 title: "Modifier une note"
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN

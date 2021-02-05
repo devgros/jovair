@@ -5,6 +5,7 @@ easy_admin:
             controller: App\Controller\MainOeuvreController
             disabled_actions: ['show', 'delete']
             list:
+                role: ROLE_SUPER_ADMIN
                 title: "Main d'oeuvre"
                 actions:
                     - { name: 'edit', icon: 'pencil', label: 'Modifier', css_class: 'btn btn-secondary ' }
@@ -15,24 +16,32 @@ easy_admin:
                     - { property: 'last_prix', label: 'Prix Ht (€)', css_class: 'text-right'}
                 dql_filter: 'entity.deleted = 0'
             show:
+                role: ROLE_SUPER_ADMIN
                 fields: 
                     - { property: 'nom', label: "Désignation", css_class: 'col-sm-6'}
                     - { property: 'last_prix', label: "Prix Ht (€)", css_class: 'col-sm-6'}
                     - { property: 'main_oeuvre_prix', label: 'Historique des prix', css_class: 'col-sm-6', template: 'list_article_prix.html.twig'}
             form:
+                role: ROLE_SUPER_ADMIN
                 title: "Ajouter une main d'oeuvre"
                 fields:
                     - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-warning' }
                     - { property: 'nom', label: 'Désignation', css_class: 'col-sm-6'}
                     - { property: 'prix_ht', label: 'Prix HT', type: 'text', type_options: { required: true }, css_class: 'col-sm-6'}
             edit:
+                role: ROLE_SUPER_ADMIN
                 title: "Modifier une main d'oeuvre"
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN
 
         MainOeuvreSuppr:
             class: App\Entity\MainOeuvre
             controller: App\Controller\MainOeuvreController
             disabled_actions: ['new', 'edit', 'show', 'delete']
             list:
+                role: ROLE_SUPER_ADMIN
                 max_results: 40
                 title: "Main d'oeuvre retiré"
                 fields: 
@@ -41,3 +50,13 @@ easy_admin:
                 actions:
                     - { name: 'undeleted', icon: 'plus-circle', label: "Réactiver", css_class: 'text-success' }
                 dql_filter: 'entity.deleted = 1'
+            show:
+                role: ROLE_SUPER_ADMIN
+            form:
+                role: ROLE_SUPER_ADMIN
+            edit:
+                role: ROLE_SUPER_ADMIN
+            new:
+                role: ROLE_SUPER_ADMIN
+            delete:
+                role: ROLE_SUPER_ADMIN
