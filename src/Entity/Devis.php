@@ -66,6 +66,12 @@ class Devis
     private $article_externe;
 
     /**
+     * @ORM\OneToMany(targetEntity="DevisFraisPort", mappedBy="devis", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $devis_frais_port;
+
+    /**
      * @ORM\OneToMany(targetEntity="DevisMainOeuvre", mappedBy="devis", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid()
      */
@@ -115,6 +121,7 @@ class Devis
         $this->devis_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devis_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->article_externe = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->frais_port = new \Doctrine\Common\Collections\ArrayCollection();
         $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -363,6 +370,44 @@ class Devis
     public function getDevisMainOeuvre()
     {
         return $this->devis_main_oeuvre;
+    }
+
+
+    /**
+     * Add devisFraisPort.
+     *
+     * @param \App\Entity\DevisFraisPort $devisFraisPort
+     *
+     * @return Devis
+     */
+    public function addDevisFraisPort(\App\Entity\DevisFraisPort $devisFraisPort)
+    {
+        $devisFraisPort->setDevis($this);
+        $this->devis_frais_port[] = $devisFraisPort;
+
+        return $this;
+    }
+
+    /**
+     * Remove devisFraisPort.
+     *
+     * @param \App\Entity\DevisFraisPort $devisFraisPort
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDevisFraisPort(\App\Entity\DevisFraisPort $devisFraisPort)
+    {
+        return $this->devis_frais_port->removeElement($devisFraisPort);
+    }
+
+    /**
+     * Get devisFraisPort.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDevisFraisPort()
+    {
+        return $this->devis_frais_port;
     }
 
 

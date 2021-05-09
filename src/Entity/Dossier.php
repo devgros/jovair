@@ -190,6 +190,12 @@ class Dossier
     private $dossier_main_oeuvre;
 
     /**
+     * @ORM\OneToMany(targetEntity="DossierFraisPort", mappedBy="dossier", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $dossier_frais_port;
+
+    /**
      * @ORM\OneToMany(targetEntity="DossierArticle", mappedBy="dossier", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid()
      */
@@ -225,6 +231,7 @@ class Dossier
         $this->cnad = new \Doctrine\Common\Collections\ArrayCollection();
         $this->travaux_sup = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dossier_frais_port = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_outils = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devis = new \Doctrine\Common\Collections\ArrayCollection();
@@ -802,6 +809,54 @@ class Dossier
         }
 
         return $groupDossierMainOeuvre;
+    }
+
+    /**
+     * Add dossierFraisPort.
+     *
+     * @param \App\Entity\DossierFraisPort $dossierFraisPort
+     *
+     * @return Dossier
+     */
+    public function addDossierFraisPort(\App\Entity\DossierFraisPort $dossierFraisPort)
+    {
+        $dossierFraisPort->setDossier($this);
+        $this->dossier_frais_port[] = $dossierFraisPort;
+
+        return $this;
+    }
+
+    /**
+     * Remove dossierFraisPort.
+     *
+     * @param \App\Entity\DossierFraisPort $dossierFraisPort
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDossierFraisPort(\App\Entity\DossierFraisPort $dossierFraisPort)
+    {
+        return $this->dossier_frais_port->removeElement($dossierFraisPort);
+    }
+
+    /**
+     * Get dossierFraisPort.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDossierFraisPort()
+    {
+        return $this->dossier_frais_port;
+    }
+
+    public function getGroupDossierFraisPort()
+    {
+        $groupDossierFraisPort = array();
+        
+        foreach($this->dossier_frais_port as $key=>$dossier_frais_port){
+            $groupDossierFraisPort[$dossier_frais_port->getFraisPort()->getId()][] = $dossier_frais_port;
+        }
+
+        return $groupDossierFraisPort;
     }
 
     /**

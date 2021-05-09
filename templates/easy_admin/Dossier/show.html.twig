@@ -263,7 +263,37 @@
 	</div>
 
 	<div class="col-sm-6 no_pad_right">
-		<div class="box box-success">
+		<div class="box box-success ">
+			<div class="box-header with-border">
+			   	<h3 class="box-title">Frais d'emballage et d'expédition :</h3>
+				<div class="box-tools pull-right">
+	            	<button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+	            </div>
+			</div>
+			<div class="box-body">
+				{% if entity.dossierFraisPort|length() > 0 %}
+				<table class="table table-striped">
+					<tr class="border_bottom">
+						<th>Désignation</th>
+						<th class="text-right" width="10"></th>
+					</tr>
+					{% for dossier_frais_port in entity.dossierFraisPort %}
+						<tr>
+							<td>{{ dossier_frais_port.fraisPort }}</td>
+							<td class="text-right">
+								<a href="{{ path('easyadmin', { action: 'edit', entity: 'FraisPort', primary_key_name: 'id', id: dossier_frais_port.fraisPort.id, dossier_id: entity.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
+							</td>
+						</tr>
+					{% endfor %}
+				</table>
+				{% endif %}
+				<a href="{{ path('easyadmin', { action: 'new', entity: 'FraisPort', primary_key_name: 'id', dossier_id: entity.id, referer: '' }) }}" class=""><i class="fa fa-plus-circle"></i> Ajouter</a>
+			</div>
+		</div>
+	</div>
+
+	<div class="col-sm-6 no_pad_left new-row">
+		<div class="box box-primary">
 			<div class="box-header with-border">
 			   	<h3 class="box-title">Outillages soumis à étalonnage :</h3>
 				<div class="box-tools pull-right">
@@ -299,8 +329,8 @@
 	{% for dossier_outils in entity.dossierOutils %}
 		{% if dossier_outils.compressiometre %}
 			{% set is_compressiometre = true %}
-			<div class="col-sm-6 no_pad_left new-row">
-				<div class="box box-success">
+			<div class="col-sm-6 no_pad_right">
+				<div class="box box-primary">
 					<div class="box-header with-border">
 					   	<h3 class="box-title">Compressiomètre :</h3>
 						<div class="box-tools pull-right">
