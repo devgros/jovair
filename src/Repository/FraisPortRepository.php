@@ -4,17 +4,11 @@ namespace App\Repository;
 
 use App\Entity\FraisPort;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-/**
- * @method FraisPort|null find($id, $lockMode = null, $lockVersion = null)
- * @method FraisPort|null findOneBy(array $criteria, array $orderBy = null)
- * @method FraisPort[]    findAll()
- * @method FraisPort[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class FraisPortRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, FraisPort::class);
     }
