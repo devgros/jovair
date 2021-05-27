@@ -1,0 +1,13 @@
+easy_admin:
+    entities:
+        FraisPort:
+            class: App\Entity\FraisPort
+            controller: App\Controller\FraisPortController
+            form:
+                title: "Ajouter des frais d'emballage et d'expédition"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-danger' }
+                    - { property: 'designation', label: "Désignation", css_class: 'col-sm-6'}
+                    - { property: 'prix_ht', label: "Prix unitaire HT", css_class: 'col-sm-6'}
+            edit:
+                title: "Modifier des frais d'emballage et d'expédition"

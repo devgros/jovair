@@ -1,0 +1,14 @@
+easy_admin:
+    entities:
+        DevisFraisPort:
+            class: App\Entity\DevisFraisPort
+            controller: App\Controller\DevisFraisPortController
+            form:
+                title: "Ajouter un frais de port"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-danger' }
+                    - { property: 'frais_port', label: "Frais de port", css_class: 'col-sm-6'}
+            edit:
+                title: "Modifier un frais de port"
+                fields:
+                    - { property: 'main_oeuvre', label: "Frais de port", type_options: { disabled: true }, css_class: 'col-sm-6'}

@@ -63,7 +63,7 @@ class DossierController extends MyAdminController
 	        if($appareil->getHrgHelice2()) $appareil->setHrgHelice2($this->addAPRSTime($appareil->getHrgHelice2(), $heure_aprs));
 	        $this->em->flush();
         }
-		
+
 		parent::prePersistEntity($entity);
 	}
 
@@ -86,8 +86,8 @@ class DossierController extends MyAdminController
 	        if($appareil->getHrgHelice2()) $appareil->setHrgHelice2($this->addAPRSTime($appareil->getHrgHelice2(), $heure_aprs));
 	        $this->em->flush();
         }
-        
-        
+
+
         parent::preUpdateEntity($entity);
     }
 
@@ -120,7 +120,7 @@ class DossierController extends MyAdminController
 		}else{
 			$value_time = date('H:i');
 		}
-		
+
 		$editForm = $this->createFormBuilder($entity)
 			->add('horametreAprs', NumberType::class, array("label"=>"Horamètre APRS", 'required' => false, 'attr' => ['min' => '0']))
 			->add('remarqueAprs', TextType::class, array("label"=>"Remarques CRS", 'required' => false))
@@ -128,7 +128,7 @@ class DossierController extends MyAdminController
 			->add('dateCf', DateType::class, array("label"=>"Date du contrôle final", 'widget'=> 'single_text', 'attr' => ['value'=>$value_date]))
 			->add('timeCf', TimeType::class, array("label"=>"Heure du contrôle final", 'input'  => 'string', 'widget'=> 'single_text', 'attr' => ['value'=>$value_time]))
 			->add('lieuCf', TextType::class, array("label"=>"Lieu du contrôle final"))
-			
+
 			->add('carteTravailFile', VichFileType::class, [
 				"label"=>"Carte de travail",
 				'required' => false,
@@ -142,7 +142,7 @@ class DossierController extends MyAdminController
 		$editForm->handleRequest($this->request);
 		if ($editForm->isSubmitted() && $editForm->isValid()) {
 			$this->em->flush();
-			
+
 			$this->generateDossier($entity);
 
 			//return $this->redirectToRoute('dossier_aprs', ['entity' => 'Dossier', 'id' => $entity->getId()]);
@@ -175,7 +175,7 @@ class DossierController extends MyAdminController
 		/*
 		 * GENERATION PDF DOSSIER
 		 */
-		
+
 		if (file_exists($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf')) {
 			unlink($this->container->get('kernel')->getProjectDir().'/public/dossier/'.$entity->getNumBl().'_CRI.pdf');
 		}
@@ -297,7 +297,7 @@ class DossierController extends MyAdminController
 		$id = $this->request->query->get('id');
 		$easyadmin = $this->request->attributes->get('easyadmin');
 		$entity = $easyadmin['item'];
-		
+
 		$editForm = $this->createFormBuilder($entity)
 			->add('dossierFinalFile', VichFileType::class, [
 				"label"=>"Télécharger le dossier final",
@@ -316,7 +316,7 @@ class DossierController extends MyAdminController
 			/*
 			 * CREATION DU PRO FORMAT SI NON EXISTANT
 			 */
-			
+
 			$devis = $this->em->getRepository('App:Devis')->findBy(array('dossier'=>$entity->getId()));
 			if(!$devis){
 				$devis = new Devis();
@@ -355,6 +355,9 @@ class DossierController extends MyAdminController
 	           		}
 	           		foreach($devis->getDossier()->getDossierMainOeuvre() as $dossier_main_oeuvre){
 	           			$devis->addFirstDossierMainOeuvre($dossier_main_oeuvre);
+	           		}
+					foreach($devis->getDossier()->getDossierFraisPort() as $dossier_frais_port){
+	           			$devis->addFirstDossierFraisPort($dossier_frais_port);
 	           		}
            		}
            		$this->em->flush();
