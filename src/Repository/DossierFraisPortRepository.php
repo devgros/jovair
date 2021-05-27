@@ -4,17 +4,11 @@ namespace App\Repository;
 
 use App\Entity\DossierFraisPort;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-/**
- * @method DossierFraisPort|null find($id, $lockMode = null, $lockVersion = null)
- * @method DossierFraisPort|null findOneBy(array $criteria, array $orderBy = null)
- * @method DossierFraisPort[]    findAll()
- * @method DossierFraisPort[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class DossierFraisPortRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, DossierFraisPort::class);
     }

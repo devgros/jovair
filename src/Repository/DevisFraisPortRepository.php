@@ -4,17 +4,11 @@ namespace App\Repository;
 
 use App\Entity\DevisFraisPort;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Bridge\Doctrine\RegistryInterface;
 
-/**
- * @method DevisFraisPort|null find($id, $lockMode = null, $lockVersion = null)
- * @method DevisFraisPort|null findOneBy(array $criteria, array $orderBy = null)
- * @method DevisFraisPort[]    findAll()
- * @method DevisFraisPort[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
- */
 class DevisFraisPortRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, DevisFraisPort::class);
     }
