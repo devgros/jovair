@@ -93,6 +93,11 @@ class Devis
      */
     private $dossier_mainoeuvres;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="dossierFraisPort", inversedBy="devis")
+     */
+    private $dossier_fraisports;
+
      /**
      * @ORM\Column(type="boolean")
      */
@@ -571,6 +576,49 @@ class Devis
     }
 
     /**
+     * @return Collection|DossierFraisPort[]
+     */
+    public function getDossierFraisPorts()
+    {
+        return $this->dossier_fraisports;
+    }
+
+    public function addDossierFraisPort(DossierFraisPort $dossier_fraisport): self
+    {
+        if (!$this->dossier_fraisports->contains($dossier_fraisport)) {
+            $this->dossier_fraisports[] = $dossier_fraisport;
+            $dossier_fraisport->addDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function addFirstDossierFraisPort(DossierFraisPort $dossier_fraisport): self
+    {
+            $this->dossier_fraisports[] = $dossier_fraisport;
+            $dossier_fraisport->addDevis($this);
+
+        return $this;
+    }
+
+    public function addNewDossierFraisPort(DossierFraisPort $dossier_fraisport): self
+    {
+        $this->dossier_fraisports[] = $dossier_fraisport;
+
+        return $this;
+    }
+
+    public function removeDossierFraisPort(DossierFraisPort $dossier_fraisport): self
+    {
+        if ($this->dossier_fraisports->contains($dossier_fraisport)) {
+            $this->dossier_fraisports->removeElement($dossier_fraisport);
+            $dossier_fraisport->removeDevis($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * Set new_devis.
      *
      * @param int $new_devis
@@ -616,5 +664,40 @@ class Devis
         $this->num_tva_intra = $num_tva_intra;
 
         return $this;
+    }
+
+    public function getFdpPiece()
+    {
+        $fdp_piece_total = 0;
+        foreach($this->article_externe as $article_externe)
+        {
+            if($article_externe->getMontantFdpHt() != null){
+                $fdp_piece_total = $fdp_piece_total + $article_externe->getMontantFdpHt();
+            }
+        }
+
+        foreach($this->devis_article as $devis_article)
+        {
+            if($devis_article->getArticleFormone()->getMontantFdpHt() != null){
+                $fdp_piece_total = $fdp_piece_total + ($devis_article->getArticleFormone()->getMontantFdpHt() * $devis_article->getQuantite());
+            }
+        }
+
+        if($this->getDossier())
+        {
+            foreach($this->getDossier()->getDossierArticleExternes() as $article_externe_dossier)
+            {
+                if($article_externe_dossier->getMontantFdpHt() != null){
+                    $fdp_piece_total = $fdp_piece_total + $article_externe_dossier->getMontantFdpHt();
+                }
+            }
+            foreach($this->getDossier()->getDossierArticle() as $article_dossier)
+            {
+                if($article_dossier->getArticleFormone()->getMontantFdpHt() != null){
+                    $fdp_piece_total = $fdp_piece_total + $article_dossier->getArticleFormone()->getMontantFdpHt();
+                }
+            }
+        }
+        return $fdp_piece_total;
     }
 }

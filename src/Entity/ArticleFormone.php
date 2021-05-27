@@ -76,6 +76,12 @@ class ArticleFormone
     private $devis_article;
 
     /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $montant_fdp_ht;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -333,5 +339,17 @@ class ArticleFormone
     public function getDevisArticle()
     {
         return $this->devis_article;
+    }
+
+    public function getMontantFdpHt(): ?string
+    {
+        return $this->montant_fdp_ht;
+    }
+
+    public function setMontantFdpHt(?string $montant_fdp_ht): self
+    {
+        $this->montant_fdp_ht = $montant_fdp_ht;
+
+        return $this;
     }
 }

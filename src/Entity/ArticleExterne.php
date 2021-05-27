@@ -71,6 +71,12 @@ class ArticleExterne
     private $updatedAt;
 
     /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $montant_fdp_ht;
+
+    /**
      * @ORM\ManyToOne(targetEntity="Devis", inversedBy="article_externe")
      * @ORM\JoinColumn(nullable=false)
      */
@@ -299,5 +305,17 @@ class ArticleExterne
     public function getPrixHt()
     {
         return $this->prix_ht;
+    }
+
+    public function getMontantFdpHt(): ?string
+    {
+        return $this->montant_fdp_ht;
+    }
+
+    public function setMontantFdpHt(?string $montant_fdp_ht): self
+    {
+        $this->montant_fdp_ht = $montant_fdp_ht;
+
+        return $this;
     }
 }

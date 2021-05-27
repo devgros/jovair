@@ -2,7 +2,7 @@
 	<div class="col-xs-12">
 		<h2 class="page-header">
 			<img src="{{ app.request.scheme ~'://' ~ app.request.httpHost}}/img/logo_min.png" width="70"  />
-			Jov'air Maintenance 
+			Jov'air Maintenance
 			<small class="pull-right"><br/>Date: {% if is_avoir %}{{ entity.dateAvoir|date('d/m/Y') }}{% else %}{{ entity.dateCreation|date('d/m/Y') }}{% endif %}</small>
 		</h2>
 	</div>
@@ -60,6 +60,7 @@
 
 {% set facture_total_remise = 0 %}
 {% set facture_total_ht = 0 %}
+{% set facture_total_fp = 0 %}
 {% set facture_total_tva = 0 %}
 {% set facture_total_ttc = 0 %}
 {% if entity.avoir %}{% set avoir = "-" %}{% else %}{% set avoir = "" %}{% endif %}
@@ -86,12 +87,13 @@
 			{% set is_piece = false %}
 			{% if entity.devis.dossier %}
 				{% if entity.devis.dossier.dossierArticle|length() > 0  %}{% set is_piece = true %}{% endif %}
+				{% if entity.dossier.dossierArticleExternes|length() > 0  %}{% set is_piece = true %}{% endif %}
 			{% endif %}
 			{% if entity.devis.devisArticle|length() > 0 %}{% set is_piece = true %}{% endif %}
 			{% if entity.devis.articleExterne|length() > 0 %}{% set is_piece = true %}{% endif %}
 
 			{% if is_piece %}<tr><th colspan="10" class="title">Pièces :</th></tr>{% endif %}
-				
+
 			{% if entity.devis.dossier %}
 				{% if entity.devis.dossier.dossierArticle|length() > 0 %}
 				{% for dossier_article in entity.devis.dossier.dossierArticle %}
@@ -363,6 +365,115 @@
 				{% endfor %}
 				{% endif %}
 			{% endif %}
+
+			{% set is_frais_port = false %}
+			{% set fdp_piece = entity.devis.getFdpPiece %}
+			{% if entity.devis.dossier %}
+				{% if entity.devis.dossier.getGroupDossierFraisPort|length() > 0  %}{% set is_frais_port = true %}{% endif %}
+			{% endif %}
+			{% if entity.devis.devisFraisPort|length() > 0 %}{% set is_frais_port = true %}{% endif %}
+			{% if fdp_piece > 0 %}{% set is_frais_port = true %}{% endif %}
+
+			{% if is_frais_port %}<tr><th colspan="10" class="title">Frais d'emballage et d'expédition :</th></tr>{% endif %}
+
+			{% if fdp_piece > 0 %}
+
+				{% set prix_ht = fdp_piece %}
+				{% set total_ht = prix_ht %}
+				{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+				{% set total_ttc = (total_ht+tva) %}
+
+				{% set facture_total_fp = facture_total_fp + total_ht %}
+				{% set facture_total_tva = facture_total_tva + tva %}
+				{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+				<tr>
+					<td></td>
+					<td>Frais de port des pièces</td>
+					<td class="text-right"></td>
+					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right"></td>
+					<td class="text-right"></td>
+					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.devis.isTvaIntra %}
+					<td class="text-right">20.0%</td>
+					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
+				</tr>
+			{% endif %}
+
+			{% if entity.devis.dossier %}
+				{% set groupDossierFraisPorts = entity.devis.dossier.getGroupDossierFraisPort %}
+				{% if groupDossierFraisPorts|length() > 0 %}
+					{% for groupDossierFraisPort in groupDossierFraisPorts %}
+						{% set dossier_frais_port = groupDossierFraisPort|first %}
+
+						{% for dossier_frais_port_tmp in groupDossierFraisPort %}
+							{% set is_dfp_ok = false %}
+							{% if entity.devis.newDevis %}
+								{% if dossier_frais_port_tmp in entity.devis.dossierFraisports %}
+									{% set is_dfp_ok = true %}
+								{% endif %}
+							{% else %}
+								{% set is_dfp_ok = true %}
+							{% endif %}
+
+						{% endfor %}
+						{% set prix_ht = dossier_frais_port.fraisPort.getPrixHt %}
+						{% set total_ht = prix_ht %}
+						{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+						{% set total_ttc = (total_ht+tva) %}
+
+						{% set facture_total_fp = facture_total_fp + total_ht %}
+						{% set facture_total_tva = facture_total_tva + tva %}
+						{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+
+						<tr>
+							<td></td>
+							<td>{{ dossier_frais_port.fraisPort.designation }}</td>
+							<td class="text-right"></td>
+							<td class="text-right">{% if is_avoir %}- {% endif %}{{ prix_ht|number_format(2, '.', ',') }} €</td>
+							<td class="text-right"></td>
+							<td class="text-right"></td>
+							<td class="text-right">{% if is_avoir %}- {% endif %}{{ total_ht|number_format(2, '.', ',') }} €</td>
+							{% if not entity.devis.isTvaIntra %}
+							<td class="text-right">20.0%</td>
+							<td class="text-right">{% if is_avoir %}- {% endif %}{{ tva|number_format(2, '.', ',') }} €</td>
+							<td class="text-right">{% if is_avoir %}- {% endif %}{{ total_ttc|number_format(2, '.', ',') }} €</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				{% endif %}
+			{% endif %}
+
+			{% if entity.devis.devisFraisPort|length() > 0 %}
+				{% for devis_frais_port in entity.devis.devisFraisPort %}
+					{% set prix_ht = devis_frais_port.fraisPort.getPrixHt %}
+					{% set total_ht = prix_ht %}
+					{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+					{% set total_ttc = (total_ht+tva) %}
+
+					{% set facture_total_fp = facture_total_fp + total_ht %}
+					{% set facture_total_tva = facture_total_tva + tva %}
+					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+				<tr>
+					<td></td>
+					<td>{{ devis_frais_port.fraisPort.designation }}</td>
+					<td class="text-right"></td>
+					<td class="text-right">{% if is_avoir %}- {% endif %}{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right"></td>
+					<td class="text-right"></td>
+					<td class="text-right">{% if is_avoir %}- {% endif %}{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.devis.isTvaIntra %}
+					<td class="text-right">20.0%</td>
+					<td class="text-right">{% if is_avoir %}- {% endif %}{{ tva|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{% if is_avoir %}- {% endif %}{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			{% endif %}
+
+
 			</tbody>
 		</table>
 	</div>
@@ -394,6 +505,12 @@
 					<th style="width:60%">Total HT :</th>
 					<td class="text-right">{% if is_avoir %}- {% endif %}{{ facture_total_ht|number_format(2, '.', ',') }} €</td>
 				</tr>
+				{% if facture_total_fp > 0 %}
+				<tr>
+					<th>Frais de port : </th>
+					<td class="text-right">{{ facture_total_fp|number_format(2, '.', ',') }} €</td>
+				</tr>
+				{% endif %}
 				{% if not entity.devis.isTvaIntra %}
 				<tr>
 					<th>TVA (20.0%) :</th>

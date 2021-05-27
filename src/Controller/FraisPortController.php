@@ -70,7 +70,6 @@ class FraisPortController extends MyAdminController
             }else{
                 return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'list']);
             }
-            //return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'show', 'id' => $entity->getDevisFraisPort()[0]->getDevis()->getId()]);
         }
 
         return $response;
@@ -78,18 +77,18 @@ class FraisPortController extends MyAdminController
 
     protected function deleteAction()
     {
+
         $response = parent::deleteAction();
 
         $entity = $this->request->attributes->get('easyadmin')['item'];
         if ($response instanceof RedirectResponse) {
-            if (null !== $devis_id = $this->request->query->get('devis_id')) {
-                return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'show', 'id' => $devis_id]);
-            }elseif(null !== $dossier_id = $this->request->query->get('dossier_id')){
-                return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $dossier_id]);
+            if(null !== $devis_frais_port = $entity->getDevisFraisPort()[0]){
+                return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'show', 'id' => $devis_frais_port->getDevis()->getId()]);
+            }elseif(null !== $dossier_frais_port = $entity->getDossierFraisPort()[0]){
+                return $this->redirectToRoute('admin', ['entity' => 'Dossier', 'action' => 'show', 'id' => $dossier_frais_port->getDossier()->getId()]);
             }else{
                 return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'list']);
             }
-            //return $this->redirectToRoute('admin', ['entity' => 'Devis', 'action' => 'show', 'id' => $entity->getDevisFraisPort()[0]->getDevis()->getId()]);
         }
 
         return $response;

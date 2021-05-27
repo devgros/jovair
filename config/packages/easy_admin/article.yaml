@@ -8,7 +8,7 @@ easy_admin:
                 role: ROLE_SUPER_ADMIN
                 max_results: 40
                 title: "Stock"
-                fields: 
+                fields:
                     - { property: 'nom', label: 'Désignation'}
                     - { property: 'pn', label: 'Pn'}
                     - { property: 'last_prix', label: 'Prix Ht (€)', css_class: 'text-right'}
@@ -24,7 +24,7 @@ easy_admin:
             show:
                 role: ROLE_SUPER_ADMIN
                 title: "Stock"
-                fields: 
+                fields:
                     - { property: 'nom', label: "Désignation", css_class: 'col-sm-6'}
                     - { property: 'pn', label: 'Pn', css_class: 'col-sm-6'}
                     - { property: 'last_prix', label: "Prix Ht (€)", css_class: 'col-sm-6'}
@@ -33,9 +33,9 @@ easy_admin:
                     - { property: 'seuil_alert', label: "Seuil d'alerte", css_class: 'col-sm-6'}
                     - { property: 'article_prix', label: 'Historique des prix', css_class: 'new-row col-sm-6', template: 'list_article_prix.html.twig'}
                     - { property: 'article_marge', label: 'Historique des marges', css_class: 'col-sm-6', template: 'list_article_marge.html.twig'}
-                    - { property: 'article_formone', label: 'Form one', css_class: 'new-row col-sm-6', template: 'list_formone.html.twig'}
+                    - { property: 'article_formone', label: 'Form one', css_class: 'new-row col-sm-12', template: 'list_formone.html.twig'}
                 actions:
-                    - { name: 'addFormone', icon: 'plus-circle', label: "FormOne", css_class: 'btn btn-secondary' }   
+                    - { name: 'addFormone', icon: 'plus-circle', label: "FormOne", css_class: 'btn btn-secondary' }
             form:
                 role: ROLE_SUPER_ADMIN
                 title: "Ajouter un article au stock"
@@ -62,7 +62,7 @@ easy_admin:
                 role: ROLE_SUPER_ADMIN
                 max_results: 40
                 title: "Article retiré du stock"
-                fields: 
+                fields:
                     - { property: 'nom', label: 'Désignation'}
                     - { property: 'pn', label: 'Pn'}
                     - { property: 'deletedAt', label: 'Date de retrait du stock', format: 'd/m/Y'}

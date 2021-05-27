@@ -75,6 +75,12 @@ class DossierArticleExterne
      */
     private $sn;
 
+    /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $montant_fdp_ht;
+
     public function __toString()
     {
         return $this->nom;
@@ -207,6 +213,18 @@ class DossierArticleExterne
     public function setSn(?string $sn): self
     {
         $this->sn = $sn;
+
+        return $this;
+    }
+
+    public function getMontantFdpHt(): ?string
+    {
+        return $this->montant_fdp_ht;
+    }
+
+    public function setMontantFdpHt(?string $montant_fdp_ht): self
+    {
+        $this->montant_fdp_ht = $montant_fdp_ht;
 
         return $this;
     }

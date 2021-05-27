@@ -61,7 +61,7 @@
 <div class="row">
 	<div class="col-xs-12 table-responsive">
 		<table class="table table-striped little-button">
-			<thead>
+		<thead>
 				<tr>
 					<th>Réf</th>
 					<th>Désignation</th>
@@ -81,15 +81,16 @@
 			{% set is_piece = false %}
 			{% if entity.dossier %}
 				{% if entity.dossier.dossierArticle|length() > 0  %}{% set is_piece = true %}{% endif %}
+				{% if entity.dossier.dossierArticleExternes|length() > 0  %}{% set is_piece = true %}{% endif %}
 			{% endif %}
 			{% if entity.devisArticle|length() > 0 %}{% set is_piece = true %}{% endif %}
 			{% if entity.articleExterne|length() > 0 %}{% set is_piece = true %}{% endif %}
 
 			{% if not pdf %}
 				<tr><th colspan="10" class="title">Pièces :</th></tr>
-			{% else %}	
+			{% else %}
 				{% if is_piece %}<tr><th colspan="10" class="title">Pièces :</th></tr>{% endif %}
-			{% endif %}			
+			{% endif %}
 
 			{% if entity.dossier %}
 				{% if entity.dossier.dossierArticle|length() > 0 %}
@@ -269,7 +270,7 @@
 
 			{% if not pdf %}
 				<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>
-			{% else %}	
+			{% else %}
 				{% if is_main_oeuvre %}<tr><th colspan="10" class="title">Main d'oeuvre :</th></tr>{% endif %}
 			{% endif %}
 
@@ -280,7 +281,7 @@
 					{% for groupDossierMainOeuvre in groupDossierMainOeuvres %}
 						{% set dossier_main_oeuvre = groupDossierMainOeuvre|first %}
 						{% set quantite = 0 %}
-						
+
 						{% for dossier_main_oeuvre_tmp in groupDossierMainOeuvre %}
 							{% set is_dmo_ok = false %}
 							{% if entity.newDevis %}
@@ -393,17 +394,92 @@
 				{% endif %}
 			{% endif %}
 
+
 			{% set is_frais_port = false %}
-			{#{% if entity.dossier %}
-				{% if entity.dossier.getGroupDossierMainOeuvre|length() > 0  %}{% set is_frais_port = true %}{% endif %}
+			{% set fdp_piece = entity.getFdpPiece %}
+
+			{% if entity.dossier %}
+				{% if entity.dossier.getGroupDossierFraisPort|length() > 0  %}{% set is_frais_port = true %}{% endif %}
 			{% endif %}
-			#}
 			{% if entity.devisFraisPort|length() > 0 %}{% set is_frais_port = true %}{% endif %}
+			{% if fdp_piece > 0 %}{% set is_frais_port = true %}{% endif %}
 
 			{% if not pdf %}
 				<tr><th colspan="10" class="title">Frais d'emballage et d'expédition :</th></tr>
-			{% else %}	
+			{% else %}
 				{% if is_frais_port %}<tr><th colspan="10" class="title">Frais d'emballage et d'expédition :</th></tr>{% endif %}
+			{% endif %}
+
+			{% if fdp_piece > 0 %}
+
+				{% set prix_ht = fdp_piece %}
+				{% set total_ht = prix_ht %}
+				{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+				{% set total_ttc = (total_ht+tva) %}
+
+				{% set facture_total_fp = facture_total_fp + total_ht %}
+				{% set facture_total_tva = facture_total_tva + tva %}
+				{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+				<tr>
+					<td></td>
+					<td>Frais de port des pièces</td>
+					<td class="text-right"></td>
+					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right"></td>
+					<td class="text-right"></td>
+					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.isTvaIntra %}
+					<td class="text-right">20.0%</td>
+					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
+				</tr>
+			{% endif %}
+
+			{% if entity.dossier %}
+				{% set groupDossierFraisPorts = entity.dossier.getGroupDossierFraisPort %}
+				{% if groupDossierFraisPorts|length() > 0 %}
+					{% if not pdf %}<tr><th colspan="10" class="sub_title">Frais d'emballage et d'expédition du dossier :</th></tr>{% endif %}
+					{% for groupDossierFraisPort in groupDossierFraisPorts %}
+						{% set dossier_frais_port = groupDossierFraisPort|first %}
+
+						{% for dossier_frais_port_tmp in groupDossierFraisPort %}
+							{% set is_dfp_ok = false %}
+							{% if entity.newDevis %}
+								{% if dossier_frais_port_tmp in entity.dossierFraisports %}
+									{% set is_dfp_ok = true %}
+								{% endif %}
+							{% else %}
+								{% set is_dfp_ok = true %}
+							{% endif %}
+
+						{% endfor %}
+						{% set prix_ht = dossier_frais_port.fraisPort.getPrixHt %}
+						{% set total_ht = prix_ht %}
+						{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+						{% set total_ttc = (total_ht+tva) %}
+
+						{% set facture_total_fp = facture_total_fp + total_ht %}
+						{% set facture_total_tva = facture_total_tva + tva %}
+						{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+
+						<tr>
+							<td></td>
+							<td>{{ dossier_frais_port.fraisPort.designation }}</td>
+							<td class="text-right"></td>
+							<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+							<td class="text-right"></td>
+							<td class="text-right"></td>
+							<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+							{% if not entity.isTvaIntra %}
+							<td class="text-right">20.0%</td>
+							<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+							<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+					{% if not pdf %}<tr><th colspan="10" class="sub_title">Frais d'emballage et d'expédition supplémentaires :</th></tr>{% endif %}
+				{% endif %}
 			{% endif %}
 
 			{% if entity.devisFraisPort|length() > 0 %}
@@ -419,7 +495,8 @@
 				<tr>
 					<td>
 						{% if not pdf and entity.statut == 0 %}
-							<a href="{{ path('easyadmin', { action: 'edit', entity: 'FraisPort', primary_key_name: 'id', id: devis_frais_port.fraisPort.id, devis_id: entity.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'FraisPort', primary_key_name: 'id', id: devis_frais_port.fraisPort.id, devis_id: entity.id, referer: '' }) }}" target="_self" data-id="{{ devis_frais_port.fraisPort.id }}" data-entity="FraisPort" ><i class="fa fa-times"></i> </a>
+							<a href="{{ path('easyadmin', { action: 'edit', entity: 'FraisPort', primary_key_name: 'id', id: devis_frais_port.fraisPort.id, devis_id: entity.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a>
+							<a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'FraisPort', primary_key_name: 'id', id: devis_frais_port.fraisPort.id, devis_id: entity.id, referer: '' }) }}" target="_self" data-id="{{ devis_frais_port.fraisPort.id }}" data-entity="FraisPort" ><i class="fa fa-times"></i> </a>
 						{% endif %}
 					</td>
 					<td>{{ devis_frais_port.fraisPort.designation }}</td>
@@ -435,7 +512,6 @@
 					{% endif %}
 				</tr>
 				{% endfor %}
-				#}
 			{% endif %}
 
 
@@ -446,8 +522,6 @@
 				</td>
 			</tr>
 			{% endif %}
-
-
 			</tbody>
 		</table>
 	</div>
@@ -475,7 +549,7 @@
 				</tr>
 				<tr><td colspan="2"></td></tr>
 				{% endif %}
-				
+
 				<tr>
 					<th style="width:60%">Total HT :</th>
 					<td class="text-right">{{ facture_total_ht|number_format(2, '.', ',') }} €</td>
@@ -520,9 +594,9 @@
         {% set request_parameters = { entity: _entity_config.name, referer: app.request.query.get('referer') } %}
 
         {% for action in actions %}
-        	{% set show_btn = true %} 
+        	{% set show_btn = true %}
         	{% if action.name == "validate" and entity.statut == 1 %}
-        		{% set show_btn = false %} 
+        		{% set show_btn = false %}
         	{% endif %}
 		    {% if 'list' == action.name %}
 		        {% set action_href = request_parameters.referer|default('') ? request_parameters.referer|easyadmin_urldecode : path('easyadmin', request_parameters|merge({ action: 'list' })) %}
