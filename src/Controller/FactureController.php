@@ -16,9 +16,9 @@ class FactureController extends MyAdminController
         $response = parent::showAction();
 
         //regenerer Facture
-        $facture = $this->request->attributes->get('easyadmin')['item'];
+        /*$facture = $this->request->attributes->get('easyadmin')['item'];
 
-        if($facture->getNumFacture() == "F118-21-JOV'AIR" || $facture->getNumFacture() == "F117-21-JOV'AIR" || $facture->getNumFacture() == "F116-21-JOV'AIR" || $facture->getNumFacture() == "F115-21-JOV'AIR" || $facture->getNumFacture() == "F114-21-JOV'AIR" ){
+        if($facture->getNumFacture() == "F118-21-JOV'AIR"){
 
 	        $path_pdf = $this->container->get('kernel')->getProjectDir().'/public/facture/facture_'.$facture->getNumFacture().'.pdf';
 
@@ -33,7 +33,7 @@ class FactureController extends MyAdminController
 					),
 					$path_pdf
 				);
-		}
+		}*/
 
         return $response;
     }
