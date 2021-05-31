@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Controller;
 
@@ -9,17 +9,17 @@ use Symfony\Component\HttpFoundation\Response;
 
 class FactureController extends MyAdminController
 {
-    
-	
+
+
 	protected function showAction()
     {
         $response = parent::showAction();
 
         //regenerer Facture
-        /*$facture = $this->request->attributes->get('easyadmin')['item'];
+        $facture = $this->request->attributes->get('easyadmin')['item'];
 
-        if($facture->getNumFacture() == "F083-19-JOV'AIR"){
-        
+        if($facture->getNumFacture() == "F118-21-JOV'AIR" || $facture->getNumFacture() == "F117-21-JOV'AIR" || $facture->getNumFacture() == "F116-21-JOV'AIR" || $facture->getNumFacture() == "F115-21-JOV'AIR" || $facture->getNumFacture() == "F114-21-JOV'AIR" ){
+
 	        $path_pdf = $this->container->get('kernel')->getProjectDir().'/public/facture/facture_'.$facture->getNumFacture().'.pdf';
 
 	        if(file_exists($path_pdf)){
@@ -33,7 +33,7 @@ class FactureController extends MyAdminController
 					),
 					$path_pdf
 				);
-		}*/		
+		}
 
         return $response;
     }
@@ -99,7 +99,7 @@ class FactureController extends MyAdminController
         /*$avoir = $this->request->attributes->get('easyadmin')['item'];
 
         if($avoir->getNumAvoir() == "FA002-20-JOV'AIR"){
-        
+
             $path_pdf = $this->container->get('kernel')->getProjectDir().'/public/avoir/avoir_'.$avoir->getNumAvoir().'.pdf';
 
             if(file_exists($path_pdf)){
@@ -161,9 +161,9 @@ class FactureController extends MyAdminController
             unlink($zipName);
 
             return $response;
-            
+
         }
-        
+
         return $this->render('easy_admin/Facture/export.html.twig', array('form' => $form->createView()));
     }
 }
