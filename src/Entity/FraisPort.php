@@ -126,7 +126,7 @@ class FraisPort
      *
      * @param \App\Entity\DossierFraisPort $dossierFraisPort
      *
-     * @return MainOeuvre
+     * @return FraisPort
      */
     public function addDossierFraisPort(\App\Entity\DossierFraisPort $dossierFraisPort)
     {

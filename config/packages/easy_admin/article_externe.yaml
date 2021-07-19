@@ -14,6 +14,7 @@ easy_admin:
                     - { property: 'remise', label: "Remise (%)", css_class: 'col-sm-4'}
                     #- { property: 'formoneExterneFile', label: 'Form one', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-3'}
                     - { type: 'section', label: '' }
-                    - { property: 'montant_fdp_ht', label: "Montant Frais de port total HT", css_class: 'col-sm-4'}
+                    - { property: 'montant_fdp_ht', label: "Frais de port total HT", css_class: 'col-sm-4'}
+                    - { property: 'montant_fdc_ht', label: "Frais de certification total HT", css_class: 'col-sm-4'}
             edit:
                 title: "Modifier un article externe au stock"

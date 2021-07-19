@@ -1,0 +1,13 @@
+easy_admin:
+    entities:
+        FraisCertif:
+            class: App\Entity\FraisCertif
+            controller: App\Controller\FraisCertifController
+            form:
+                title: "Ajouter un frais de certification"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-danger' }
+                    - { property: 'designation', label: "Désignation", css_class: 'col-sm-6'}
+                    - { property: 'prix_ht', label: "Prix unitaire HT", css_class: 'col-sm-6'}
+            edit:
+                title: "Modifier des frais de certification"

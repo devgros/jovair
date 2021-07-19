@@ -359,6 +359,9 @@ class DossierController extends MyAdminController
 					foreach($devis->getDossier()->getDossierFraisPort() as $dossier_frais_port){
 	           			$devis->addFirstDossierFraisPort($dossier_frais_port);
 	           		}
+					foreach($devis->getDossier()->getDossierFraisCertif() as $dossier_frais_certif){
+	           			$devis->addFirstDossierFraisCertif($dossier_frais_certif);
+	           		}
            		}
            		$this->em->flush();
 			}

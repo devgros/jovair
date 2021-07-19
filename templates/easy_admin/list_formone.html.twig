@@ -9,7 +9,8 @@
                     <th>From Tracking</th>
                     <th class="text-right">Quantité</th>
                     <th class="text-right">Form one</th>
-                    <th class="text-right">Montant Frais de port HT par quantité</th>
+                    <th class="text-right">Frais de port HT par quantité</th>
+                    <th class="text-right">Frais de certification HT par quantité</th>
                     <th class="text-right">Action</th>
                 </tr>
                 {% for item in value|slice(0, easyadmin_config('show.max_results')) %}
@@ -22,6 +23,7 @@
                             <td class="text-right">{{ item.quantite }}</td>
                             <td class="text-right"><a title="voir le Form one" href="{{ vich_uploader_asset(item, 'formoneFile', 'App\\Entity\\ArticleFormone') }}" target="_blank" target="_self"><i class="fa fa-file-pdf-o"></i></a></td>
                             <td class="text-right">{{ item.montantFdpHt }}</td>
+                            <td class="text-right">{{ item.montantFdcHt }}</td>
                             <td class="text-right">
                                 <a href="{{ path('easyadmin', link_parameters|merge({ id: primary_key_value, menuIndex: '5', action: 'edit', referer: '' })) }}"><i class="fa fa-pencil"></i></a>
                             </td>

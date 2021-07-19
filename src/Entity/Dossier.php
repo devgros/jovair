@@ -196,6 +196,12 @@ class Dossier
     private $dossier_frais_port;
 
     /**
+     * @ORM\OneToMany(targetEntity="DossierFraisCertif", mappedBy="dossier", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $dossier_frais_certif;
+
+    /**
      * @ORM\OneToMany(targetEntity="DossierArticle", mappedBy="dossier", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid()
      */
@@ -232,6 +238,7 @@ class Dossier
         $this->travaux_sup = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_frais_port = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->dossier_frais_certif = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->dossier_outils = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devis = new \Doctrine\Common\Collections\ArrayCollection();
@@ -803,7 +810,7 @@ class Dossier
     public function getGroupDossierMainOeuvre()
     {
         $groupDossierMainOeuvre = array();
-        
+
         foreach($this->dossier_main_oeuvre as $key=>$dossier_main_oeuvre){
             $groupDossierMainOeuvre[$dossier_main_oeuvre->getMainOeuvre()->getId()][] = $dossier_main_oeuvre;
         }
@@ -851,12 +858,62 @@ class Dossier
     public function getGroupDossierFraisPort()
     {
         $groupDossierFraisPort = array();
-        
+
         foreach($this->dossier_frais_port as $key=>$dossier_frais_port){
             $groupDossierFraisPort[$dossier_frais_port->getFraisPort()->getId()][] = $dossier_frais_port;
         }
 
         return $groupDossierFraisPort;
+    }
+
+
+
+    /**
+     * Add dossierFraisCertif.
+     *
+     * @param \App\Entity\DossierFraisCertif $dossierFraisCertif
+     *
+     * @return Dossier
+     */
+    public function addDossierFraisCertif(\App\Entity\DossierFraisCertif $dossierFraisCertif)
+    {
+        $dossierFraisCertif->setDossier($this);
+        $this->dossier_frais_certif[] = $dossierFraisCertif;
+
+        return $this;
+    }
+
+    /**
+     * Remove dossierFraisPort.
+     *
+     * @param \App\Entity\DossierFraisCertif $dossierFraisCertif
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDossierFraisCertif(\App\Entity\DossierFraisCertif $dossierFraisCertif)
+    {
+        return $this->dossier_frais_certif->removeElement($dossierFraisCertif);
+    }
+
+    /**
+     * Get dossierFraisPort.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDossierFraisCertif()
+    {
+        return $this->dossier_frais_certif;
+    }
+
+    public function getGroupDossierFraisCertif()
+    {
+        $groupDossierFraisCertif = array();
+
+        foreach($this->dossier_frais_certif as $key=>$dossier_frais_certif){
+            $groupDossierFraisCertif[$dossier_frais_certif->getFraisCertif()->getId()][] = $dossier_frais_certif;
+        }
+
+        return $groupDossierFraisCertif;
     }
 
     /**

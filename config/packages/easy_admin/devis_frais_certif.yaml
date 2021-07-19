@@ -1,0 +1,14 @@
+easy_admin:
+    entities:
+        DevisFraisCertif:
+            class: App\Entity\DevisFraisCertif
+            controller: App\Controller\DevisFraisCertifController
+            form:
+                title: "Ajouter un frais de certification"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-danger' }
+                    - { property: 'frais_port', label: "Frais de certification", css_class: 'col-sm-6'}
+            edit:
+                title: "Modifier un frais de certification"
+                fields:
+                    - { property: 'main_oeuvre', label: "Frais de certification", type_options: { disabled: true }, css_class: 'col-sm-6'}

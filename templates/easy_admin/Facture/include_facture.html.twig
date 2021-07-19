@@ -61,6 +61,7 @@
 {% set facture_total_remise = 0 %}
 {% set facture_total_ht = 0 %}
 {% set facture_total_fp = 0 %}
+{% set facture_total_fc = 0 %}
 {% set facture_total_tva = 0 %}
 {% set facture_total_ttc = 0 %}
 {% if entity.avoir %}{% set avoir = "-" %}{% else %}{% set avoir = "" %}{% endif %}
@@ -474,6 +475,114 @@
 			{% endif %}
 
 
+
+			{% set is_frais_certif = false %}
+			{% set fdc_piece = entity.devis.getFdcPiece %}
+			{% if entity.devis.dossier %}
+				{% if entity.devis.dossier.getGroupDossierFraisCertif|length() > 0  %}{% set is_frais_certif = true %}{% endif %}
+			{% endif %}
+			{% if entity.devis.devisFraisCertif|length() > 0 %}{% set is_frais_certif = true %}{% endif %}
+			{% if fdc_piece > 0 %}{% set is_frais_certif = true %}{% endif %}
+
+			{% if is_frais_certif %}<tr><th colspan="10" class="title">Frais de certification :</th></tr>{% endif %}
+
+			{% if fdc_piece > 0 %}
+
+				{% set prix_ht = fdc_piece %}
+				{% set total_ht = prix_ht %}
+				{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+				{% set total_ttc = (total_ht+tva) %}
+
+				{% set facture_total_fc = facture_total_fc + total_ht %}
+				{% set facture_total_tva = facture_total_tva + tva %}
+				{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+				<tr>
+					<td></td>
+					<td>Frais de certification des pièces</td>
+					<td class="text-right"></td>
+					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right"></td>
+					<td class="text-right"></td>
+					<td class="text-right">{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.devis.isTvaIntra %}
+					<td class="text-right">20.0%</td>
+					<td class="text-right">{{ tva|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
+				</tr>
+			{% endif %}
+
+			{% if entity.devis.dossier %}
+				{% set groupDossierFraisCertifs = entity.devis.dossier.getGroupDossierFraisCertif %}
+				{% if groupDossierFraisCertifs|length() > 0 %}
+					{% for groupDossierFraisCertif in groupDossierFraisCertifs %}
+						{% set dossier_frais_certif = groupDossierFraisCertif|first %}
+
+						{% for dossier_frais_certif_tmp in groupDossierFraisCertif %}
+							{% set is_dfc_ok = false %}
+							{% if entity.devis.newDevis %}
+								{% if dossier_frais_certif_tmp in entity.devis.dossierFraiscertifs %}
+									{% set is_dfc_ok = true %}
+								{% endif %}
+							{% else %}
+								{% set is_dfc_ok = true %}
+							{% endif %}
+
+						{% endfor %}
+						{% set prix_ht = dossier_frais_certif.fraisCertif.getPrixHt %}
+						{% set total_ht = prix_ht %}
+						{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+						{% set total_ttc = (total_ht+tva) %}
+
+						{% set facture_total_fc = facture_total_fc + total_ht %}
+						{% set facture_total_tva = facture_total_tva + tva %}
+						{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+
+						<tr>
+							<td></td>
+							<td>{{ dossier_frais_certif.fraisCertif.designation }}</td>
+							<td class="text-right"></td>
+							<td class="text-right">{% if is_avoir %}- {% endif %}{{ prix_ht|number_format(2, '.', ',') }} €</td>
+							<td class="text-right"></td>
+							<td class="text-right"></td>
+							<td class="text-right">{% if is_avoir %}- {% endif %}{{ total_ht|number_format(2, '.', ',') }} €</td>
+							{% if not entity.devis.isTvaIntra %}
+							<td class="text-right">20.0%</td>
+							<td class="text-right">{% if is_avoir %}- {% endif %}{{ tva|number_format(2, '.', ',') }} €</td>
+							<td class="text-right">{% if is_avoir %}- {% endif %}{{ total_ttc|number_format(2, '.', ',') }} €</td>
+							{% endif %}
+						</tr>
+					{% endfor %}
+				{% endif %}
+			{% endif %}
+
+			{% if entity.devis.devisFraisCertif|length() > 0 %}
+				{% for devis_frais_certif in entity.devis.devisFraisCertif %}
+					{% set prix_ht = devis_frais_certif.fraisCertif.getPrixHt %}
+					{% set total_ht = prix_ht %}
+					{% set tva = ((total_ht * 20)/100)|round(2, 'common') %}
+					{% set total_ttc = (total_ht+tva) %}
+
+					{% set facture_total_fc = facture_total_fc + total_ht %}
+					{% set facture_total_tva = facture_total_tva + tva %}
+					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
+				<tr>
+					<td></td>
+					<td>{{ devis_frais_certif.fraisCertif.designation }}</td>
+					<td class="text-right"></td>
+					<td class="text-right">{% if is_avoir %}- {% endif %}{{ prix_ht|number_format(2, '.', ',') }} €</td>
+					<td class="text-right"></td>
+					<td class="text-right"></td>
+					<td class="text-right">{% if is_avoir %}- {% endif %}{{ total_ht|number_format(2, '.', ',') }} €</td>
+					{% if not entity.devis.isTvaIntra %}
+					<td class="text-right">20.0%</td>
+					<td class="text-right">{% if is_avoir %}- {% endif %}{{ tva|number_format(2, '.', ',') }} €</td>
+					<td class="text-right">{% if is_avoir %}- {% endif %}{{ total_ttc|number_format(2, '.', ',') }} €</td>
+					{% endif %}
+				</tr>
+				{% endfor %}
+			{% endif %}
+
 			</tbody>
 		</table>
 	</div>
@@ -505,6 +614,12 @@
 					<th style="width:60%">Total HT :</th>
 					<td class="text-right">{% if is_avoir %}- {% endif %}{{ facture_total_ht|number_format(2, '.', ',') }} €</td>
 				</tr>
+				{% if facture_total_fc > 0 %}
+				<tr>
+					<th>Frais de certification : </th>
+					<td class="text-right">{{ facture_total_fc|number_format(2, '.', ',') }} €</td>
+				</tr>
+				{% endif %}
 				{% if facture_total_fp > 0 %}
 				<tr>
 					<th>Frais de port : </th>
