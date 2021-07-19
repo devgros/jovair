@@ -72,6 +72,12 @@ class Devis
     private $devis_frais_port;
 
     /**
+     * @ORM\OneToMany(targetEntity="DevisFraisCertif", mappedBy="devis", cascade={"persist", "remove"}, orphanRemoval=true)
+     * @Assert\Valid()
+     */
+    private $devis_frais_certif;
+
+    /**
      * @ORM\OneToMany(targetEntity="DevisMainOeuvre", mappedBy="devis", cascade={"persist", "remove"}, orphanRemoval=true)
      * @Assert\Valid()
      */
@@ -98,6 +104,11 @@ class Devis
      */
     private $dossier_fraisports;
 
+    /**
+     * @ORM\ManyToMany(targetEntity="dossierFraisCertif", inversedBy="devis")
+     */
+    private $dossier_fraiscertifs;
+
      /**
      * @ORM\Column(type="boolean")
      */
@@ -123,10 +134,13 @@ class Devis
      */
     public function __construct()
     {
+        $this->devis_frais_port = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->devis_frais_certif = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devis_main_oeuvre = new \Doctrine\Common\Collections\ArrayCollection();
         $this->devis_article = new \Doctrine\Common\Collections\ArrayCollection();
         $this->article_externe = new \Doctrine\Common\Collections\ArrayCollection();
         $this->frais_port = new \Doctrine\Common\Collections\ArrayCollection();
+        $this->frais_certif = new \Doctrine\Common\Collections\ArrayCollection();
         $this->factures = new \Doctrine\Common\Collections\ArrayCollection();
     }
 
@@ -417,6 +431,44 @@ class Devis
 
 
     /**
+     * Add devisFraisCertif.
+     *
+     * @param \App\Entity\DevisFraisCertif $devisFraisCertif
+     *
+     * @return Devis
+     */
+    public function addDevisFraisCertif(\App\Entity\DevisFraisCertif $devisFraisCertif)
+    {
+        $devisFraisCertif->setDevis($this);
+        $this->devis_frais_certif[] = $devisFraisCertif;
+
+        return $this;
+    }
+
+    /**
+     * Remove devisFraisCertif.
+     *
+     * @param \App\Entity\DevisFraisCertif $devisFraisCertif
+     *
+     * @return boolean TRUE if this collection contained the specified element, FALSE otherwise.
+     */
+    public function removeDevisFraisCertif(\App\Entity\DevisFraisCertif $devisFraisCertif)
+    {
+        return $this->devis_frais_certif->removeElement($devisFraisCertif);
+    }
+
+    /**
+     * Get devisFraisCertif.
+     *
+     * @return \Doctrine\Common\Collections\Collection
+     */
+    public function getDevisFraisCertif()
+    {
+        return $this->devis_frais_certif;
+    }
+
+
+    /**
      * Add facture.
      *
      * @param \App\Entity\Facture $facture
@@ -619,6 +671,49 @@ class Devis
     }
 
     /**
+     * @return Collection|DossierFraisCertif[]
+     */
+    public function getDossierFraisCertifs()
+    {
+        return $this->dossier_fraiscertifs;
+    }
+
+    public function addDossierFraisCertif(DossierFraisCertif $dossier_fraiscertif): self
+    {
+        if (!$this->dossier_fraiscertifs->contains($dossier_fraiscertif)) {
+            $this->dossier_fraiscertifs[] = $dossier_fraiscertif;
+            $dossier_fraiscertif->addDevis($this);
+        }
+
+        return $this;
+    }
+
+    public function addFirstDossierFraisCertif(DossierFraisCertif $dossier_fraiscertif): self
+    {
+            $this->dossier_fraiscertifs[] = $dossier_fraiscertif;
+            $dossier_fraiscertif->addDevis($this);
+
+        return $this;
+    }
+
+    public function addNewDossierFraisCertif(DossierFraisCertif $dossier_fraiscertif): self
+    {
+        $this->dossier_fraiscertifs[] = $dossier_fraiscertif;
+
+        return $this;
+    }
+
+    public function removeDossierFraisCertif(DossierFraisCertif $dossier_fraiscertif): self
+    {
+        if ($this->dossier_fraiscertifs->contains($dossier_fraiscertif)) {
+            $this->dossier_fraiscertifs->removeElement($dossier_fraiscertif);
+            $dossier_fraiscertif->removeDevis($this);
+        }
+
+        return $this;
+    }
+
+    /**
      * Set new_devis.
      *
      * @param int $new_devis
@@ -699,5 +794,40 @@ class Devis
             }
         }
         return $fdp_piece_total;
+    }
+
+    public function getFdcPiece()
+    {
+        $fdc_piece_total = 0;
+        foreach($this->article_externe as $article_externe)
+        {
+            if($article_externe->getMontantFdcHt() != null){
+                $fdc_piece_total = $fdc_piece_total + $article_externe->getMontantFdcHt();
+            }
+        }
+
+        foreach($this->devis_article as $devis_article)
+        {
+            if($devis_article->getArticleFormone()->getMontantFdcHt() != null){
+                $fdc_piece_total = $fdc_piece_total + ($devis_article->getArticleFormone()->getMontantFdcHt() * $devis_article->getQuantite());
+            }
+        }
+
+        if($this->getDossier())
+        {
+            foreach($this->getDossier()->getDossierArticleExternes() as $article_externe_dossier)
+            {
+                if($article_externe_dossier->getMontantFdcHt() != null){
+                    $fdc_piece_total = $fdc_piece_total + $article_externe_dossier->getMontantFdcHt();
+                }
+            }
+            foreach($this->getDossier()->getDossierArticle() as $article_dossier)
+            {
+                if($article_dossier->getArticleFormone()->getMontantFdcHt() != null){
+                    $fdc_piece_total = $fdc_piece_total + $article_dossier->getArticleFormone()->getMontantFdcHt();
+                }
+            }
+        }
+        return $fdc_piece_total;
     }
 }

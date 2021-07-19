@@ -69,7 +69,7 @@ class DevisFraisPort
      *
      * @param \App\Entity\FraisPort $fraisPort
      *
-     * @return DevisMainOeuvre
+     * @return DevisFraisPort
      */
     public function setFraisPort(\App\Entity\FraisPort $fraisPort)
     {

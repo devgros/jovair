@@ -13,6 +13,7 @@ easy_admin:
                     - { property: 'sn', label: 'Sn', css_class: 'col-sm-6'}
                     - { property: 'formoneFile', label: 'Form one', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-6'}
                     - { type: 'section', label: '' }
-                    - { property: 'montant_fdp_ht', label: "Montant Frais de port HT par quantité", css_class: 'col-sm-3'}
+                    - { property: 'montant_fdp_ht', label: "Frais de port HT par quantité", css_class: 'col-sm-3'}
+                    - { property: 'montant_fdc_ht', label: "Frais de certification HT par quantité", css_class: 'col-sm-3'}
             edit:
                 title: "Modifier une Form One"

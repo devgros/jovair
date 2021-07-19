@@ -82,6 +82,12 @@ class ArticleFormone
     private $montant_fdp_ht;
 
     /**
+     * @ORM\Column(type="decimal", scale=2, nullable=true)
+     * @Assert\GreaterThanOrEqual(0)
+     */
+    private $montant_fdc_ht;
+
+    /**
      * Constructor
      */
     public function __construct()
@@ -349,6 +355,18 @@ class ArticleFormone
     public function setMontantFdpHt(?string $montant_fdp_ht): self
     {
         $this->montant_fdp_ht = $montant_fdp_ht;
+
+        return $this;
+    }
+
+    public function getMontantFdcHt(): ?string
+    {
+        return $this->montant_fdc_ht;
+    }
+
+    public function setMontantFdcHt(?string $montant_fdc_ht): self
+    {
+        $this->montant_fdc_ht = $montant_fdc_ht;
 
         return $this;
     }

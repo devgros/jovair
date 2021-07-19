@@ -5,6 +5,7 @@ imports:
     - { resource: easy_admin/dossier_travaux_sup.yaml }
     - { resource: easy_admin/dossier_main_oeuvre.yaml }
     - { resource: easy_admin/dossier_frais_port.yaml }
+    - { resource: easy_admin/dossier_frais_certif.yaml }
     - { resource: easy_admin/dossier_article.yaml }
     - { resource: easy_admin/dossier_article_externe.yaml }
     - { resource: easy_admin/dossier_outils.yaml }
@@ -12,8 +13,10 @@ imports:
     - { resource: easy_admin/devis_article.yaml }
     - { resource: easy_admin/article_externe.yaml }
     - { resource: easy_admin/frais_port.yaml }
+    - { resource: easy_admin/frais_certif.yaml }
     - { resource: easy_admin/devis_main_oeuvre.yaml }
     - { resource: easy_admin/devis_frais_port.yaml }
+    - { resource: easy_admin/devis_frais_certif.yaml }
     - { resource: easy_admin/facture.yaml }
     - { resource: easy_admin/client.yaml }
     - { resource: easy_admin/appareil.yaml }
@@ -35,7 +38,7 @@ imports:
 
 easy_admin:
     site_name: "JOV'AIR <em style='font-size: 80%;'>Maintenance<em>"
-    
+
     design:
         brand_color: '#008d4c'
         color_scheme: 'dark'
@@ -46,25 +49,25 @@ easy_admin:
             js:
         menu:
             - { label: 'Gestion' }
-            - { entity: 'Dossier', label: 'Dossiers', icon: 'folder-open', params: { 'filters[entity.statut]': '0' } } 
+            - { entity: 'Dossier', label: 'Dossiers', icon: 'folder-open', params: { 'filters[entity.statut]': '0' } }
             - { entity: 'Devis', label: 'Pro format', icon: 'calculator', params: { 'filters[entity.statut]': '0' }, role: ROLE_SUPER_ADMIN }
             - { entity: 'Facture', label: 'Factures', icon: 'euro', role: ROLE_SUPER_ADMIN }
             - { entity: 'Todo', label: 'Notes', icon: 'sticky-note', role: ROLE_SUPER_ADMIN }
             - { label: 'Inventaire', role: ROLE_SUPER_ADMIN }
-            - { entity: 'Article', label: 'Stock', icon: 'tags', role: ROLE_SUPER_ADMIN } 
-            - { entity: 'MainOeuvre', label: "Main d'oeuvre", icon: 'wrench', role: ROLE_SUPER_ADMIN } 
+            - { entity: 'Article', label: 'Stock', icon: 'tags', role: ROLE_SUPER_ADMIN }
+            - { entity: 'MainOeuvre', label: "Main d'oeuvre", icon: 'wrench', role: ROLE_SUPER_ADMIN }
             - { label: 'Clients', role: ROLE_SUPER_ADMIN }
-            - { entity: 'Client', label: 'Clients', icon: 'address-book', role: ROLE_SUPER_ADMIN } 
-            - { entity: 'Appareil', label: 'Appareils', icon: 'plane', role: ROLE_SUPER_ADMIN } 
-            - { label: "Atelier", role: ROLE_SUPER_ADMIN }            
-            - { entity: 'Outillage', label: 'Outillages', icon: 'gears', role: ROLE_SUPER_ADMIN } 
-            - { entity: 'Mecanicien', label: 'Mécaniciens', icon: 'users', role: ROLE_SUPER_ADMIN } 
+            - { entity: 'Client', label: 'Clients', icon: 'address-book', role: ROLE_SUPER_ADMIN }
+            - { entity: 'Appareil', label: 'Appareils', icon: 'plane', role: ROLE_SUPER_ADMIN }
+            - { label: "Atelier", role: ROLE_SUPER_ADMIN }
+            - { entity: 'Outillage', label: 'Outillages', icon: 'gears', role: ROLE_SUPER_ADMIN }
+            - { entity: 'Mecanicien', label: 'Mécaniciens', icon: 'users', role: ROLE_SUPER_ADMIN }
             - { label: "Historique inventaire", role: ROLE_SUPER_ADMIN }
-            - { entity: 'ArticleSuppr', label: 'Ancien stock', icon: 'tags', role: ROLE_SUPER_ADMIN } 
-            - { entity: 'MainOeuvreSuppr', label: "Ancienne main d'oeuvre", icon: 'wrench', role: ROLE_SUPER_ADMIN } 
-            
-            
-            
+            - { entity: 'ArticleSuppr', label: 'Ancien stock', icon: 'tags', role: ROLE_SUPER_ADMIN }
+            - { entity: 'MainOeuvreSuppr', label: "Ancienne main d'oeuvre", icon: 'wrench', role: ROLE_SUPER_ADMIN }
+
+
+
 
     list:
         actions:
