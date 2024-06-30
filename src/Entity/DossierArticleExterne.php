@@ -157,14 +157,14 @@ class DossierArticleExterne
         return $this;
     }
 
-    public function getFormoneExterne(): ?string
+    public function getDossierFormoneExterne(): ?string
     {
-        return $this->formone_externe;
+        return $this->dossier_formone_externe;
     }
 
-    public function setFormoneExterne(?string $formone_externe): self
+    public function setDossierFormoneExterne(?string $formone_externe): self
     {
-        $this->formone_externe = $formone_externe;
+        $this->dossier_formone_externe = $formone_externe;
 
         return $this;
     }
@@ -178,7 +178,7 @@ class DossierArticleExterne
         // otherwise the event listeners won't be called and the file is lost
         if ($file) {
             // if 'updatedAt' is not defined in your entity, use another property
-            $this->updatedAt = new \DateTime('now');
+            $this->updated_at = new \DateTime('now');
         }
     }
 

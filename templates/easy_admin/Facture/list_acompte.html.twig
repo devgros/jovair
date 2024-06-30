@@ -1,0 +1,34 @@
+<div class="form-horizontal">
+    <div class="box box-success">
+        <div class="box-header with-border">
+            <h3 class="box-title">Acomptes</h3>
+            <div class="box-tools pull-right">
+                <button type="button" class="btn btn-box-tool" data-widget="collapse"><i class="fa fa-minus"></i></button>
+            </div>
+        </div>
+        <div class="box-body">
+            <a name="addAcompte" class="btn btn-secondary action-addAcompte" title="" href="{{ path('easyadmin', { action: 'addAcompte', entity: 'Facture', id:entity.id, menuIndex: '3', submenuIndex: '1', sortField:'id', sortDirection:'DESC', page:'1' }) }}" target="_self"><i class="fa fa-plus-circle"></i> Ajouter un acompte</a>
+            <br/><br/>
+            {% if entity.factureAcompte|length > 0 %}
+            <table class="table">
+                <tr>
+                    <th>Date</th>
+                    <th>Montant</th>
+                    <th class="text-right">Action</th>
+                </tr>
+                {% for acompte in entity.factureAcompte %}
+                    <tr>
+                        <td>{{ acompte.date|date("d/m/Y") }}</td>
+                        <td>{{ acompte.montant|number_format(2, '.', ',') }} €</td>
+                        <td class="text-right">
+                            <a href="{{ path('easyadmin', { action: 'edit', entity: 'FactureAcompte', primary_key_name: "id", id:acompte.id, menuIndex: '3', submenuIndex: '1' }) }}"><i class="fa fa-pencil"></i></a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+            {% else %}
+                <span class="label label-empty">Il n'y pas d'acompte sur cette facture</span>
+            {% endif %}
+        </div>
+    </div>
+</div>

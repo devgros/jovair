@@ -9,6 +9,8 @@ parameters:
     app.path.carteTravailCnadFile: /public/uploads/carte_travail_cnad
     app.path.carteTravailTravauxSupFile: /public/uploads/carte_travail_tarvaux_sup
     app.path.scanBcFile: /public/uploads/scan_bc
+    app.path.carteTravailMoteurFile: /public/uploads/carte_travail_moteur
+    app.path.carteTravailCelluleFile: /public/uploads/carte_travail_cellule
 
 vich_uploader:
     db_driver: orm
@@ -56,4 +58,12 @@ vich_uploader:
             namer: vich_uploader.namer_uniqid
             uri_prefix:         '%app.path.scanBcFile%'
             upload_destination: '%kernel.root_dir%/../public/uploads/scan_bc'
+        carteTravailMoteurFile:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.carteTravailMoteurFile%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/carte_travail_moteur'
+        carteTravailCelluleFile:
+            namer: vich_uploader.namer_uniqid
+            uri_prefix:         '%app.path.carteTravailCelluleFile%'
+            upload_destination: '%kernel.root_dir%/../public/uploads/carte_travail_cellule'
             

@@ -18,6 +18,7 @@ imports:
     - { resource: easy_admin/devis_frais_port.yaml }
     - { resource: easy_admin/devis_frais_certif.yaml }
     - { resource: easy_admin/facture.yaml }
+    - { resource: easy_admin/facture_acompte.yaml }
     - { resource: easy_admin/client.yaml }
     - { resource: easy_admin/appareil.yaml }
     - { resource: easy_admin/programme_entretien.yaml }
@@ -67,7 +68,8 @@ easy_admin:
             - { entity: 'MainOeuvreSuppr', label: "Ancienne main d'oeuvre", icon: 'wrench', role: ROLE_SUPER_ADMIN }
 
 
-
+    show: 
+        max_results: 10000
 
     list:
         actions:

@@ -1,0 +1,13 @@
+easy_admin:
+    entities:
+        FactureAcompte:
+            class: App\Entity\FactureAcompte
+            controller: App\Controller\FactureAcompteController
+            form:
+                title: "Ajouter un acompte"
+                fields:
+                    - { type: 'group', css_class: 'col-sm-12', label: '', background: 'box-warning' }
+                    - { property: 'montant', label: 'Montant', css_class: 'col-sm-6'}
+                    - { property: 'date', label: "Date de l'acompte", type_options: { widget: 'single_text' }, css_class: 'col-sm-6' }
+            edit:
+                title: "Modifier un acompte"

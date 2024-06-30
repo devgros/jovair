@@ -48,6 +48,8 @@ easy_admin:
                     - { property: 'prenom_responsable_vol', label: 'Prénom', css_class: 'col-sm-6'}
                     - { property: 'email_responsable_vol', label: 'Email'}
                     - { type: 'group', css_class: 'new-row col-sm-12', label: 'Information Techniques', background: 'box-danger'}
+                    - { property: 'carteTravailCelluleFile', label: 'Carte de travail Cellule', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-3'}
+                    - { property: 'carteTravailMoteurFile', label: 'Carte de travail Moteur', type: 'vich_file', type_options: {allow_delete: false}, css_class: 'col-sm-3'}
                     - { type: 'section', label: 'Cellule' }
                     - { property: 'marque_cellule', label: 'Marque', css_class: 'col-sm-3'}
                     - { property: 'model_cellule', label: 'Model', css_class: 'col-sm-3'}

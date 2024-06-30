@@ -11,7 +11,13 @@
 
 {% block content_title %}
 	Dossier n°: {{ entity.numBl }} <span class="right label {% if entity.statut == 1 %}label-success{% else %}label-warning{% endif %}">{{ statut_dossier[entity.statut] }}</span><br/>
-	<span class="h4">Suivant le Bon de Commande n°: {{ entity.numBc }} <a title="voir le bon de commande" href="{{ vich_uploader_asset(entity, 'scanBcFile', 'App\\Entity\\Dossier') }}" target="_blank" target="_self"><i class="fa fa-file-pdf-o"></i></a></span>
+	<span class="h4">Suivant le Bon de Commande n°: {{ entity.numBc }} <a title="voir le bon de commande" href="{{ vich_uploader_asset(entity, 'scanBcFile', 'App\\Entity\\Dossier') }}" target="_blank" target="_self"><i class="fa fa-file-pdf-o"></i></a></span></br>
+	{% if entity.appareil.carteTravailCellule %}
+	<span class="h4">Carte de travail Cellule : {{ entity.numBc }}  <a title="Carte de travail Cellule" href="{{ vich_uploader_asset(entity, 'carteTravailCelluleFile', 'App\\Entity\\Appareil') }}" target="_blank" target="_self"><i class="fa fa-file-pdf-o"></i></a></span></br>
+	{% endif %}
+	{% if entity.appareil.carteTravailMoteur %}
+	<span class="h4">Carte de travail Moteur: {{ entity.numBc }} <a title="Carte de travail Moteur" href="{{ vich_uploader_asset(entity, 'carteTravailMoteurFile', 'App\\Entity\\Appareil') }}" target="_blank" target="_self"><i class="fa fa-file-pdf-o"></i></a></span></br>
+	{% endif %}
 {% endblock %}
 
 {% block main %}

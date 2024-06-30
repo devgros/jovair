@@ -122,7 +122,7 @@
 					{% set facture_total_tva = facture_total_tva + tva %}
 					{% set facture_total_ttc = facture_total_ttc + total_ttc %}
 				<tr>
-					<td>{{ dossier_article.articleFormone.sn }}</td>
+					<td>{{ dossier_article.articleFormone.article.pn }} - {{ dossier_article.articleFormone.sn }}</td>
 					<td>{{ dossier_article.articleFormone.article.nom }}</td>
 					<td class="text-right">{{ dossier_article.quantite }}</td>
 					<td class="text-right">{{ prix_ht|number_format(2, '.', ',') }} €</td>
@@ -159,7 +159,7 @@
 						{% if not pdf and entity.statut == 0 %}
 							<a href="{{ path('easyadmin', { action: 'edit', entity: 'DevisArticle', primary_key_name: 'id', id: devis_article.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'DevisArticle', primary_key_name: 'id', id: devis_article.id, referer: '' }) }}" target="_self" data-id="{{ devis_article.id }}" data-entity="DevisArticle" ><i class="fa fa-times"></i> </a>
 						{% endif %}
-						{{ devis_article.articleFormone.sn }}
+						{{ devis_article.articleFormone.pn }} - {{ devis_article.articleFormone.sn }}
 					</td>
 					<td>{{ devis_article.articleFormone.article.nom }}</td>
 					<td class="text-right">{{ devis_article.quantite }}</td>
@@ -717,7 +717,7 @@
 
 <div class="row invoice-info">
 	<div class="col-xs-12 invoice-col">
-		<p class="facture_bottom">SASU au capital social de 5000€ / 821 289 246 RCS / SIREN 821 289 246 00018 / N° TVA intracommunautaire FR 44 821289246</p>
+		<p class="facture_bottom">SARL au capital social de 5000€ / 821 289 246 RCS / SIREN 821 289 246 00018 / N° TVA intracommunautaire FR 44 821289246</p>
 	</div>
 </div>
 {% if not pdf %}

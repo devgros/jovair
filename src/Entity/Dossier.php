@@ -1190,4 +1190,32 @@ class Dossier
         return $this;
     }
 
+    public function isCarteTravailCellule()
+    {
+        if($this->appareil->getCarteTravailCellule() != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function isCarteTravailMoteur()
+    {
+        if($this->appareil->getCarteTravailMoteur() != null){
+            return true;
+        }else{
+            return false;
+        }
+    }
+
+    public function getCarteTravailCellule()
+    {
+        return $this->appareil->getCarteTravailCellule();
+    }
+
+    public function getCarteTravailMoteur()
+    {
+        return $this->appareil->getCarteTravailMoteur();
+    }
+
 }

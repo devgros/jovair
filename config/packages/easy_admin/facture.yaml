@@ -16,8 +16,11 @@ easy_admin:
                     - { property: 'client', label: 'Client'}
                     - { property: 'facture_paye', label: 'Payée ?', type: 'toggle' }
                     - { property: 'paiement_liquide', label: 'En liquide ?', type: 'toggle' }
+                    - { property: 'paiement_cheque', label: 'Chèque', type: 'toggle' }
+                    - { property: 'paiement_virement', label: 'Virement', type: 'toggle' }
                 actions:
                     - { name: 'show', icon: 'search', label: false }
+                    - { name: 'addAcompte', icon: 'plus-circle', label: "Acompte" }
                     - { name: 'addAvoir', icon: 'plus-circle', label: "Avoir" }
                     - { name: 'showAvoir', icon: 'eye', label: "Avoir" }
             search:
@@ -33,3 +36,5 @@ easy_admin:
                     - { property: 'facture_paye', label: 'La facture est-elle payée ?' }
             show:
                 role: ROLE_SUPER_ADMIN
+                actions:
+                    - { name: 'addAcompte', icon: 'plus-circle', label: "Acompte" }

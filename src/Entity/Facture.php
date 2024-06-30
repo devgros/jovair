@@ -2,6 +2,8 @@
 
 namespace App\Entity;
 
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
 use Gedmo\Mapping\Annotation as Gedmo;
@@ -64,6 +66,27 @@ class Facture
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $date_avoir;
+
+        /**
+     * @ORM\Column(type="boolean")
+     */
+    private $paiement_cheque;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $paiement_virement;
+
+    /**
+     * @ORM\OneToMany(targetEntity=FactureAcompte::class, mappedBy="facture", cascade={"ALL"}, indexBy="date")
+     * @ORM\OrderBy({"date" = "DESC"})
+     */
+    private $facture_acompte;
+
+    public function __construct()
+    {
+        $this->facture_acompte = new ArrayCollection();
+    }
 
 
     public function __toString()
@@ -282,6 +305,60 @@ class Facture
     public function setDateAvoir(?\DateTimeInterface $date_avoir): self
     {
         $this->date_avoir = $date_avoir;
+
+        return $this;
+    }
+
+    public function getPaiementCheque(): ?bool
+    {
+        return $this->paiement_cheque;
+    }
+
+    public function setPaiementCheque(bool $paiement_cheque): self
+    {
+        $this->paiement_cheque = $paiement_cheque;
+
+        return $this;
+    }
+
+    public function getPaiementVirement(): ?bool
+    {
+        return $this->paiement_virement;
+    }
+
+    public function setPaiementVirement(bool $paiement_virement): self
+    {
+        $this->paiement_virement = $paiement_virement;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, FactureAcompte>
+     */
+    public function getFactureAcompte(): Collection
+    {
+        return $this->facture_acompte;
+    }
+
+    public function addFactureAcompte(FactureAcompte $factureAcompte): self
+    {
+        if (!$this->facture_acompte->contains($factureAcompte)) {
+            $this->facture_acompte[] = $factureAcompte;
+            $factureAcompte->setFacture($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFactureAcompte(FactureAcompte $factureAcompte): self
+    {
+        if ($this->facture_acompte->removeElement($factureAcompte)) {
+            // set the owning side to null (unless already changed)
+            if ($factureAcompte->getFacture() === $this) {
+                $factureAcompte->setFacture(null);
+            }
+        }
 
         return $this;
     }

@@ -26,3 +26,10 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    fos_user.mailer.default:
+        class: FOS\UserBundle\Mailer\TwigSwiftMailer
+        arguments:
+            $mailer: '@mailer'
+            $router: '@router'
+            $twig: '@twig'
+            $parameters: []  # Configurez explicitement la valeur de l'argument $parameters

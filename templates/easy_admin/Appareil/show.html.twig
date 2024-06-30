@@ -22,6 +22,28 @@
         </div>
     </div>
     <div class="box-body">
+        <div class="box-body">
+            {% if entity.carteTravailCellule %}
+            <div class="form-group field-string col-sm-3">
+                <label class="col-sm-6 control-label">Carte de travail Cellule</label>
+                <div  class="col-sm-6">
+                    <div class="form-control">
+                        <a title="Carte de travail Cellule" href="{{ vich_uploader_asset(entity, 'carteTravailCelluleFile', 'App\\Entity\\Appareil') }}" target="_blank" target="_self"><i class="fa fa-file-pdf-o"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+            {% if entity.carteTravailMoteur %}
+            <div class="form-group field-string col-sm-3">
+                <label class="col-sm-6 control-label">Carte de travail Moteur</label>
+                <div  class="col-sm-6">
+                    <div class="form-control">
+                        <a title="Carte de travail Moteur" href="{{ vich_uploader_asset(entity, 'carteTravailMoteurFile', 'App\\Entity\\Appareil') }}" target="_blank" target="_self"><i class="fa fa-file-pdf-o"></i></a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
+        </div>
 		{% include  'easy_admin/Includes/appareil_table.html.twig' with {'appareil': entity } %}
 	</div>
 </div>

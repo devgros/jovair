@@ -33,4 +33,8 @@
             {% include  'easy_admin/Facture/include_facture.html.twig' with {'entity': entity, pdf: false } %}
 		{% endblock %}
     </section>
+
+    <section class="content">
+        {% include  'easy_admin/Facture/list_acompte.html.twig' with {'entity': entity } %}
+    </section>
 {% endblock content %}

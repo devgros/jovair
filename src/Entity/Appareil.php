@@ -4,9 +4,12 @@ namespace App\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Validator\Constraints as Assert;
+use Symfony\Component\HttpFoundation\File\File;
+use Vich\UploaderBundle\Mapping\Annotation as Vich;
 
 /**
  * @ORM\Entity(repositoryClass="App\Repository\AppareilRepository")
+ * @Vich\Uploadable
  */
 class Appareil
 {
@@ -238,6 +241,50 @@ class Appareil
      * @ORM\OneToMany(targetEntity="App\Entity\Todo", mappedBy="appareil")
      */
     private $todos;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $carte_travail_moteur;
+
+    /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
+     * @Vich\UploadableField(mapping="carteTravailMoteurFile", fileNameProperty="carte_travail_moteur")
+     * @var File
+     */
+    private $carteTravailMoteurFile;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $ctmUpdatedAt;
+
+    /**
+     * @ORM\Column(type="string", length=255, nullable=true)
+     * @var string
+     */
+    private $carte_travail_cellule;
+
+    /**
+     * @Assert\File(
+     *     mimeTypes = {"application/pdf", "application/x-pdf"},
+     *     mimeTypesMessage = "Merci de sélectionner un fichier PDF"
+     * )
+     * @Vich\UploadableField(mapping="carteTravailCelluleFile", fileNameProperty="carte_travail_cellule")
+     * @var File
+     */
+    private $carteTravailCelluleFile;
+
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     * @var \DateTime
+     */
+    private $ctcUpdatedAt;
 
     public function __toString()
     {
@@ -1359,5 +1406,137 @@ class Appareil
     public function getTodos()
     {
         return $this->todos;
+    }
+
+    /**
+     * Set carteTravailMoteur.
+     *
+     * @param string $carteTravailMoteur
+     *
+     * @return Appareil
+     */
+    public function setCarteTravailMoteur($carteTravailMoteur)
+    {
+        $this->carte_travail_moteur = $carteTravailMoteur;
+
+        return $this;
+    }
+
+    /**
+     * Get carteTravailMoteur.
+     *
+     * @return string
+     */
+    public function getCarteTravailMoteur()
+    {
+        return $this->carte_travail_moteur;
+    }
+
+    public function setCarteTravailMoteurFile(File $image = null)
+    {
+        $this->carteTravailMoteurFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->ctmUpdatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getCarteTravailMoteurFile()
+    {
+        return $this->carteTravailMoteurFile;
+    }
+
+    /**
+     * Set ctmUpdatedAt.
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Dossier
+     */
+    public function setCtmUpdatedAt($updatedAt)
+    {
+        $this->ctmUpdatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get ctmUpdatedAt.
+     *
+     * @return \DateTime
+     */
+    public function getCtmUpdatedAt()
+    {
+        return $this->ctmUpdatedAt;
+    }
+
+    /**
+     * Set carteTravailCellule.
+     *
+     * @param string $carteTravailCellule
+     *
+     * @return Appareil
+     */
+    public function setCarteTravailCellule($carteTravailCellule)
+    {
+        $this->carte_travail_cellule = $carteTravailCellule;
+
+        return $this;
+    }
+
+    /**
+     * Get carteTravailCellule.
+     *
+     * @return string
+     */
+    public function getCarteTravailCellule()
+    {
+        return $this->carte_travail_cellule;
+    }
+
+    public function setCarteTravailCelluleFile(File $image = null)
+    {
+        $this->carteTravailCelluleFile = $image;
+
+        // VERY IMPORTANT:
+        // It is required that at least one field changes if you are using Doctrine,
+        // otherwise the event listeners won't be called and the file is lost
+        if ($image) {
+            // if 'updatedAt' is not defined in your entity, use another property
+            $this->ctmUpdatedAt = new \DateTime('now');
+        }
+    }
+
+    public function getCarteTravailCelluleFile()
+    {
+        return $this->carteTravailCelluleFile;
+    }
+
+    /**
+     * Set ctcUpdatedAt.
+     *
+     * @param \DateTime $updatedAt
+     *
+     * @return Dossier
+     */
+    public function setCtcUpdatedAt($updatedAt)
+    {
+        $this->ctcUpdatedAt = $updatedAt;
+
+        return $this;
+    }
+
+    /**
+     * Get ctcUpdatedAt.
+     *
+     * @return \DateTime
+     */
+    public function getCtcUpdatedAt()
+    {
+        return $this->ctcUpdatedAt;
     }
 }

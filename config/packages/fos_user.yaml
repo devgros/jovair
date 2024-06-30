@@ -8,3 +8,5 @@ fos_user:
     from_email:
         address: '%env(MAILER_USER_ADDRESS)%'
         sender_name: '%env(MAILER_USER_NAME)%'
+    service:
+        mailer: fos_user.mailer.default

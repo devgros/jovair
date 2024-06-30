@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 namespace App\Controller;
 
@@ -32,18 +32,18 @@ class AdminController extends BaseAdminController
 				    $queryBuilder->leftJoin(sprintf('entity.%s', $name), $name);
 				    $alreadyJoin[] = sprintf('entity.%s', $name);
 				}
-                
+
 
                 // here is the change
                 if (!is_array($searchFields)) {
                     $searchFields = [$searchFields];
                 }
                 foreach ($searchFields as $searchField) {
-                	if (strpos($searchField, ".") !== false) 
+                	if (strpos($searchField, ".") !== false)
 					{
 					    $searchFieldTab =explode(".", $searchField);
 					    if(sizeof($searchFieldTab) <= 2){
-					    	$parent_name = $name;			
+					    	$parent_name = $name;
 						    $subName = $searchFieldTab[0];
 						    $searchField = $searchFieldTab[1];
 
@@ -52,7 +52,7 @@ class AdminController extends BaseAdminController
 							    $alreadyJoin[] = sprintf('%s.%s', $parent_name, $subName);
 							}
 					    }else{
-					    	$parent_name = $name;			
+					    	$parent_name = $name;
 					    	$subTable = $searchFieldTab[0];
 						    $subName = $searchFieldTab[1];
 						    $searchField = $searchFieldTab[2];
