@@ -159,7 +159,7 @@
 						{% if not pdf and entity.statut == 0 %}
 							<a href="{{ path('easyadmin', { action: 'edit', entity: 'DevisArticle', primary_key_name: 'id', id: devis_article.id, referer: '' }) }}" class="btn btn-xs btn-secondary"><i class="fa fa-pencil"></i></a><a class="btn btn-xs btn-secondary text-danger delete-line" title="" href="{{ path('easyadmin', { action: 'delete', entity: 'DevisArticle', primary_key_name: 'id', id: devis_article.id, referer: '' }) }}" target="_self" data-id="{{ devis_article.id }}" data-entity="DevisArticle" ><i class="fa fa-times"></i> </a>
 						{% endif %}
-						{{ devis_article.articleFormone.pn }} - {{ devis_article.articleFormone.sn }}
+						{{ devis_article.articleFormone.article.pn }} - {{ devis_article.articleFormone.sn }}
 					</td>
 					<td>{{ devis_article.articleFormone.article.nom }}</td>
 					<td class="text-right">{{ devis_article.quantite }}</td>
