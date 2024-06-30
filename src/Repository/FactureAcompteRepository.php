@@ -3,10 +3,10 @@
 namespace App\Repository;
 
 use App\Entity\FactureAcompte;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
 use Doctrine\ORM\ORMException;
-use Doctrine\Persistence\ManagerRegistry;
+use Doctrine\ORM\OptimisticLockException;
+use Symfony\Bridge\Doctrine\RegistryInterface;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @extends ServiceEntityRepository<FactureAcompte>
@@ -18,7 +18,7 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class FactureAcompteRepository extends ServiceEntityRepository
 {
-    public function __construct(ManagerRegistry $registry)
+    public function __construct(RegistryInterface $registry)
     {
         parent::__construct($registry, FactureAcompte::class);
     }
