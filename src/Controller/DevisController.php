@@ -96,6 +96,8 @@ class DevisController extends MyAdminController
 		$facture->setDevis($entity);
 		$facture->setFacturePaye(false);
 		$facture->setPaiementLiquide(false);
+		$facture->setPaiementCheque(false);
+		$facture->setPaiementVirement(false);
 		$facture->setAvoir(false);
 		$facture->setClient($entity->getClient());
 		$this->em->persist($facture);
