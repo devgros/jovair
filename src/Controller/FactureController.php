@@ -30,7 +30,7 @@ class FactureController extends MyAdminController
 			$this->container->get('knp_snappy.pdf')->generateFromHtml(
 					$this->renderView(
 						'easy_admin/Facture/pdf_facture.html.twig',
-						array('entity' => $facture)
+						array('entity' => $facture, 'is_avoir' => false)
 					),
 					$path_pdf
 				);
